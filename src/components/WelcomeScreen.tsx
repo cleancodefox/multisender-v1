@@ -7,10 +7,9 @@ import {
   Zap, 
   Shield, 
   Clock, 
-  Users, 
-  TrendingUp,
-  Star,
-  Send
+  Users,
+  Send,
+  Star
 } from 'lucide-react';
 
 interface WelcomeScreenProps {
@@ -21,157 +20,121 @@ interface WelcomeScreenProps {
 export const WelcomeScreen = ({ onConnect, isConnecting }: WelcomeScreenProps) => {
   const features = [
     {
-      icon: <Zap className="h-5 w-5" />,
-      title: "Lightning Fast",
-      description: "Send to 1000+ wallets instantly"
+      icon: <Zap className="h-5 w-5 text-black" />,
+      title: "Işık Hızında",
+      description: "Tek seferde 1000'den fazla cüzdana anında gönderim yapın."
     },
     {
-      icon: <Shield className="h-5 w-5" />,
-      title: "100% Secure", 
-      description: "Non-custodial & trustless"
+      icon: <Shield className="h-5 w-5 text-black" />,
+      title: "%100 Güvenli", 
+      description: "Varlıklarınız sizin kontrolünüzde, tamamen merkeziyetsiz."
     },
     {
-      icon: <Clock className="h-5 w-5" />,
-      title: "Save Time",
-      description: "Bulk transfers in one click"
+      icon: <Clock className="h-5 w-5 text-black" />,
+      title: "Zaman Kazanın",
+      description: "Toplu transferleri tek bir tıkla saniyeler içinde halledin."
     }
   ];
 
-  const stats = [
-    { label: "Total Transfers", value: "2.4M+" },
-    { label: "Volume", value: "$890M+" },
-    { label: "Users", value: "45K+" }
-  ];
-
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white text-black">
       {/* Header */}
-      <div className="border-b border-gray-100">
+      <header className="border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
-              <Send className="h-4 w-4 text-white" />
-            </div>
-            <div>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
+                <Send className="h-4 w-4 text-white" />
+              </div>
               <h1 className="text-lg font-semibold text-black">MultiSender.so</h1>
-              <p className="text-xs text-gray-500">Bulk token distribution on Solana</p>
             </div>
+            <Button 
+              onClick={onConnect}
+              disabled={isConnecting}
+              variant="outline"
+              className="border-gray-200 hover:bg-gray-50"
+            >
+              {isConnecting ? 'Bağlanıyor...' : 'Cüzdan Bağla'}
+            </Button>
           </div>
         </div>
-      </div>
+      </header>
 
       {/* Hero Section */}
-      <div className="max-w-4xl mx-auto px-6 py-24 text-center">
-        <div className="mb-8">
-          <Badge variant="outline" className="mb-6 border-gray-200 text-gray-700">
-            #1 Solana Multisender
+      <main className="max-w-7xl mx-auto px-6">
+        <div className="py-24 sm:py-32 text-center">
+          <Badge variant="outline" className="mb-6 border-gray-200 text-gray-600 font-medium py-1 px-3">
+            #1 Toplu Gönderim Platformu
           </Badge>
           
-          <h1 className="text-5xl font-bold text-black mb-6 leading-tight">
-            Send tokens to<br />
-            <span className="text-gray-600">thousands at once</span>
+          <h1 className="text-4xl md:text-6xl font-bold text-black mb-6 leading-tight">
+            Tokenlarınızı binlerce adrese <br/> aynı anda gönderin
           </h1>
           
-          <p className="text-xl text-gray-500 mb-12 max-w-2xl mx-auto">
-            The most advanced bulk transfer tool on Solana. Save time, reduce fees, and scale your distribution.
+          <p className="text-lg md:text-xl text-gray-600 mb-10 max-w-3xl mx-auto">
+            Solana üzerindeki en gelişmiş toplu transfer aracı. Zamandan tasarruf edin, işlem ücretlerini azaltın ve dağıtım operasyonlarınızı ölçeklendirin.
           </p>
-        </div>
 
-        <div className="flex flex-col items-center gap-6 mb-16">
           <Button 
             onClick={onConnect}
             disabled={isConnecting}
             size="lg"
-            className="bg-black hover:bg-gray-800 text-white px-8 py-4 rounded-lg text-base font-medium h-auto"
+            className="bg-black hover:bg-gray-800 text-white px-8 h-12 text-base font-medium rounded-xl"
           >
             <Wallet className="h-4 w-4 mr-2" />
-            {isConnecting ? 'Connecting...' : 'Connect Wallet'}
+            {isConnecting ? 'Bağlanıyor...' : 'Hemen Başla'}
           </Button>
-          
-          <div className="flex items-center gap-2 text-sm text-gray-500">
-            <div className="flex -space-x-1">
-              {[1,2,3,4].map(i => (
-                <div key={i} className="w-6 h-6 bg-gray-100 border border-white rounded-full flex items-center justify-center text-gray-600 text-xs">
-                  {i}
-                </div>
-              ))}
-            </div>
-            <span>Trusted by 45K+ users</span>
-          </div>
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-3 gap-8 mb-20">
-          {stats.map((stat, index) => (
-            <div key={index} className="text-center">
-              <div className="text-3xl font-bold text-black mb-1">{stat.value}</div>
-              <div className="text-sm text-gray-500">{stat.label}</div>
-            </div>
-          ))}
-        </div>
-
-        {/* Features */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
-          {features.map((feature, index) => (
-            <Card key={index} className="border border-gray-100 hover:border-gray-200 transition-colors">
-              <CardContent className="p-8 text-center">
-                <div className="w-10 h-10 bg-gray-50 rounded-lg flex items-center justify-center mx-auto mb-4 text-gray-700">
+        {/* Features Section */}
+        <div className="py-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {features.map((feature, index) => (
+              <div key={index} className="p-8 bg-gray-50 rounded-2xl border border-gray-100">
+                <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center mb-5 border border-gray-200">
                   {feature.icon}
                 </div>
                 <h3 className="text-lg font-semibold text-black mb-2">
                   {feature.title}
                 </h3>
-                <p className="text-gray-500 text-sm">
+                <p className="text-gray-600">
                   {feature.description}
                 </p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        {/* Testimonial */}
-        <div className="bg-gray-50 rounded-2xl p-12 mb-20">
-          <div className="flex justify-center mb-4">
-            {[1,2,3,4,5].map(i => (
-              <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+              </div>
             ))}
           </div>
-          
-          <blockquote className="text-xl text-gray-700 mb-6 font-medium">
-            "Saved us 40+ hours during our airdrop. Clean interface, incredible speed."
-          </blockquote>
-          
-          <div className="flex items-center justify-center gap-3">
-            <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-gray-600 font-semibold">
-              JD
+        </div>
+
+        {/* Testimonial Section */}
+        <div className="py-24">
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="flex justify-center mb-4">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+              ))}
             </div>
-            <div className="text-left">
-              <div className="text-black font-medium">John Dao</div>
-              <div className="text-gray-500 text-sm">Founder @SolanaLabs</div>
+            <blockquote className="text-2xl font-medium text-black mb-6">
+              "Airdrop sürecimizde bize 40 saatten fazla kazandırdı. İnanılmaz temiz arayüz, akıl almaz bir hız."
+            </blockquote>
+            <div className="flex items-center justify-center gap-3">
+              <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center text-black font-semibold border border-gray-200">
+                JD
+              </div>
+              <div className="text-left">
+                <div className="text-black font-semibold">John Dao</div>
+                <div className="text-gray-500">Founder @SolanaLabs</div>
+              </div>
             </div>
           </div>
         </div>
+      </main>
 
-        {/* Final CTA */}
-        <div className="text-center">
-          <h2 className="text-3xl font-bold text-black mb-4">
-            Ready to scale your distribution?
-          </h2>
-          <p className="text-gray-500 text-lg mb-8">
-            Join thousands who chose us for their token launches
-          </p>
-          
-          <Button 
-            onClick={onConnect}
-            disabled={isConnecting}
-            size="lg"
-            className="bg-black hover:bg-gray-800 text-white px-8 py-4 rounded-lg text-base font-medium h-auto"
-          >
-            <Wallet className="h-4 w-4 mr-2" />
-            {isConnecting ? 'Connecting...' : 'Get Started'}
-          </Button>
+       {/* Footer */}
+       <footer className="border-t border-gray-100">
+        <div className="max-w-7xl mx-auto px-6 py-8 text-center text-sm text-gray-500">
+          <p>&copy; {new Date().getFullYear()} MultiSender.so - All rights reserved.</p>
         </div>
-      </div>
+      </footer>
     </div>
   );
 };

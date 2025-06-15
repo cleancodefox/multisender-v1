@@ -1,10 +1,9 @@
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { ArrowLeft, Send, CheckCircle, AlertTriangle, ExternalLink, Zap, Shield } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { ArrowLeft, Send, CheckCircle, AlertTriangle, ExternalLink, Shield } from 'lucide-react';
 
 interface Recipient {
   address: string;
@@ -27,181 +26,115 @@ export const TransferPreview = ({
   onBack,
   onConfirm
 }: TransferPreviewProps) => {
-  const validRecipients = recipients.filter(r => r.isValid);
+  const validRecipients = recipients.filter(r => r.isValid !== false);
+  const solPrice = 160; // Mock price
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-green-50 pb-20">
-      {/* Enhanced Header */}
-      <div className="sticky top-0 bg-white/95 backdrop-blur-sm border-b border-gray-200 p-4 shadow-sm">
-        <div className="flex items-center gap-4">
-          <Button variant="ghost" onClick={onBack} className="rounded-xl p-2 hover:bg-gray-100">
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-          <div className="flex-1">
-            <h2 className="text-xl font-bold text-gray-900">Final Review</h2>
-            <p className="text-sm text-gray-500">Double-check before execution</p>
+    <div className="min-h-screen bg-gray-50/50">
+       <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-sm border-b border-gray-100">
+        <div className="max-w-4xl mx-auto px-6 py-4">
+          <div className="flex items-center gap-4">
+            <Button variant="outline" size="icon" onClick={onBack} className="rounded-full h-9 w-9">
+              <ArrowLeft className="h-4 w-4" />
+            </Button>
+            <div>
+              <h2 className="text-lg font-semibold text-gray-900">Transferi Onayla</h2>
+              <p className="text-sm text-gray-500">Bu işlem geri alınamaz, lütfen detayları kontrol edin.</p>
+            </div>
           </div>
-          <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 px-3 py-1">
-            <Shield className="h-3 w-3 mr-1" />
-            Secure
-          </Badge>
         </div>
-      </div>
+      </header>
 
-      <div className="p-4 space-y-4">
-        {/* Enhanced Summary Card */}
-        <Card className="border-0 bg-gradient-to-r from-white to-green-50 shadow-xl">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-xl flex items-center gap-2">
-              <Zap className="h-5 w-5 text-yellow-500" />
-              Transaction Overview
-            </CardTitle>
-            <CardDescription>
-              You're about to send tokens to {validRecipients.length} recipients
-            </CardDescription>
+      <main className="max-w-4xl mx-auto px-6 py-8 space-y-6 pb-32">
+        {/* Summary Card */}
+        <Card className="bg-white border border-gray-100 shadow-sm">
+          <CardHeader>
+            <CardTitle className="text-black">İşlem Detayları</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4 text-sm">
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Recipients</span>
-                  <span className="font-bold text-lg">{validRecipients.length}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Token</span>
-                  <Badge variant="secondary" className="bg-gray-100">SOL</Badge>
-                </div>
+            <div className="flex justify-between items-center text-lg">
+              <span className="text-gray-600">Gönderilecek Toplam Tutar</span>
+              <div className="text-right">
+                <span className="font-bold text-black">{totalCost.toFixed(6)} SOL</span>
+                <p className="text-xs text-gray-500">${(totalCost * solPrice).toFixed(2)}</p>
               </div>
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Total Amount</span>
-                  <span className="font-bold text-lg">{totalCost.toFixed(6)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Network Fees</span>
-                  <span className="font-semibold">{networkFees.toFixed(6)}</span>
-                </div>
-              </div>
+            </div>
+             <div className="flex justify-between items-center text-sm">
+              <span className="text-gray-600">Tahmini Ağ Ücreti</span>
+              <span className="font-medium text-black">{networkFees.toFixed(6)} SOL</span>
             </div>
             
             <Separator />
             
             <div className="flex justify-between items-center">
-              <span className="text-xl font-bold">Final Cost</span>
+              <span className="text-xl font-bold text-black">TOPLAM MALİYET</span>
               <div className="text-right">
-                <div className="text-2xl font-bold text-green-600">
+                <div className="text-2xl font-bold text-black">
                   {(totalCost + networkFees).toFixed(6)} SOL
                 </div>
-                <div className="text-xs text-gray-500">
-                  ~${((totalCost + networkFees) * 180).toFixed(2)} USD
+                <div className="text-sm text-gray-500">
+                  ~${((totalCost + networkFees) * solPrice).toFixed(2)} USD
                 </div>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Enhanced Status Alert */}
-        <Alert className="bg-gradient-to-r from-green-50 to-emerald-50 border-green-200 rounded-xl shadow-lg">
-          <CheckCircle className="h-5 w-5 text-green-600" />
-          <AlertDescription className="text-green-800 font-medium">
-            🎯 All systems ready! Your transfer will be processed in the next block.
-          </AlertDescription>
-        </Alert>
-
-        {/* Enhanced Recipients List */}
-        <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-lg">
-          <CardHeader className="pb-3">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-lg">Recipients Preview</CardTitle>
-              <div className="flex gap-2">
-                <Badge variant="outline" className="text-green-600 border-green-200 bg-green-50 rounded-lg">
-                  <CheckCircle className="h-3 w-3 mr-1" />
-                  {validRecipients.length} Valid
-                </Badge>
-                <Badge variant="outline" className="text-blue-600 border-blue-200 bg-blue-50 rounded-lg">
-                  <Zap className="h-3 w-3 mr-1" />
-                  Gas Optimized
-                </Badge>
-              </div>
-            </div>
+        {/* Recipients List */}
+        <Card className="bg-white border border-gray-100 shadow-sm">
+          <CardHeader>
+             <CardTitle className="text-black">Alıcılar ({validRecipients.length})</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="max-h-80 overflow-y-auto space-y-3">
-              {validRecipients.slice(0, 5).map((recipient, index) => (
+            <div className="max-h-80 overflow-y-auto space-y-2 pr-2 -mr-2">
+              {validRecipients.map((recipient, index) => (
                 <div
                   key={index}
-                  className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-gray-50 to-white border border-gray-200 hover:shadow-md transition-shadow"
+                  className="flex items-center justify-between p-3 rounded-lg bg-gray-50 border border-gray-100"
                 >
-                  <div className="flex-1 min-w-0">
-                    <p className="font-mono text-sm text-gray-900 truncate">
-                      {recipient.address}
-                    </p>
-                    <div className="flex items-center gap-2 mt-2">
-                      <Badge variant="secondary" className="rounded-lg">
-                        #{index + 1}
-                      </Badge>
-                      <Button variant="link" size="sm" className="h-auto p-0 text-xs text-green-600 hover:text-green-700">
-                        <ExternalLink className="h-3 w-3 mr-1" />
-                        View
-                      </Button>
-                    </div>
+                  <div className="flex items-center gap-3 min-w-0">
+                     <div className="text-xs text-gray-400 font-mono bg-white border rounded-md w-8 h-8 flex items-center justify-center">{index + 1}</div>
+                     <div>
+                        <p className="font-mono text-sm text-black truncate">
+                          {recipient.address}
+                        </p>
+                         <Badge variant="secondary" className="bg-white border text-gray-600 mt-1">
+                          {recipient.amount.toFixed(6)} SOL
+                        </Badge>
+                     </div>
                   </div>
-                  <div className="text-right">
-                    <p className="font-bold text-xl text-green-600">
-                      {recipient.amount.toFixed(6)}
-                    </p>
-                    <p className="text-xs text-gray-500">SOL</p>
-                  </div>
+                   <Button variant="ghost" size="sm" asChild className="h-auto p-0 text-xs text-gray-500 hover:text-black">
+                      <a href={`https://solscan.io/account/${recipient.address}`} target="_blank" rel="noopener noreferrer">
+                        <ExternalLink className="h-3.5 w-3.5" />
+                      </a>
+                    </Button>
                 </div>
               ))}
-              
-              {validRecipients.length > 5 && (
-                <div className="p-4 text-center border-2 border-dashed border-gray-200 rounded-xl">
-                  <p className="text-gray-600 font-medium">
-                    + {validRecipients.length - 5} more recipients
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    All addresses have been validated
-                  </p>
-                </div>
-              )}
             </div>
           </CardContent>
         </Card>
+        
+        {/* Final Warning */}
+        <Alert variant="destructive" className="bg-red-500 border-none text-white shadow-lg">
+          <AlertTriangle className="h-5 w-5 text-white" />
+          <AlertTitle className="font-bold text-lg">DİKKAT: Bu işlem geri alınamaz!</AlertTitle>
+          <AlertDescription className="opacity-90">
+            Onayladığınızda, tokenlar cüzdanınızdan çıkacak ve belirtilen adreslere gönderilecektir. 
+            Lütfen tüm bilgilerin doğruluğundan emin olun.
+          </AlertDescription>
+        </Alert>
+      </main>
 
-        {/* Enhanced Warning */}
-        <Card className="border-0 bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-xl">
-          <CardContent className="p-6">
-            <div className="flex items-start gap-4">
-              <AlertTriangle className="h-6 w-6 mt-0.5 flex-shrink-0" />
-              <div className="space-y-2">
-                <h3 className="font-bold text-lg">⚠️ Final Warning</h3>
-                <p className="text-sm opacity-90 leading-relaxed">
-                  This action is irreversible. Once executed, tokens will be immediately sent to all recipients. 
-                  Please verify all addresses and amounts are correct.
-                </p>
-                <div className="flex items-center gap-2 mt-3">
-                  <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-                  <span className="text-xs font-medium">Live on Solana Mainnet</span>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Enhanced Fixed Bottom Button */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-white/95 backdrop-blur-sm border-t border-gray-200">
-        <Button 
-          className="w-full h-14 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold rounded-xl shadow-xl hover:shadow-2xl transition-all duration-200 transform hover:-translate-y-1"
-          onClick={onConfirm}
-        >
-          <Send className="h-5 w-5 mr-2" />
-          Execute Transfer Now
-          <Badge variant="secondary" className="ml-3 bg-white/20 text-white border-white/30">
-            {validRecipients.length} recipients
-          </Badge>
-        </Button>
+      <div className="fixed bottom-0 left-0 right-0 p-4 bg-white/80 backdrop-blur-sm border-t border-gray-100">
+        <div className="max-w-4xl mx-auto">
+          <Button 
+            className="w-full h-14 bg-black hover:bg-gray-800 text-white font-bold rounded-xl text-lg"
+            onClick={onConfirm}
+          >
+            <Shield className="h-5 w-5 mr-2" />
+            Onayla ve {validRecipients.length} Adrese Gönder
+          </Button>
+        </div>
       </div>
     </div>
   );

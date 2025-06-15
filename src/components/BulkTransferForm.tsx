@@ -1,6 +1,5 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
@@ -20,85 +19,87 @@ export const BulkTransferForm = ({
   onDistributionMethodChange
 }: BulkTransferFormProps) => {
   return (
-    <Card className="bg-white border border-gray-100">
-      <CardHeader className="pb-4">
+    <Card className="bg-white border border-gray-100 shadow-sm">
+      <CardHeader>
         <CardTitle className="flex items-center gap-2 text-lg text-black">
           <Calculator className="h-5 w-5 text-gray-400" />
-          Distribution Setup
+          Dağıtım Ayarları
         </CardTitle>
         <CardDescription className="text-gray-500">
-          Choose how to distribute tokens to recipients
+          Tokenların alıcılara nasıl dağıtılacağını seçin
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
-        {/* Distribution Method Selection */}
-        <div className="space-y-4">
-          <Label className="text-sm font-medium text-black">Distribution Method</Label>
+        <div>
+          <Label className="text-sm font-medium text-black">Dağıtım Yöntemi</Label>
           <RadioGroup 
             value={distributionMethod} 
             onValueChange={onDistributionMethodChange}
-            className="space-y-3"
+            className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-3"
           >
-            <div className="flex items-center space-x-3 p-4 rounded-lg border border-gray-100 hover:border-gray-200 transition-colors has-[:checked]:border-black has-[:checked]:bg-gray-50">
-              <RadioGroupItem value="equal" id="equal" />
-              <div className="flex items-center gap-3 flex-1">
-                <Users className="h-4 w-4 text-gray-400" />
-                <div>
-                  <Label htmlFor="equal" className="font-medium text-black cursor-pointer">
-                    Equal Distribution
-                  </Label>
-                  <p className="text-sm text-gray-500">Same amount to every recipient</p>
+            <Label htmlFor="equal" className="flex flex-col items-start space-x-3 p-4 rounded-xl border border-gray-200 bg-white hover:border-gray-300 transition-colors has-[:checked]:border-black has-[:checked]:ring-2 has-[:checked]:ring-black has-[:checked]:ring-offset-2 cursor-pointer">
+              <div className="flex items-center gap-3 w-full">
+                <RadioGroupItem value="equal" id="equal" />
+                <div className="flex items-center gap-3 flex-1">
+                  <Users className="h-5 w-5 text-gray-500" />
+                  <div>
+                    <p className="font-medium text-black">
+                      Eşit Dağıtım
+                    </p>
+                    <p className="text-sm text-gray-500">Tüm alıcılara eşit tutar</p>
+                  </div>
                 </div>
               </div>
-            </div>
+            </Label>
 
-            <div className="flex items-center space-x-3 p-4 rounded-lg border border-gray-100 hover:border-gray-200 transition-colors has-[:checked]:border-black has-[:checked]:bg-gray-50">
-              <RadioGroupItem value="manual" id="manual" />
-              <div className="flex items-center gap-3 flex-1">
-                <DollarSign className="h-4 w-4 text-gray-400" />
-                <div>
-                  <Label htmlFor="manual" className="font-medium text-black cursor-pointer">
-                    Manual Amounts
-                  </Label>
-                  <p className="text-sm text-gray-500">Set custom amount for each recipient</p>
+            <Label htmlFor="manual" className="flex flex-col items-start space-x-3 p-4 rounded-xl border border-gray-200 bg-white hover:border-gray-300 transition-colors has-[:checked]:border-black has-[:checked]:ring-2 has-[:checked]:ring-black has-[:checked]:ring-offset-2 cursor-pointer">
+              <div className="flex items-center gap-3 w-full">
+                <RadioGroupItem value="manual" id="manual" />
+                <div className="flex items-center gap-3 flex-1">
+                  <DollarSign className="h-5 w-5 text-gray-500" />
+                  <div>
+                    <p className="font-medium text-black">
+                      Manuel Tutar
+                    </p>
+                    <p className="text-sm text-gray-500">Her alıcı için özel tutar</p>
+                  </div>
                 </div>
               </div>
-            </div>
+            </Label>
           </RadioGroup>
         </div>
 
-        {/* Total Amount Input - Only show for equal split */}
         {distributionMethod === 'equal' && (
-          <div className="space-y-3 p-4 bg-gray-50 rounded-lg border border-gray-100">
+          <div className="space-y-2 !mt-4">
             <Label htmlFor="totalAmount" className="text-sm font-medium text-black">
-              Total Amount to Distribute
+              Dağıtılacak Toplam Tutar
             </Label>
             <div className="relative">
               <Input
                 id="totalAmount"
                 type="number"
                 step="0.000001"
-                placeholder="Enter total SOL amount"
+                min="0"
+                placeholder="Örn: 1000"
                 value={totalAmount || ''}
                 onChange={(e) => onTotalAmountChange(Number(e.target.value))}
-                className="h-10 pr-12 bg-white border-gray-200 focus:border-black"
+                className="h-11 pr-12 bg-white border-gray-200 focus:border-black rounded-xl"
               />
-              <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm font-medium">
+              <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 text-sm font-medium">
                 SOL
               </div>
             </div>
-            <p className="text-sm text-gray-500">
-              This amount will be split equally among all recipients
+            <p className="text-xs text-gray-500 pt-1">
+              Bu tutar tüm alıcılar arasında eşit olarak paylaştırılacaktır.
             </p>
           </div>
         )}
 
-        {/* Info for manual method */}
         {distributionMethod === 'manual' && (
-          <div className="p-4 bg-blue-50 rounded-lg border border-blue-100">
-            <p className="text-blue-900 font-medium text-sm">Manual Amount Configuration</p>
-            <p className="text-blue-700 text-sm mt-1">
-              You'll set individual amounts for each recipient below
+          <div className="p-4 bg-gray-50 rounded-xl border border-gray-100 !mt-4">
+            <p className="text-black font-medium text-sm">Manuel Tutar Girişi</p>
+            <p className="text-gray-600 text-sm mt-1">
+              Her alıcı için özel tutarları aşağıdaki listeden gireceksiniz.
             </p>
           </div>
         )}

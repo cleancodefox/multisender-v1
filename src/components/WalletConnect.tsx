@@ -1,12 +1,12 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Wallet, ChevronDown, Copy, ExternalLink, LogOut, Zap } from 'lucide-react';
+import { Wallet, ChevronDown, Copy, ExternalLink, LogOut } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useToast } from '@/hooks/use-toast';
@@ -21,6 +21,7 @@ interface WalletConnectProps {
 export const WalletConnect = ({ balance, isConnected, onConnect, onDisconnect }: WalletConnectProps) => {
   const { toast } = useToast();
   const [isConnecting, setIsConnecting] = useState(false);
+  const walletAddress = '9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM';
 
   const handleConnect = async () => {
     setIsConnecting(true);
@@ -28,27 +29,18 @@ export const WalletConnect = ({ balance, isConnected, onConnect, onDisconnect }:
     setTimeout(() => {
       onConnect();
       setIsConnecting(false);
-      toast({
-        title: "🎉 Wallet Connected!",
-        description: "Welcome to the most advanced multisender on Solana",
-      });
     }, 1500);
   };
 
   const handleCopyAddress = () => {
-    navigator.clipboard.writeText('9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM');
+    navigator.clipboard.writeText(walletAddress);
     toast({
-      title: "📋 Address Copied",
-      description: "Wallet address copied to clipboard",
+      title: "📋 Adres Kopyalandı",
     });
   };
 
   const handleDisconnect = () => {
     onDisconnect();
-    toast({
-      title: "👋 Wallet Disconnected",
-      description: "See you soon!",
-    });
   };
 
   if (!isConnected) {
@@ -56,10 +48,10 @@ export const WalletConnect = ({ balance, isConnected, onConnect, onDisconnect }:
       <Button 
         onClick={handleConnect}
         disabled={isConnecting}
-        className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 rounded-xl px-4 py-2 text-sm font-medium shadow-lg hover:shadow-xl transition-all duration-200"
+        className="bg-black text-white hover:bg-gray-800 rounded-xl px-4 text-sm font-medium h-10"
       >
         <Wallet className="h-4 w-4 mr-2" />
-        {isConnecting ? 'Connecting...' : 'Connect Wallet'}
+        {isConnecting ? 'Bağlanıyor...' : 'Cüzdan Bağla'}
       </Button>
     );
   }
@@ -67,36 +59,40 @@ export const WalletConnect = ({ balance, isConnected, onConnect, onDisconnect }:
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="bg-white/90 backdrop-blur-sm border-gray-200 hover:bg-white/95 rounded-xl px-3 py-2 shadow-sm">
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-            <span className="font-mono text-xs text-gray-700">9WzD...4Kx7</span>
-            <Badge variant="secondary" className="bg-green-100 text-green-700 text-xs px-1 rounded">
+        <Button variant="outline" className="bg-white border-gray-200 hover:bg-gray-50 rounded-xl px-3 h-10 shadow-sm">
+          <div className="flex items-center gap-3">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+            </span>
+            <span className="font-mono text-sm text-black">{walletAddress.slice(0, 4)}...{walletAddress.slice(-4)}</span>
+            <Badge variant="secondary" className="bg-gray-100 text-black text-xs px-2 py-1 rounded-md">
               {balance.toFixed(2)} SOL
             </Badge>
-            <ChevronDown className="h-3 w-3 text-gray-400" />
+            <ChevronDown className="h-4 w-4 text-gray-400" />
           </div>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-52 bg-white/95 backdrop-blur-sm border-gray-100 rounded-xl shadow-xl">
-        <DropdownMenuItem onClick={handleCopyAddress} className="flex items-center gap-2 px-3 py-2 cursor-pointer">
-          <Copy className="h-4 w-4" />
-          Copy Address
+      <DropdownMenuContent align="end" className="w-60 bg-white/80 backdrop-blur-sm border-gray-100 rounded-xl shadow-xl mt-2">
+        <div className="px-3 py-2">
+            <p className="text-xs text-gray-500">Cüzdan Adresi</p>
+            <p className="text-sm font-mono text-black">{walletAddress.slice(0, 12)}...{walletAddress.slice(-8)}</p>
+        </div>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={handleCopyAddress} className="flex items-center gap-2 px-3 py-2 cursor-pointer text-sm">
+          <Copy className="h-4 w-4 text-gray-500" />
+          Adresi Kopyala
         </DropdownMenuItem>
-        <DropdownMenuItem className="flex items-center gap-2 px-3 py-2">
-          <ExternalLink className="h-4 w-4" />
-          View on Explorer
+        <DropdownMenuItem asChild className="flex items-center gap-2 px-3 py-2 cursor-pointer text-sm">
+          <a href={`https://solscan.io/account/${walletAddress}`} target="_blank" rel="noopener noreferrer">
+            <ExternalLink className="h-4 w-4 text-gray-500" />
+            Solscan'de Görüntüle
+          </a>
         </DropdownMenuItem>
-        <DropdownMenuItem className="flex items-center gap-2 px-3 py-2">
-          <Zap className="h-4 w-4 text-yellow-500" />
-          <div className="flex flex-col">
-            <span className="text-sm">Premium Member</span>
-            <span className="text-xs text-gray-500">Unlimited transfers</span>
-          </div>
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={handleDisconnect} className="flex items-center gap-2 px-3 py-2 text-red-600 cursor-pointer">
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={handleDisconnect} className="flex items-center gap-2 px-3 py-2 text-red-600 hover:!text-red-600 hover:!bg-red-50 cursor-pointer text-sm font-medium">
           <LogOut className="h-4 w-4" />
-          Disconnect
+          Bağlantıyı Kes
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
