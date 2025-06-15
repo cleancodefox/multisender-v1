@@ -1,7 +1,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Wallet, ChevronDown } from 'lucide-react';
+import { Wallet, ChevronDown, Copy, ExternalLink, LogOut } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,9 +18,9 @@ export const WalletConnect = ({ balance }: WalletConnectProps) => {
 
   if (!isConnected) {
     return (
-      <Button className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700">
+      <Button className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 rounded-xl px-4 py-2 text-sm font-medium">
         <Wallet className="h-4 w-4 mr-2" />
-        Connect Wallet
+        Connect
       </Button>
     );
   }
@@ -28,24 +28,27 @@ export const WalletConnect = ({ balance }: WalletConnectProps) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="bg-white/80 border-purple-200 hover:bg-purple-50">
-          <div className="flex items-center space-x-3">
-            <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-              <span className="font-mono text-sm">9WzD...4Kx7</span>
-            </div>
-            <div className="text-right">
-              <div className="text-xs text-gray-500">Balance</div>
-              <div className="font-semibold">{balance.toFixed(3)} SOL</div>
-            </div>
-            <ChevronDown className="h-4 w-4 text-gray-400" />
+        <Button variant="outline" className="bg-gray-50 border-gray-200 hover:bg-gray-100 rounded-xl px-3 py-2">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+            <span className="font-mono text-xs text-gray-700">9WzD...4Kx7</span>
+            <ChevronDown className="h-3 w-3 text-gray-400" />
           </div>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-48 bg-white/95 backdrop-blur-sm">
-        <DropdownMenuItem>Copy Address</DropdownMenuItem>
-        <DropdownMenuItem>View on Explorer</DropdownMenuItem>
-        <DropdownMenuItem className="text-red-600">Disconnect</DropdownMenuItem>
+      <DropdownMenuContent align="end" className="w-48 bg-white/95 backdrop-blur-sm border-gray-100 rounded-xl">
+        <DropdownMenuItem className="flex items-center gap-2 px-3 py-2">
+          <Copy className="h-4 w-4" />
+          Copy Address
+        </DropdownMenuItem>
+        <DropdownMenuItem className="flex items-center gap-2 px-3 py-2">
+          <ExternalLink className="h-4 w-4" />
+          View Explorer
+        </DropdownMenuItem>
+        <DropdownMenuItem className="flex items-center gap-2 px-3 py-2 text-red-600">
+          <LogOut className="h-4 w-4" />
+          Disconnect
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
