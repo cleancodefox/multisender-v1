@@ -10,7 +10,10 @@ import {
   ArrowRight,
   CheckCircle,
   Users,
-  DollarSign
+  DollarSign,
+  Clock,
+  TrendingUp,
+  Copy
 } from 'lucide-react';
 
 interface WelcomeScreenProps {
@@ -21,31 +24,32 @@ interface WelcomeScreenProps {
 export const WelcomeScreen = ({ onConnect, isConnecting }: WelcomeScreenProps) => {
   const features = [
     {
-      icon: <Zap className="h-5 w-5 text-gray-600" />,
-      title: "Lightning Fast",
-      description: "Send to 1000+ wallets instantly"
+      icon: <Users className="h-6 w-6 text-black" />,
+      title: "Toplu Gönderim",
+      description: "Tek seferde 1000+ adrese token gönderin"
     },
     {
-      icon: <Shield className="h-5 w-5 text-gray-600" />,
-      title: "100% Secure", 
-      description: "Your keys, your control"
+      icon: <DollarSign className="h-6 w-6 text-black" />,
+      title: "Düşük Komisyon", 
+      description: "Solana'nın düşük ücretlerinden yararlanın"
     },
     {
-      icon: <DollarSign className="h-5 w-5 text-gray-600" />,
-      title: "Save 90%",
-      description: "Bulk transfers = massive savings"
+      icon: <Zap className="h-6 w-6 text-black" />,
+      title: "Hızlı İşlem",
+      description: "Saniyeler içinde binlerce transfer"
     }
   ];
 
-  const stats = [
-    { value: "10M+", label: "Tokens Sent" },
-    { value: "50K+", label: "Users" },
-    { value: "99.9%", label: "Success Rate" }
+  const useCases = [
+    "💰 Airdrop dağıtımları",
+    "💸 Çalışan maaş ödemeleri", 
+    "🎁 NFT holder ödülleri",
+    "📊 Yatırımcı kar paylaşımları"
   ];
 
   return (
     <div className="min-h-screen bg-gray-50/50">
-      {/* Header - Ana panel ile aynı stil */}
+      {/* Header */}
       <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-sm border-b border-gray-100">
         <div className="max-w-6xl mx-auto px-6 py-3">
           <div className="flex items-center justify-between">
@@ -63,12 +67,12 @@ export const WelcomeScreen = ({ onConnect, isConnecting }: WelcomeScreenProps) =
               {isConnecting ? (
                 <>
                   <div className="w-4 h-4 border-2 border-gray-300 border-t-white rounded-full animate-spin mr-2"></div>
-                  Connecting...
+                  Bağlanıyor...
                 </>
               ) : (
                 <>
                   <Wallet className="h-4 w-4 mr-2" />
-                  Connect Wallet
+                  Cüzdan Bağla
                 </>
               )}
             </Button>
@@ -80,56 +84,77 @@ export const WelcomeScreen = ({ onConnect, isConnecting }: WelcomeScreenProps) =
       <main className="max-w-6xl mx-auto px-6">
         <div className="pt-16 pb-12 text-center">
           <div className="inline-flex items-center gap-2 bg-white border border-gray-200 rounded-full px-4 py-2 mb-8 shadow-sm">
-            <CheckCircle className="h-4 w-4 text-green-600" />
-            <span className="text-sm font-medium text-black">#1 on Solana</span>
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+            <span className="text-sm font-medium text-black">Solana Mainnet</span>
             <Badge variant="secondary" className="bg-gray-100 text-black text-xs">
-              Free
+              Aktif
             </Badge>
           </div>
           
           <h1 className="text-4xl md:text-6xl font-bold text-black mb-6 leading-tight">
-            Send crypto to{' '}
+            Binlerce adrese{' '}
             <span className="text-gray-600">
-              thousands
+              tek tıkla
             </span>
             <br/>
-            at once
+            token gönderin
           </h1>
           
-          <p className="text-lg text-gray-600 mb-10 max-w-xl mx-auto">
-            The fastest way to distribute tokens on Solana.
+          <p className="text-lg text-gray-600 mb-10 max-w-2xl mx-auto">
+            Solana blockchain'inde toplu token transferi yapmanın en kolay yolu.
             <br/>
-            <span className="font-medium text-black">Simple. Fast. Cheap.</span>
+            <span className="font-medium text-black">Airdrop, maaş, ödül dağıtımları için ideal.</span>
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
             <Button 
               onClick={onConnect}
               disabled={isConnecting}
               size="lg"
               className="bg-black hover:bg-gray-800 text-white px-8 h-12 text-base font-medium rounded-xl shadow-sm group"
             >
-              <Wallet className="h-4 w-4 mr-2" />
-              {isConnecting ? 'Connecting...' : 'Start Free'}
+              <Send className="h-4 w-4 mr-2" />
+              {isConnecting ? 'Bağlanıyor...' : 'Hemen Başla'}
               <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform duration-200" />
-            </Button>
-            <Button 
-              variant="outline" 
-              size="lg"
-              className="h-12 px-8 text-base font-medium rounded-xl border border-gray-200 hover:bg-gray-50"
-            >
-              Watch Demo
             </Button>
           </div>
 
-          {/* Stats */}
-          <div className="grid grid-cols-3 gap-8 mb-16">
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-2xl md:text-3xl font-bold text-black mb-1">
-                  {stat.value}
-                </div>
-                <div className="text-sm text-gray-500">{stat.label}</div>
+          {/* Quick Stats */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-black mb-1">~0.000005</div>
+              <div className="text-sm text-gray-500">SOL per transfer</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-black mb-1">&lt;5s</div>
+              <div className="text-sm text-gray-500">Ortalama süre</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-black mb-1">1000+</div>
+              <div className="text-sm text-gray-500">Max adres</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-black mb-1">99.9%</div>
+              <div className="text-sm text-gray-500">Başarı oranı</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Use Cases */}
+        <div className="py-16">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-black mb-3">
+              Kimler Kullanıyor?
+            </h2>
+            <p className="text-lg text-gray-600">
+              MultiSender ile neler yapabilirsiniz
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto mb-12">
+            {useCases.map((useCase, index) => (
+              <div key={index} className="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-100">
+                <span className="text-base">{useCase}</span>
               </div>
             ))}
           </div>
@@ -137,15 +162,6 @@ export const WelcomeScreen = ({ onConnect, isConnecting }: WelcomeScreenProps) =
 
         {/* Features */}
         <div className="py-16">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-black mb-3">
-              Why MultiSender?
-            </h2>
-            <p className="text-lg text-gray-600">
-              Built for speed, security, and savings
-            </p>
-          </div>
-
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {features.map((feature, index) => (
               <Card key={index} className="border border-gray-100 hover:border-gray-200 hover:shadow-sm transition-all duration-200 bg-white">
@@ -165,45 +181,61 @@ export const WelcomeScreen = ({ onConnect, isConnecting }: WelcomeScreenProps) =
           </div>
         </div>
 
-        {/* Testimonial */}
+        {/* How it works */}
         <div className="py-16">
-          <Card className="max-w-3xl mx-auto bg-black border-0 text-white">
-            <CardContent className="p-8 text-center">
-              <blockquote className="text-xl md:text-2xl font-semibold mb-6">
-                "Saved us 40+ hours on our airdrop. 
-                This tool is a game-changer!"
-              </blockquote>
-              <div className="flex items-center justify-center gap-3">
-                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-black font-semibold text-sm">
-                  JD
-                </div>
-                <div className="text-left">
-                  <div className="font-medium">John Dao</div>
-                  <div className="text-gray-400 text-sm">Founder @SolanaLabs</div>
-                </div>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-black mb-3">
+              Nasıl Çalışır?
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            <div className="text-center">
+              <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center mb-4 mx-auto">
+                <span className="text-white font-bold">1</span>
               </div>
-            </CardContent>
-          </Card>
+              <h3 className="text-lg font-semibold text-black mb-2">Cüzdan Bağla</h3>
+              <p className="text-gray-600 text-sm">Solana cüzdanınızı güvenli şekilde bağlayın</p>
+            </div>
+            
+            <div className="text-center">
+              <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center mb-4 mx-auto">
+                <span className="text-white font-bold">2</span>
+              </div>
+              <h3 className="text-lg font-semibold text-black mb-2">Adresleri Ekle</h3>
+              <p className="text-gray-600 text-sm">CSV dosyası veya manuel olarak adresleri ekleyin</p>
+            </div>
+            
+            <div className="text-center">
+              <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center mb-4 mx-auto">
+                <span className="text-white font-bold">3</span>
+              </div>
+              <h3 className="text-lg font-semibold text-black mb-2">Gönder</h3>
+              <p className="text-gray-600 text-sm">Tek tıkla tüm transferleri gerçekleştirin</p>
+            </div>
+          </div>
         </div>
 
         {/* CTA */}
         <div className="py-16 text-center">
-          <h2 className="text-3xl font-bold text-black mb-4">
-            Ready to send?
-          </h2>
-          <p className="text-lg text-gray-600 mb-8">
-            Join thousands of projects using MultiSender
-          </p>
-          <Button 
-            onClick={onConnect}
-            disabled={isConnecting}
-            size="lg"
-            className="bg-black hover:bg-gray-800 text-white px-10 h-14 text-lg font-medium rounded-xl shadow-sm group"
-          >
-            <Wallet className="h-5 w-5 mr-2" />
-            {isConnecting ? 'Connecting...' : 'Get Started'}
-            <ArrowRight className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform duration-200" />
-          </Button>
+          <div className="bg-black rounded-2xl p-12 text-white">
+            <h2 className="text-3xl font-bold mb-4">
+              Toplu Transfer Yapmaya Hazır Mısınız?
+            </h2>
+            <p className="text-lg text-gray-300 mb-8 max-w-xl mx-auto">
+              Binlerce Solana projesi MultiSender kullanarak zaman ve para tasarrufu yapıyor
+            </p>
+            <Button 
+              onClick={onConnect}
+              disabled={isConnecting}
+              size="lg"
+              className="bg-white hover:bg-gray-100 text-black px-10 h-14 text-lg font-medium rounded-xl shadow-sm group"
+            >
+              <Wallet className="h-5 w-5 mr-2" />
+              {isConnecting ? 'Bağlanıyor...' : 'Ücretsiz Başla'}
+              <ArrowRight className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform duration-200" />
+            </Button>
+          </div>
         </div>
       </main>
 
@@ -218,7 +250,7 @@ export const WelcomeScreen = ({ onConnect, isConnecting }: WelcomeScreenProps) =
               <span className="font-medium text-black">MultiSender.so</span>
             </div>
             <p className="text-sm text-gray-500">
-              &copy; {new Date().getFullYear()} MultiSender.so - All rights reserved.
+              &copy; {new Date().getFullYear()} MultiSender.so - Tüm hakları saklıdır.
             </p>
           </div>
         </div>
