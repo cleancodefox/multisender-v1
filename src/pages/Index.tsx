@@ -34,10 +34,6 @@ const Index = () => {
     setTimeout(() => {
       setIsWalletConnected(true);
       setIsConnecting(false);
-      toast({
-        title: "🎉 Welcome to multisender.so!",
-        description: "Ready to start your bulk transfers",
-      });
     }, 1500);
   };
 
@@ -92,25 +88,25 @@ const Index = () => {
   const validRecipients = recipients.filter(r => r.isValid);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-green-50">
       {/* Enhanced Header */}
       <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200 shadow-sm">
         <div className="px-4 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-blue-500 rounded-xl flex items-center justify-center shadow-lg">
+              <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center shadow-lg">
                 <Send className="h-5 w-5 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-                  multisender.so
+                <h1 className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+                  SolMulti Pro
                 </h1>
                 <div className="flex items-center gap-2">
-                  <Badge variant="secondary" className="bg-purple-100 text-purple-800 text-xs px-2 py-0.5 rounded-full">
+                  <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 text-xs px-2 py-0.5 rounded-full">
                     <Sparkles className="h-3 w-3 mr-1" />
-                    Beta
+                    Premium
                   </Badge>
-                  <p className="text-xs text-gray-500">Bulk Transfer Tool</p>
+                  <p className="text-xs text-gray-500">Advanced multisender</p>
                 </div>
               </div>
             </div>
@@ -128,8 +124,8 @@ const Index = () => {
         <div className="pb-20">
           {/* Enhanced Balance Card */}
           <div className="p-4">
-            <Card className="bg-gradient-to-r from-gray-900 via-purple-900 to-blue-900 text-white border-0 shadow-2xl overflow-hidden relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-blue-500/20"></div>
+            <Card className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white border-0 shadow-2xl overflow-hidden relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-green-500/10 to-emerald-500/10"></div>
               <CardContent className="p-6 relative">
                 <div className="text-center space-y-3">
                   <div className="flex items-center justify-center gap-2 mb-2">
@@ -143,6 +139,10 @@ const Index = () => {
                     <Badge variant="secondary" className="bg-green-500/20 text-green-300 border-green-500/30 px-3 py-1">
                       <CheckCircle className="h-3 w-3 mr-1" />
                       Connected
+                    </Badge>
+                    <Badge variant="secondary" className="bg-yellow-500/20 text-yellow-300 border-yellow-500/30 px-3 py-1">
+                      <TrendingUp className="h-3 w-3 mr-1" />
+                      Gas Optimized
                     </Badge>
                   </div>
                 </div>
@@ -206,7 +206,7 @@ const Index = () => {
                 
                 <div className="flex justify-between text-lg font-bold">
                   <span>Total Cost</span>
-                  <span className="text-purple-600">{(totalCost + networkFees).toFixed(6)} SOL</span>
+                  <span className="text-green-600">{(totalCost + networkFees).toFixed(6)} SOL</span>
                 </div>
 
                 {walletBalance < (totalCost + networkFees) && totalCost > 0 && (
@@ -219,9 +219,9 @@ const Index = () => {
                 )}
 
                 {validRecipients.length > 0 && walletBalance >= (totalCost + networkFees) && totalCost > 0 && (
-                  <Alert className="bg-gradient-to-r from-purple-50 to-blue-50 border-purple-200 rounded-xl">
-                    <CheckCircle className="h-4 w-4 text-purple-600" />
-                    <AlertDescription className="text-purple-800 text-sm">
+                  <Alert className="bg-green-50 border-green-200 rounded-xl">
+                    <CheckCircle className="h-4 w-4 text-green-600" />
+                    <AlertDescription className="text-green-800 text-sm">
                       🚀 Ready to execute! All addresses validated and balance sufficient.
                     </AlertDescription>
                   </Alert>
@@ -233,7 +233,7 @@ const Index = () => {
           {/* Enhanced Fixed Bottom Button */}
           <div className="fixed bottom-0 left-0 right-0 p-4 bg-white/95 backdrop-blur-sm border-t border-gray-200">
             <Button 
-              className="w-full h-14 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5"
+              className="w-full h-14 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5"
               onClick={() => setIsPreviewMode(true)}
               disabled={validRecipients.length === 0 || totalCost === 0 || walletBalance < (totalCost + networkFees)}
             >
