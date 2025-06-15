@@ -48,7 +48,7 @@ export const AddressManager = ({
   const invalidRecipients = recipients.filter(r => r.isValid === false);
 
   return (
-    <div className="border border-white bg-black p-8">
+    <div className="border border-black bg-white p-8">
       <div className="flex items-center gap-3 mb-8">
         <Users className="h-6 w-6" />
         <h2 className="text-2xl font-bold">MANAGE RECIPIENTS</h2>
@@ -70,12 +70,12 @@ export const AddressManager = ({
             key={tab.id}
             onClick={() => !tab.disabled && setActiveTab(tab.id)}
             disabled={tab.disabled}
-            className={`p-3 border border-white font-bold text-sm transition-colors ${
+            className={`p-3 border border-black font-bold text-sm transition-colors ${
               activeTab === tab.id
-                ? 'bg-white text-black'
+                ? 'bg-black text-white'
                 : tab.disabled
-                ? 'bg-black text-gray-500 border-gray-500 cursor-not-allowed'
-                : 'bg-black text-white hover:bg-white hover:text-black'
+                ? 'bg-white text-gray-400 border-gray-300 cursor-not-allowed'
+                : 'bg-white text-black hover:bg-black hover:text-white'
             }`}
           >
             {tab.label}
@@ -90,7 +90,7 @@ export const AddressManager = ({
             placeholder="Enter wallet address..."
             value={manualAddress}
             onChange={(e) => setManualAddress(e.target.value)}
-            className="flex-1 h-12 border border-white bg-black text-white focus:border-white"
+            className="flex-1 h-12 border border-black bg-white text-black focus:border-black"
           />
           {distributionMethod === 'manual' && (
             <Input
@@ -100,12 +100,12 @@ export const AddressManager = ({
               placeholder="Amount (SOL)"
               value={manualAmount}
               onChange={(e) => setManualAmount(e.target.value === '' ? '' : Number(e.target.value))}
-              className="sm:w-36 h-12 border border-white bg-black text-white focus:border-white"
+              className="sm:w-36 h-12 border border-black bg-white text-black focus:border-black"
             />
           )}
           <Button 
             onClick={handleManualAdd} 
-            className="h-12 bg-white hover:bg-gray-200 text-black font-bold"
+            className="h-12 bg-black hover:bg-gray-800 text-white font-bold"
           >
             <Plus className="h-4 w-4 sm:mr-2" />
             <span className="hidden sm:inline">ADD</span>
@@ -114,7 +114,7 @@ export const AddressManager = ({
       )}
 
       {activeTab === 'csv' && (
-        <div className="border border-white p-8 text-center hover:bg-white hover:text-black transition-colors cursor-pointer mb-8">
+        <div className="border border-black p-8 text-center hover:bg-black hover:text-white transition-colors cursor-pointer mb-8">
           <Upload className="h-8 w-8 mx-auto mb-4" />
           <p className="font-bold mb-2">DRAG AND DROP OR SELECT A CSV FILE</p>
           <p className="text-sm opacity-70">Format: address,amount</p>
@@ -136,8 +136,8 @@ export const AddressManager = ({
             </div>
           </div>
           
-          <div className="border border-white">
-            <div className="grid grid-cols-12 gap-4 p-4 border-b border-white font-bold text-sm">
+          <div className="border border-black">
+            <div className="grid grid-cols-12 gap-4 p-4 border-b border-black font-bold text-sm">
               <div className="col-span-1">#</div>
               <div className="col-span-6">WALLET ADDRESS</div>
               <div className="col-span-3 text-right">AMOUNT (SOL)</div>
@@ -146,7 +146,7 @@ export const AddressManager = ({
             </div>
             
             {recipients.map((recipient, index) => (
-              <div key={index} className="grid grid-cols-12 gap-4 p-4 border-b border-white last:border-b-0 hover:bg-white hover:text-black transition-colors">
+              <div key={index} className="grid grid-cols-12 gap-4 p-4 border-b border-black last:border-b-0 hover:bg-black hover:text-white transition-colors">
                 <div className="col-span-1 text-sm opacity-70">{index + 1}</div>
                 <div className="col-span-6">
                   <code className="text-sm font-mono">
@@ -160,7 +160,7 @@ export const AddressManager = ({
                     min="0"
                     value={recipient.amount || ''}
                     onChange={(e) => onUpdateRecipient(index, recipient.address, Number(e.target.value))}
-                    className="w-full h-10 text-sm border border-white bg-transparent text-right"
+                    className="w-full h-10 text-sm border border-black bg-transparent text-right"
                     disabled={distributionMethod === 'equal'}
                     placeholder="0.00"
                   />
@@ -173,7 +173,7 @@ export const AddressManager = ({
                     variant="ghost"
                     size="icon"
                     onClick={() => onRemoveRecipient(index)}
-                    className="h-8 w-8 p-0 hover:bg-white hover:text-black"
+                    className="h-8 w-8 p-0 hover:bg-black hover:text-white"
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>

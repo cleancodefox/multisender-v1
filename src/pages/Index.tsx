@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { WelcomeScreen } from '@/components/WelcomeScreen';
 import { Button } from '@/components/ui/button';
@@ -94,14 +93,14 @@ const Index = () => {
   const isReady = validRecipients.length > 0 && totalCost > 0 && walletBalance >= (totalCost + networkFees);
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-white text-black">
       {/* Header */}
-      <header className="border-b border-white">
+      <header className="border-b border-black">
         <div className="max-w-6xl mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="w-10 h-10 bg-white flex items-center justify-center">
-                <Send className="h-5 w-5 text-black" />
+              <div className="w-10 h-10 bg-black flex items-center justify-center">
+                <Send className="h-5 w-5 text-white" />
               </div>
               <h1 className="text-2xl font-bold">MULTISENDER.SO</h1>
             </div>
@@ -136,7 +135,7 @@ const Index = () => {
             </div>
 
             <div className="lg:col-span-1">
-              <div className="sticky top-8 border border-white bg-black p-8">
+              <div className="sticky top-8 border border-black bg-white p-8">
                 <h2 className="text-2xl font-bold mb-8">SUMMARY</h2>
                 
                 <div className="space-y-6">
@@ -157,7 +156,7 @@ const Index = () => {
                     <span className="font-bold">{networkFees.toFixed(6)} SOL</span>
                   </div>
                   
-                  <div className="border-t border-white pt-6">
+                  <div className="border-t border-black pt-6">
                     <div className="flex justify-between text-xl">
                       <span className="font-bold">TOTAL</span>
                       <span className="font-bold">{(totalCost + networkFees).toFixed(6)} SOL</span>
@@ -166,18 +165,18 @@ const Index = () => {
                 </div>
 
                 {walletBalance < (totalCost + networkFees) && totalCost > 0 && (
-                  <div className="mt-6 p-4 border border-white bg-black">
-                    <div className="flex items-center gap-2">
+                  <div className="mt-6 p-4 border border-red-600 bg-red-50">
+                    <div className="flex items-center gap-2 text-red-600">
                       <AlertTriangle className="h-5 w-5" />
                       <span className="font-bold">INSUFFICIENT BALANCE</span>
                     </div>
-                    <p className="mt-2">Need {((totalCost + networkFees) - walletBalance).toFixed(6)} more SOL</p>
+                    <p className="mt-2 text-red-600">Need {((totalCost + networkFees) - walletBalance).toFixed(6)} more SOL</p>
                   </div>
                 )}
 
                 {isReady && (
-                  <div className="mt-6 p-4 border border-white bg-black">
-                    <div className="flex items-center gap-2">
+                  <div className="mt-6 p-4 border border-green-600 bg-green-50">
+                    <div className="flex items-center gap-2 text-green-600">
                       <CheckCircle className="h-5 w-5" />
                       <span className="font-bold">READY TO SEND</span>
                     </div>
@@ -185,7 +184,7 @@ const Index = () => {
                 )}
 
                 <Button 
-                  className="w-full h-14 bg-white hover:bg-gray-200 text-black font-bold text-lg mt-8"
+                  className="w-full h-14 bg-black hover:bg-gray-800 text-white font-bold text-lg mt-8"
                   onClick={() => setIsPreviewMode(true)}
                   disabled={!isReady}
                 >
