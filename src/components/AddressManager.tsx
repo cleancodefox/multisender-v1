@@ -39,6 +39,10 @@ export const AddressManager = ({
       onAddRecipient(manualAddress, distributionMethod === 'manual' ? manualAmount : 0);
       setManualAddress('');
       setManualAmount(0);
+      toast({
+        title: "Recipient Added",
+        description: "Address added successfully",
+      });
     }
   };
 
@@ -54,18 +58,18 @@ export const AddressManager = ({
   const invalidRecipients = recipients.filter(r => !r.isValid);
 
   return (
-    <Card className="bg-white border border-gray-200">
+    <Card className="bg-white border border-gray-100">
       <CardHeader className="pb-4">
-        <CardTitle className="text-lg">Add Recipients</CardTitle>
-        <CardDescription className="text-gray-600">
+        <CardTitle className="text-lg text-black">Add Recipients</CardTitle>
+        <CardDescription className="text-gray-500">
           Add wallet addresses to receive tokens
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <Tabs defaultValue="manual" className="w-full">
-          <TabsList className="grid w-full grid-cols-4 bg-gray-100">
-            <TabsTrigger value="manual" className="text-xs">Manual Entry</TabsTrigger>
-            <TabsTrigger value="csv" className="text-xs">CSV Upload</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-4 bg-gray-50">
+            <TabsTrigger value="manual" className="text-xs">Manual</TabsTrigger>
+            <TabsTrigger value="csv" className="text-xs">CSV</TabsTrigger>
             <TabsTrigger value="nft" className="text-xs">NFT Holders</TabsTrigger>
             <TabsTrigger value="token" className="text-xs">Token Holders</TabsTrigger>
           </TabsList>
@@ -76,7 +80,7 @@ export const AddressManager = ({
                 placeholder="Enter wallet address"
                 value={manualAddress}
                 onChange={(e) => setManualAddress(e.target.value)}
-                className="flex-1 h-10 bg-white border-gray-300 focus:border-gray-900"
+                className="flex-1 h-10 bg-white border-gray-200 focus:border-black"
               />
               {distributionMethod === 'manual' && (
                 <Input
@@ -85,41 +89,41 @@ export const AddressManager = ({
                   placeholder="Amount"
                   value={manualAmount || ''}
                   onChange={(e) => setManualAmount(Number(e.target.value))}
-                  className="w-32 h-10 bg-white border-gray-300 focus:border-gray-900"
+                  className="w-32 h-10 bg-white border-gray-200 focus:border-black"
                 />
               )}
-              <Button onClick={handleManualAdd} className="h-10 bg-gray-900 hover:bg-gray-800">
+              <Button onClick={handleManualAdd} className="h-10 bg-black hover:bg-gray-800 text-white">
                 <Plus className="h-4 w-4" />
               </Button>
             </div>
           </TabsContent>
 
           <TabsContent value="csv" className="space-y-4">
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+            <div className="border-2 border-dashed border-gray-200 rounded-lg p-8 text-center hover:border-gray-300 transition-colors">
               <Upload className="h-8 w-8 text-gray-400 mx-auto mb-2" />
               <p className="text-sm text-gray-600 mb-2">Drop CSV file here or click to upload</p>
               <p className="text-xs text-gray-500">Format: Address, Amount</p>
-              <Button variant="outline" className="mt-3">
+              <Button variant="outline" className="mt-3 border-gray-200 hover:bg-gray-50">
                 Choose File
               </Button>
             </div>
           </TabsContent>
 
           <TabsContent value="nft" className="space-y-4">
-            <div className="p-6 bg-gray-50 rounded-lg border border-gray-200 text-center">
+            <div className="p-6 bg-gray-50 rounded-lg border border-gray-100 text-center">
               <Users className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-              <p className="text-sm text-gray-600 mb-2">NFT Holders</p>
+              <p className="text-sm text-gray-600 mb-1">NFT Holders</p>
               <p className="text-xs text-gray-500 mb-3">+0.1 SOL - Available with same amount per wallet</p>
-              <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">Coming Soon</Badge>
+              <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200">Soon</Badge>
             </div>
           </TabsContent>
 
           <TabsContent value="token" className="space-y-4">
-            <div className="p-6 bg-gray-50 rounded-lg border border-gray-200 text-center">
+            <div className="p-6 bg-gray-50 rounded-lg border border-gray-100 text-center">
               <Coins className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-              <p className="text-sm text-gray-600 mb-2">Token Holders</p>
+              <p className="text-sm text-gray-600 mb-1">Token Holders</p>
               <p className="text-xs text-gray-500 mb-3">+0.1 SOL - Available with same amount per wallet</p>
-              <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">Coming Soon</Badge>
+              <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200">Soon</Badge>
             </div>
           </TabsContent>
         </Tabs>
@@ -127,43 +131,47 @@ export const AddressManager = ({
         {/* Recipients Summary */}
         <div className="flex items-center justify-between text-sm">
           <div className="flex items-center gap-4">
-            <span className="text-gray-600">{recipients.length} Wallets</span>
-            <span className="text-red-600">{invalidRecipients.length} Invalid</span>
+            <span className="text-gray-500">{recipients.length} Wallets</span>
+            {invalidRecipients.length > 0 && (
+              <span className="text-red-600">{invalidRecipients.length} Invalid</span>
+            )}
           </div>
-          <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-            {validRecipients.length} Valid
-          </Badge>
+          {validRecipients.length > 0 && (
+            <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+              {validRecipients.length} Valid
+            </Badge>
+          )}
         </div>
 
         {/* Recipients Table */}
         {recipients.length > 0 && (
-          <div className="border border-gray-200 rounded-lg">
+          <div className="border border-gray-100 rounded-lg overflow-hidden">
             <Table>
               <TableHeader>
                 <TableRow className="bg-gray-50">
-                  <TableHead className="text-xs text-gray-600 font-medium">#</TableHead>
-                  <TableHead className="text-xs text-gray-600 font-medium">Wallet Address</TableHead>
-                  <TableHead className="text-xs text-gray-600 font-medium">Amount (SOL)</TableHead>
-                  <TableHead className="text-xs text-gray-600 font-medium">Status</TableHead>
-                  <TableHead className="text-xs text-gray-600 font-medium w-20"></TableHead>
+                  <TableHead className="text-xs text-gray-500 font-medium">#</TableHead>
+                  <TableHead className="text-xs text-gray-500 font-medium">Wallet Address</TableHead>
+                  <TableHead className="text-xs text-gray-500 font-medium">Amount (SOL)</TableHead>
+                  <TableHead className="text-xs text-gray-500 font-medium">Status</TableHead>
+                  <TableHead className="text-xs text-gray-500 font-medium w-20"></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {recipients.map((recipient, index) => (
                   <TableRow key={index} className="hover:bg-gray-50">
-                    <TableCell className="text-sm text-gray-500">{index + 1}</TableCell>
+                    <TableCell className="text-sm text-gray-400">{index + 1}</TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
-                        <code className="text-xs bg-gray-100 px-2 py-1 rounded font-mono">
+                        <code className="text-xs bg-gray-100 px-2 py-1 rounded font-mono text-gray-700">
                           {recipient.address.slice(0, 8)}...{recipient.address.slice(-4)}
                         </code>
                         <Button
                           variant="ghost"
                           size="sm"
                           onClick={() => handleCopyAddress(recipient.address)}
-                          className="h-6 w-6 p-0"
+                          className="h-6 w-6 p-0 hover:bg-gray-100"
                         >
-                          <Copy className="h-3 w-3" />
+                          <Copy className="h-3 w-3 text-gray-400" />
                         </Button>
                       </div>
                     </TableCell>
@@ -173,18 +181,18 @@ export const AddressManager = ({
                         step="0.000001"
                         value={recipient.amount || ''}
                         onChange={(e) => onUpdateRecipient(index, recipient.address, Number(e.target.value))}
-                        className="w-24 h-8 text-sm bg-white border-gray-300 focus:border-gray-900"
+                        className="w-24 h-8 text-sm bg-white border-gray-200 focus:border-black"
                         disabled={distributionMethod === 'equal'}
                       />
                     </TableCell>
                     <TableCell>
                       {recipient.isValid ? (
-                        <Badge variant="secondary" className="bg-green-50 text-green-700 border-green-200">
+                        <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
                           <CheckCircle className="h-3 w-3 mr-1" />
                           Valid
                         </Badge>
                       ) : (
-                        <Badge variant="secondary" className="bg-red-50 text-red-700 border-red-200">
+                        <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200">
                           <AlertCircle className="h-3 w-3 mr-1" />
                           Invalid
                         </Badge>
@@ -195,7 +203,7 @@ export const AddressManager = ({
                         variant="ghost"
                         size="sm"
                         onClick={() => onRemoveRecipient(index)}
-                        className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50"
+                        className="h-8 w-8 p-0 text-red-500 hover:text-red-600 hover:bg-red-50"
                       >
                         <Trash2 className="h-3 w-3" />
                       </Button>

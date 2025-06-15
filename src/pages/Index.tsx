@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { WelcomeScreen } from '@/components/WelcomeScreen';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -93,17 +92,17 @@ const Index = () => {
   const validRecipients = recipients.filter(r => r.isValid);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Minimal Header */}
-      <header className="sticky top-0 z-50 bg-white border-b border-gray-200">
+    <div className="min-h-screen bg-white">
+      {/* Header */}
+      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-sm border-b border-gray-100">
         <div className="px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
                 <Send className="h-4 w-4 text-white" />
               </div>
               <div>
-                <h1 className="text-lg font-semibold text-gray-900">MultiSender.so</h1>
+                <h1 className="text-lg font-semibold text-black">MultiSender.so</h1>
                 <p className="text-xs text-gray-500">Bulk token distribution</p>
               </div>
             </div>
@@ -121,16 +120,16 @@ const Index = () => {
         <div className="pb-24">
           {/* Balance Card */}
           <div className="p-6">
-            <Card className="bg-white border border-gray-200">
+            <Card className="bg-white border border-gray-100">
               <CardContent className="p-6">
-                <div className="text-center space-y-3">
+                <div className="text-center space-y-4">
                   <div className="flex items-center justify-center gap-2 mb-2">
-                    <Wallet className="h-4 w-4 text-gray-600" />
-                    <p className="text-sm text-gray-600">Available Balance</p>
+                    <Wallet className="h-4 w-4 text-gray-400" />
+                    <p className="text-sm text-gray-500">Available Balance</p>
                   </div>
-                  <p className="text-3xl font-semibold text-gray-900">{walletBalance.toFixed(6)}</p>
-                  <p className="text-sm text-gray-500">SOL</p>
-                  <Badge variant="secondary" className="bg-green-50 text-green-700 border-green-200">
+                  <p className="text-4xl font-bold text-black">{walletBalance.toFixed(6)}</p>
+                  <p className="text-base text-gray-500">SOL</p>
+                  <Badge variant="outline" className="border-green-200 text-green-700 bg-green-50">
                     <CheckCircle className="h-3 w-3 mr-1" />
                     Connected
                   </Badge>
@@ -157,12 +156,12 @@ const Index = () => {
             />
 
             {/* Summary Card */}
-            <Card className="bg-white border border-gray-200">
+            <Card className="bg-white border border-gray-100">
               <CardHeader className="pb-4">
                 <CardTitle className="text-lg flex items-center justify-between">
                   Summary
                   {validRecipients.length > 0 && (
-                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                    <Badge variant="outline" className="border-green-200 text-green-700 bg-green-50">
                       {validRecipients.length} Ready
                     </Badge>
                   )}
@@ -170,33 +169,33 @@ const Index = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Recipients</span>
-                      <span className="font-medium">{recipients.length}</span>
+                      <span className="text-gray-500">Recipients</span>
+                      <span className="font-medium text-black">{recipients.length}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Valid</span>
+                      <span className="text-gray-500">Valid</span>
                       <span className="font-medium text-green-600">{validRecipients.length}</span>
                     </div>
                   </div>
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Amount</span>
-                      <span className="font-medium">{totalCost.toFixed(6)} SOL</span>
+                      <span className="text-gray-500">Amount</span>
+                      <span className="font-medium text-black">{totalCost.toFixed(6)} SOL</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Fees</span>
-                      <span className="font-medium">{networkFees.toFixed(6)} SOL</span>
+                      <span className="text-gray-500">Network Fees</span>
+                      <span className="font-medium text-black">{networkFees.toFixed(6)} SOL</span>
                     </div>
                   </div>
                 </div>
                 
-                <Separator />
+                <Separator className="bg-gray-100" />
                 
                 <div className="flex justify-between text-base font-semibold">
-                  <span>Total Cost</span>
-                  <span className="text-gray-900">{(totalCost + networkFees).toFixed(6)} SOL</span>
+                  <span className="text-gray-700">Total Cost</span>
+                  <span className="text-black">{(totalCost + networkFees).toFixed(6)} SOL</span>
                 </div>
 
                 {walletBalance < (totalCost + networkFees) && totalCost > 0 && (
@@ -221,9 +220,9 @@ const Index = () => {
           </div>
 
           {/* Fixed Bottom Button */}
-          <div className="fixed bottom-0 left-0 right-0 p-6 bg-white border-t border-gray-200">
+          <div className="fixed bottom-0 left-0 right-0 p-6 bg-white/90 backdrop-blur-sm border-t border-gray-100">
             <Button 
-              className="w-full h-12 bg-gray-900 hover:bg-gray-800 text-white font-medium rounded-lg"
+              className="w-full h-12 bg-black hover:bg-gray-800 text-white font-medium rounded-lg"
               onClick={() => setIsPreviewMode(true)}
               disabled={validRecipients.length === 0 || totalCost === 0 || walletBalance < (totalCost + networkFees)}
             >

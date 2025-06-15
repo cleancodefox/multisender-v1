@@ -20,31 +20,31 @@ export const BulkTransferForm = ({
   onDistributionMethodChange
 }: BulkTransferFormProps) => {
   return (
-    <Card className="bg-white border border-gray-200">
+    <Card className="bg-white border border-gray-100">
       <CardHeader className="pb-4">
-        <CardTitle className="flex items-center gap-2 text-lg">
-          <Calculator className="h-5 w-5 text-gray-700" />
+        <CardTitle className="flex items-center gap-2 text-lg text-black">
+          <Calculator className="h-5 w-5 text-gray-400" />
           Distribution Setup
         </CardTitle>
-        <CardDescription className="text-gray-600">
+        <CardDescription className="text-gray-500">
           Choose how to distribute tokens to recipients
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Distribution Method Selection */}
         <div className="space-y-4">
-          <Label className="text-sm font-medium text-gray-900">Distribution Method</Label>
+          <Label className="text-sm font-medium text-black">Distribution Method</Label>
           <RadioGroup 
             value={distributionMethod} 
             onValueChange={onDistributionMethodChange}
             className="space-y-3"
           >
-            <div className="flex items-center space-x-3 p-4 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors has-[:checked]:border-gray-900 has-[:checked]:bg-gray-50">
+            <div className="flex items-center space-x-3 p-4 rounded-lg border border-gray-100 hover:border-gray-200 transition-colors has-[:checked]:border-black has-[:checked]:bg-gray-50">
               <RadioGroupItem value="equal" id="equal" />
               <div className="flex items-center gap-3 flex-1">
-                <Users className="h-4 w-4 text-gray-600" />
+                <Users className="h-4 w-4 text-gray-400" />
                 <div>
-                  <Label htmlFor="equal" className="font-medium text-gray-900 cursor-pointer">
+                  <Label htmlFor="equal" className="font-medium text-black cursor-pointer">
                     Equal Distribution
                   </Label>
                   <p className="text-sm text-gray-500">Same amount to every recipient</p>
@@ -52,12 +52,12 @@ export const BulkTransferForm = ({
               </div>
             </div>
 
-            <div className="flex items-center space-x-3 p-4 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors has-[:checked]:border-gray-900 has-[:checked]:bg-gray-50">
+            <div className="flex items-center space-x-3 p-4 rounded-lg border border-gray-100 hover:border-gray-200 transition-colors has-[:checked]:border-black has-[:checked]:bg-gray-50">
               <RadioGroupItem value="manual" id="manual" />
               <div className="flex items-center gap-3 flex-1">
-                <DollarSign className="h-4 w-4 text-gray-600" />
+                <DollarSign className="h-4 w-4 text-gray-400" />
                 <div>
-                  <Label htmlFor="manual" className="font-medium text-gray-900 cursor-pointer">
+                  <Label htmlFor="manual" className="font-medium text-black cursor-pointer">
                     Manual Amounts
                   </Label>
                   <p className="text-sm text-gray-500">Set custom amount for each recipient</p>
@@ -69,8 +69,8 @@ export const BulkTransferForm = ({
 
         {/* Total Amount Input - Only show for equal split */}
         {distributionMethod === 'equal' && (
-          <div className="space-y-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
-            <Label htmlFor="totalAmount" className="text-sm font-medium text-gray-900">
+          <div className="space-y-3 p-4 bg-gray-50 rounded-lg border border-gray-100">
+            <Label htmlFor="totalAmount" className="text-sm font-medium text-black">
               Total Amount to Distribute
             </Label>
             <div className="relative">
@@ -81,13 +81,13 @@ export const BulkTransferForm = ({
                 placeholder="Enter total SOL amount"
                 value={totalAmount || ''}
                 onChange={(e) => onTotalAmountChange(Number(e.target.value))}
-                className="h-10 pr-12 bg-white border-gray-300 focus:border-gray-900"
+                className="h-10 pr-12 bg-white border-gray-200 focus:border-black"
               />
               <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm font-medium">
                 SOL
               </div>
             </div>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-500">
               This amount will be split equally among all recipients
             </p>
           </div>
@@ -95,8 +95,8 @@ export const BulkTransferForm = ({
 
         {/* Info for manual method */}
         {distributionMethod === 'manual' && (
-          <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-            <p className="text-blue-800 font-medium text-sm">Manual Amount Configuration</p>
+          <div className="p-4 bg-blue-50 rounded-lg border border-blue-100">
+            <p className="text-blue-900 font-medium text-sm">Manual Amount Configuration</p>
             <p className="text-blue-700 text-sm mt-1">
               You'll set individual amounts for each recipient below
             </p>
