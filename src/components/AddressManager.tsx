@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Plus, Upload, Users, Trash2, CheckCircle, XCircle } from 'lucide-react';
+import { Plus, Users, Trash2, CheckCircle, XCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface Recipient {
@@ -28,7 +28,6 @@ export const AddressManager = ({
 }: AddressManagerProps) => {
   const [manualAddress, setManualAddress] = useState('');
   const [manualAmount, setManualAmount] = useState<number | ''>('');
-  const [activeTab, setActiveTab] = useState('manual');
   const { toast } = useToast();
 
   const handleManualAdd = () => {
@@ -55,73 +54,53 @@ export const AddressManager = ({
       </div>
       
       <p className="text-sm text-gray-600 mb-6">
-        Add wallet addresses manually or via CSV file upload.
+        Add wallet addresses manually. Advanced features like CSV upload and token holder imports coming soon.
       </p>
 
-      {/* Tab Navigation */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-6">
-        {[
-          { id: 'manual', label: 'Manual Entry' },
-          { id: 'csv', label: 'CSV Upload' },
-          { id: 'nft', label: 'NFT Holders', disabled: true },
-          { id: 'token', label: 'Token Holders', disabled: true }
-        ].map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => !tab.disabled && setActiveTab(tab.id)}
-            disabled={tab.disabled}
-            className={`p-3 rounded-lg font-medium text-sm transition-all ${
-              activeTab === tab.id
-                ? 'bg-black text-white'
-                : tab.disabled
-                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
-
-      {/* Tab Content */}
-      {activeTab === 'manual' && (
-        <div className="flex flex-col sm:flex-row gap-3 mb-6">
+      {/* Simplified Manual Entry - Mobile First */}
+      <div className="space-y-4 mb-6">
+        <div className="flex flex-col space-y-3">
           <Input
             placeholder="Enter Solana wallet address..."
             value={manualAddress}
             onChange={(e) => setManualAddress(e.target.value)}
-            className="flex-1 h-11 border-gray-300 focus:border-black focus:ring-black rounded-lg"
+            className="h-12 border-gray-300 focus:border-black focus:ring-black rounded-xl"
           />
+          
           {distributionMethod === 'manual' && (
-            <Input
-              type="number"
-              step="0.000001"
-              min="0"
-              placeholder="Amount (SOL)"
-              value={manualAmount}
-              onChange={(e) => setManualAmount(e.target.value === '' ? '' : Number(e.target.value))}
-              className="sm:w-36 h-11 border-gray-300 focus:border-black focus:ring-black rounded-lg"
-            />
+            <div className="flex gap-3">
+              <Input
+                type="number"
+                step="0.000001"
+                min="0"
+                placeholder="Amount (SOL)"
+                value={manualAmount}
+                onChange={(e) => setManualAmount(e.target.value === '' ? '' : Number(e.target.value))}
+                className="flex-1 h-12 border-gray-300 focus:border-black focus:ring-black rounded-xl"
+              />
+              <Button 
+                onClick={handleManualAdd} 
+                className="h-12 bg-black hover:bg-gray-800 text-white font-medium px-6 rounded-xl"
+              >
+                <Plus className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">Add</span>
+              </Button>
+            </div>
           )}
-          <Button 
-            onClick={handleManualAdd} 
-            className="h-11 bg-black hover:bg-gray-800 text-white font-medium px-6 rounded-lg"
-          >
-            <Plus className="h-4 w-4 sm:mr-2" />
-            <span className="hidden sm:inline">Add</span>
-          </Button>
+          
+          {distributionMethod === 'equal' && (
+            <Button 
+              onClick={handleManualAdd} 
+              className="w-full sm:w-auto h-12 bg-black hover:bg-gray-800 text-white font-medium px-6 rounded-xl"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Add Recipient
+            </Button>
+          )}
         </div>
-      )}
+      </div>
 
-      {activeTab === 'csv' && (
-        <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition-colors cursor-pointer mb-6">
-          <Upload className="h-8 w-8 mx-auto mb-3 text-gray-400" />
-          <p className="font-medium text-gray-700 mb-1">Drop CSV file here or click to browse</p>
-          <p className="text-sm text-gray-500">Format: address,amount (one per line)</p>
-        </div>
-      )}
-
-      {/* Recipients List */}
+      {/* Recipients List - Mobile Optimized */}
       {recipients.length > 0 && (
         <div>
           <div className="flex items-center justify-between mb-4">
@@ -142,61 +121,109 @@ export const AddressManager = ({
             </div>
           </div>
           
-          <div className="border border-gray-200 rounded-lg overflow-hidden">
-            <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
-              <div className="grid grid-cols-12 gap-4 text-sm font-medium text-gray-700">
-                <div className="col-span-1">#</div>
-                <div className="col-span-6">Wallet Address</div>
-                <div className="col-span-3 text-right">Amount (SOL)</div>
-                <div className="col-span-1 text-center">Status</div>
-                <div className="col-span-1"></div>
-              </div>
-            </div>
-            
-            <div className="divide-y divide-gray-200">
+          {/* Mobile: Card Layout, Desktop: Table Layout */}
+          <div className="space-y-3 sm:space-y-0">
+            {/* Mobile Cards */}
+            <div className="block sm:hidden space-y-3">
               {recipients.map((recipient, index) => (
-                <div key={index} className={`px-4 py-3 hover:bg-gray-50 transition-colors ${
-                  index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'
-                }`}>
-                  <div className="grid grid-cols-12 gap-4 items-center">
-                    <div className="col-span-1 text-sm text-gray-500">{index + 1}</div>
-                    <div className="col-span-6">
-                      <code className="text-sm font-mono text-gray-900 bg-gray-100 px-2 py-1 rounded">
-                        {recipient.address.slice(0, 12)}...{recipient.address.slice(-8)}
-                      </code>
-                    </div>
-                    <div className="col-span-3">
-                      <Input
-                        type="number"
-                        step="0.000001"
-                        min="0"
-                        value={recipient.amount || ''}
-                        onChange={(e) => onUpdateRecipient(index, recipient.address, Number(e.target.value))}
-                        className="w-full h-9 text-sm text-right border-gray-300 focus:border-black focus:ring-black rounded"
-                        disabled={distributionMethod === 'equal'}
-                        placeholder="0.00"
-                      />
-                    </div>
-                    <div className="col-span-1 text-center">
+                <div key={index} className="p-4 border border-gray-200 rounded-xl bg-gray-50">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-gray-500 bg-white border rounded-md w-6 h-6 flex items-center justify-center">
+                        {index + 1}
+                      </span>
                       {recipient.isValid ? (
-                        <CheckCircle className="h-4 w-4 text-green-500 mx-auto" />
+                        <CheckCircle className="h-4 w-4 text-green-500" />
                       ) : (
-                        <XCircle className="h-4 w-4 text-red-500 mx-auto" />
+                        <XCircle className="h-4 w-4 text-red-500" />
                       )}
                     </div>
-                    <div className="col-span-1 text-right">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => onRemoveRecipient(index)}
-                        className="h-8 w-8 p-0 hover:bg-red-50 hover:text-red-600"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => onRemoveRecipient(index)}
+                      className="h-8 w-8 p-0 hover:bg-red-50 hover:text-red-600"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <p className="font-mono text-sm text-gray-900 break-all">
+                      {recipient.address}
+                    </p>
+                    <Input
+                      type="number"
+                      step="0.000001"
+                      min="0"
+                      value={recipient.amount || ''}
+                      onChange={(e) => onUpdateRecipient(index, recipient.address, Number(e.target.value))}
+                      className="h-9 text-sm border-gray-300 focus:border-black focus:ring-black rounded-lg"
+                      disabled={distributionMethod === 'equal'}
+                      placeholder="0.00"
+                    />
                   </div>
                 </div>
               ))}
+            </div>
+
+            {/* Desktop Table */}
+            <div className="hidden sm:block border border-gray-200 rounded-xl overflow-hidden">
+              <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
+                <div className="grid grid-cols-12 gap-4 text-sm font-medium text-gray-700">
+                  <div className="col-span-1">#</div>
+                  <div className="col-span-6">Wallet Address</div>
+                  <div className="col-span-3 text-right">Amount (SOL)</div>
+                  <div className="col-span-1 text-center">Status</div>
+                  <div className="col-span-1"></div>
+                </div>
+              </div>
+              
+              <div className="divide-y divide-gray-200">
+                {recipients.map((recipient, index) => (
+                  <div key={index} className={`px-4 py-3 hover:bg-gray-50 transition-colors ${
+                    index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'
+                  }`}>
+                    <div className="grid grid-cols-12 gap-4 items-center">
+                      <div className="col-span-1 text-sm text-gray-500">{index + 1}</div>
+                      <div className="col-span-6">
+                        <code className="text-sm font-mono text-gray-900 bg-gray-100 px-2 py-1 rounded">
+                          {recipient.address.slice(0, 12)}...{recipient.address.slice(-8)}
+                        </code>
+                      </div>
+                      <div className="col-span-3">
+                        <Input
+                          type="number"
+                          step="0.000001"
+                          min="0"
+                          value={recipient.amount || ''}
+                          onChange={(e) => onUpdateRecipient(index, recipient.address, Number(e.target.value))}
+                          className="w-full h-9 text-sm text-right border-gray-300 focus:border-black focus:ring-black rounded-lg"
+                          disabled={distributionMethod === 'equal'}
+                          placeholder="0.00"
+                        />
+                      </div>
+                      <div className="col-span-1 text-center">
+                        {recipient.isValid ? (
+                          <CheckCircle className="h-4 w-4 text-green-500 mx-auto" />
+                        ) : (
+                          <XCircle className="h-4 w-4 text-red-500 mx-auto" />
+                        )}
+                      </div>
+                      <div className="col-span-1 text-right">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => onRemoveRecipient(index)}
+                          className="h-8 w-8 p-0 hover:bg-red-50 hover:text-red-600"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
