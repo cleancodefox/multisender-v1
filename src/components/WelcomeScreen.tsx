@@ -1,15 +1,14 @@
 
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { 
   Send,
   ArrowRight,
   Upload,
   CheckCircle,
   Users,
-  Coins,
-  Zap,
-  Star,
-  TrendingUp
+  FileText,
+  Zap
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -18,48 +17,13 @@ interface WelcomeScreenProps {
   isConnecting: boolean;
 }
 
-interface Scenario {
-  title: string;
-  description: string;
-  icon: React.ReactNode;
-  recipients: number;
-  amount: string;
-  totalCost: string;
-  useCase: string;
-}
-
 export const WelcomeScreen = ({ onConnect, isConnecting }: WelcomeScreenProps) => {
-  const [selectedScenario, setSelectedScenario] = useState<Scenario | null>(null);
+  const [previewAmount, setPreviewAmount] = useState('0.1');
+  const [recipientCount, setRecipientCount] = useState(1000);
 
-  const scenarios: Scenario[] = [
-    {
-      title: "NFT Airdrop",
-      description: "Reward your NFT community",
-      icon: <Star className="h-5 w-5" />,
-      recipients: 2500,
-      amount: "0.05",
-      totalCost: "125.013",
-      useCase: "Send rewards to all NFT holders automatically"
-    },
-    {
-      title: "Token Distribution",
-      description: "Launch your token to early supporters",
-      icon: <Coins className="h-5 w-5" />,
-      recipients: 5000,
-      amount: "0.1",
-      totalCost: "500.025",
-      useCase: "Distribute tokens to whitelist addresses"
-    },
-    {
-      title: "Community Rewards",
-      description: "Thank your active community members",
-      icon: <Users className="h-5 w-5" />,
-      recipients: 1000,
-      amount: "0.025",
-      totalCost: "25.005",
-      useCase: "Reward top contributors and active users"
-    }
-  ];
+  const totalAmount = parseFloat(previewAmount || '0') * recipientCount;
+  const networkFees = recipientCount * 0.000005;
+  const totalCost = totalAmount + networkFees;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
@@ -82,152 +46,121 @@ export const WelcomeScreen = ({ onConnect, isConnecting }: WelcomeScreenProps) =
           <p className="text-lg text-gray-500 mb-12 max-w-2xl mx-auto">
             Bulk token distribution on Solana. Ultra-low fees, lightning-fast transfers.
           </p>
-
-          {/* Social Proof */}
-          <div className="flex items-center justify-center gap-8 mb-12 text-sm text-gray-600">
-            <div className="flex items-center gap-2">
-              <TrendingUp className="h-4 w-4 text-green-500" />
-              <span>500+ Projects</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Send className="h-4 w-4 text-blue-500" />
-              <span>2M+ Transfers</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle className="h-4 w-4 text-green-500" />
-              <span>99.9% Success Rate</span>
-            </div>
-          </div>
         </div>
 
-        {/* Sample Scenarios */}
+        {/* Interactive Preview */}
         <div className="max-w-4xl mx-auto mb-16">
           <div className="bg-white rounded-2xl border border-gray-200 shadow-lg p-8">
             <div className="flex items-center gap-3 mb-8">
               <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
                 <Zap className="h-4 w-4 text-white" />
               </div>
-              <span className="font-semibold text-gray-900">Sample Use Cases</span>
+              <span className="font-semibold text-gray-900">Bulk Transfer Calculator</span>
               <div className="ml-auto bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
-                Choose Your Scenario
+                Live Preview
               </div>
             </div>
             
-            {/* Scenario Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-              {scenarios.map((scenario, index) => (
-                <div 
-                  key={index}
-                  className={`p-4 rounded-lg border cursor-pointer transition-all ${
-                    selectedScenario === scenario 
-                      ? 'border-black bg-gray-50' 
-                      : 'border-gray-200 bg-white hover:border-gray-300'
-                  }`}
-                  onClick={() => setSelectedScenario(scenario)}
-                >
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
-                      {scenario.icon}
-                    </div>
-                    <div className="font-semibold text-gray-900">{scenario.title}</div>
-                  </div>
-                  <div className="text-sm text-gray-600 mb-3">{scenario.description}</div>
-                  <div className="text-xs text-gray-500">{scenario.useCase}</div>
+            {/* Distribution Method */}
+            <div className="mb-8">
+              <h4 className="font-semibold text-gray-900 mb-4">How It Works</h4>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                  <Upload className="h-6 w-6 text-gray-600 mb-2" />
+                  <div className="font-semibold text-gray-900 mb-1">Upload CSV</div>
+                  <div className="text-sm text-gray-600">Import thousands of addresses at once</div>
                 </div>
-              ))}
+                <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                  <Users className="h-6 w-6 text-gray-600 mb-2" />
+                  <div className="font-semibold text-gray-900 mb-1">NFT/Token Holders</div>
+                  <div className="text-sm text-gray-600">Auto-fetch holder addresses</div>
+                </div>
+                <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                  <FileText className="h-6 w-6 text-gray-600 mb-2" />
+                  <div className="font-semibold text-gray-900 mb-1">Manual Entry</div>
+                  <div className="text-sm text-gray-600">Add addresses one by one</div>
+                </div>
+              </div>
             </div>
 
-            {/* Selected Scenario Details */}
-            {selectedScenario && (
-              <div className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-xl p-6 mb-6">
-                <h4 className="font-semibold text-gray-900 mb-4">
-                  {selectedScenario.title} Preview
-                </h4>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-gray-900">
-                      {selectedScenario.recipients.toLocaleString()}
-                    </div>
-                    <div className="text-gray-600">Recipients</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-gray-900">
-                      {selectedScenario.amount}
-                    </div>
-                    <div className="text-gray-600">SOL each</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-gray-900">
-                      {(parseFloat(selectedScenario.amount) * selectedScenario.recipients).toFixed(2)}
-                    </div>
-                    <div className="text-gray-600">Total amount</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-green-600">
-                      {selectedScenario.totalCost}
-                    </div>
-                    <div className="text-gray-600">Total cost</div>
-                  </div>
-                </div>
-                
-                <div className="mt-4 pt-4 border-t border-gray-200">
-                  <div className="flex justify-between items-center text-xs text-gray-500">
-                    <span>Network fees: {(selectedScenario.recipients * 0.000005).toFixed(6)} SOL</span>
-                    <span>≈ ${(parseFloat(selectedScenario.totalCost) * 160).toFixed(2)} USD</span>
+            {/* Calculator */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Amount per recipient
+                </label>
+                <div className="relative">
+                  <Input 
+                    placeholder="Enter amount (e.g., 0.1)"
+                    value={previewAmount}
+                    onChange={(e) => setPreviewAmount(e.target.value)}
+                    className="h-12 text-base border-gray-300 focus:border-black focus:ring-black pr-16 rounded-lg"
+                    type="number"
+                    step="0.000001"
+                    min="0"
+                  />
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-medium text-gray-500">
+                    SOL
                   </div>
                 </div>
               </div>
-            )}
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Number of recipients
+                </label>
+                <div className="relative">
+                  <Input 
+                    placeholder="Enter number of recipients"
+                    value={recipientCount}
+                    onChange={(e) => setRecipientCount(Number(e.target.value) || 0)}
+                    className="h-12 text-base border-gray-300 focus:border-black focus:ring-black rounded-lg"
+                    type="number"
+                    min="1"
+                    max="10000"
+                  />
+                </div>
+              </div>
+            </div>
             
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button 
-                onClick={onConnect}
-                disabled={isConnecting}
-                className="flex-1 h-12 bg-black hover:bg-gray-800 text-white font-semibold text-base rounded-lg"
-              >
-                {isConnecting ? 'Connecting...' : 'Start Your First Bulk Transfer'}
-                <ArrowRight className="h-5 w-5 ml-2" />
-              </Button>
-              {selectedScenario && (
-                <Button 
-                  variant="outline"
-                  className="h-12 border-gray-300 hover:bg-gray-50 text-gray-700 font-medium text-base rounded-lg"
-                  onClick={onConnect}
-                  disabled={isConnecting}
-                >
-                  Try This Scenario
-                </Button>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* How It Works */}
-        <div className="text-center mb-16">
-          <h3 className="text-2xl font-bold text-gray-900 mb-8">How It Works</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <Upload className="h-6 w-6 text-blue-600" />
+            {/* Summary */}
+            <div className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-xl p-6 mb-6">
+              <h4 className="font-semibold text-gray-900 mb-4">Transfer Preview</h4>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-gray-900">{recipientCount.toLocaleString()}</div>
+                  <div className="text-gray-600">Recipients</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-gray-900">{previewAmount || '0'}</div>
+                  <div className="text-gray-600">SOL each</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-gray-900">{totalAmount.toFixed(2)}</div>
+                  <div className="text-gray-600">Total amount</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-green-600">{totalCost.toFixed(6)}</div>
+                  <div className="text-gray-600">Total cost</div>
+                </div>
               </div>
-              <div className="text-xl font-bold text-gray-900 mb-2">1. Import Addresses</div>
-              <div className="text-sm text-gray-600">Upload CSV, fetch NFT holders, or add manually</div>
-            </div>
-            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-              <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <Users className="h-6 w-6 text-purple-600" />
+              
+              <div className="mt-4 pt-4 border-t border-gray-200">
+                <div className="flex justify-between items-center text-xs text-gray-500">
+                  <span>Network fees: {networkFees.toFixed(6)} SOL</span>
+                  <span>≈ ${(totalCost * 160).toFixed(2)} USD</span>
+                </div>
               </div>
-              <div className="text-xl font-bold text-gray-900 mb-2">2. Set Amounts</div>
-              <div className="text-sm text-gray-600">Equal distribution or custom amounts per recipient</div>
             </div>
-            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <Zap className="h-6 w-6 text-green-600" />
-              </div>
-              <div className="text-xl font-bold text-gray-900 mb-2">3. Send Instantly</div>
-              <div className="text-sm text-gray-600">One click to send to thousands of wallets</div>
-            </div>
+            
+            <Button 
+              onClick={onConnect}
+              disabled={isConnecting || recipientCount === 0}
+              className="w-full h-12 bg-black hover:bg-gray-800 text-white font-semibold text-lg rounded-lg"
+            >
+              {isConnecting ? 'Connecting...' : `Try MultiSender → Send to ${recipientCount.toLocaleString()} wallets`}
+              <ArrowRight className="h-5 w-5 ml-2" />
+            </Button>
           </div>
         </div>
 
