@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { ArrowLeft, Send, CheckCircle, AlertTriangle, ExternalLink, Zap, Shield } from 'lucide-react';
+import { ArrowLeft, Send, CheckCircle, AlertTriangle, ExternalLink, Zap, Shield, Crown } from 'lucide-react';
 
 interface Recipient {
   address: string;
@@ -30,7 +30,7 @@ export const TransferPreview = ({
   const validRecipients = recipients.filter(r => r.isValid);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-green-50 pb-20">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50 pb-20">
       {/* Enhanced Header */}
       <div className="sticky top-0 bg-white/95 backdrop-blur-sm border-b border-gray-200 p-4 shadow-sm">
         <div className="flex items-center gap-4">
@@ -39,21 +39,21 @@ export const TransferPreview = ({
           </Button>
           <div className="flex-1">
             <h2 className="text-xl font-bold text-gray-900">Final Review</h2>
-            <p className="text-sm text-gray-500">Double-check before execution</p>
+            <p className="text-sm text-gray-500">Powered by multisender.so</p>
           </div>
-          <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 px-3 py-1">
-            <Shield className="h-3 w-3 mr-1" />
-            Secure
+          <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200 px-3 py-1">
+            <Crown className="h-3 w-3 mr-1" />
+            Free Pass
           </Badge>
         </div>
       </div>
 
       <div className="p-4 space-y-4">
         {/* Enhanced Summary Card */}
-        <Card className="border-0 bg-gradient-to-r from-white to-green-50 shadow-xl">
+        <Card className="border-0 bg-gradient-to-r from-white to-purple-50 shadow-xl">
           <CardHeader className="pb-3">
             <CardTitle className="text-xl flex items-center gap-2">
-              <Zap className="h-5 w-5 text-yellow-500" />
+              <Zap className="h-5 w-5 text-purple-500" />
               Transaction Overview
             </CardTitle>
             <CardDescription>
@@ -89,7 +89,7 @@ export const TransferPreview = ({
             <div className="flex justify-between items-center">
               <span className="text-xl font-bold">Final Cost</span>
               <div className="text-right">
-                <div className="text-2xl font-bold text-green-600">
+                <div className="text-2xl font-bold text-purple-600">
                   {(totalCost + networkFees).toFixed(6)} SOL
                 </div>
                 <div className="text-xs text-gray-500">
@@ -101,9 +101,9 @@ export const TransferPreview = ({
         </Card>
 
         {/* Enhanced Status Alert */}
-        <Alert className="bg-gradient-to-r from-green-50 to-emerald-50 border-green-200 rounded-xl shadow-lg">
-          <CheckCircle className="h-5 w-5 text-green-600" />
-          <AlertDescription className="text-green-800 font-medium">
+        <Alert className="bg-gradient-to-r from-purple-50 to-blue-50 border-purple-200 rounded-xl shadow-lg">
+          <CheckCircle className="h-5 w-5 text-purple-600" />
+          <AlertDescription className="text-purple-800 font-medium">
             🎯 All systems ready! Your transfer will be processed in the next block.
           </AlertDescription>
         </Alert>
@@ -118,7 +118,7 @@ export const TransferPreview = ({
                   <CheckCircle className="h-3 w-3 mr-1" />
                   {validRecipients.length} Valid
                 </Badge>
-                <Badge variant="outline" className="text-blue-600 border-blue-200 bg-blue-50 rounded-lg">
+                <Badge variant="outline" className="text-purple-600 border-purple-200 bg-purple-50 rounded-lg">
                   <Zap className="h-3 w-3 mr-1" />
                   Gas Optimized
                 </Badge>
@@ -140,14 +140,14 @@ export const TransferPreview = ({
                       <Badge variant="secondary" className="rounded-lg">
                         #{index + 1}
                       </Badge>
-                      <Button variant="link" size="sm" className="h-auto p-0 text-xs text-green-600 hover:text-green-700">
+                      <Button variant="link" size="sm" className="h-auto p-0 text-xs text-purple-600 hover:text-purple-700">
                         <ExternalLink className="h-3 w-3 mr-1" />
                         View
                       </Button>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="font-bold text-xl text-green-600">
+                    <p className="font-bold text-xl text-purple-600">
                       {recipient.amount.toFixed(6)}
                     </p>
                     <p className="text-xs text-gray-500">SOL</p>
@@ -193,7 +193,7 @@ export const TransferPreview = ({
       {/* Enhanced Fixed Bottom Button */}
       <div className="fixed bottom-0 left-0 right-0 p-4 bg-white/95 backdrop-blur-sm border-t border-gray-200">
         <Button 
-          className="w-full h-14 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold rounded-xl shadow-xl hover:shadow-2xl transition-all duration-200 transform hover:-translate-y-1"
+          className="w-full h-14 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold rounded-xl shadow-xl hover:shadow-2xl transition-all duration-200 transform hover:-translate-y-1"
           onClick={onConfirm}
         >
           <Send className="h-5 w-5 mr-2" />

@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Wallet, ChevronDown, Copy, ExternalLink, LogOut, Zap } from 'lucide-react';
+import { Wallet, ChevronDown, Copy, ExternalLink, LogOut, Crown } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,8 +29,8 @@ export const WalletConnect = ({ balance, isConnected, onConnect, onDisconnect }:
       onConnect();
       setIsConnecting(false);
       toast({
-        title: "🎉 Wallet Connected!",
-        description: "Welcome to the most advanced multisender on Solana",
+        title: "🎉 Welcome to multisender.so!",
+        description: "Your free NFT pass is now active - enjoy unlimited transfers!",
       });
     }, 1500);
   };
@@ -46,8 +46,8 @@ export const WalletConnect = ({ balance, isConnected, onConnect, onDisconnect }:
   const handleDisconnect = () => {
     onDisconnect();
     toast({
-      title: "👋 Wallet Disconnected",
-      description: "See you soon!",
+      title: "👋 See You Soon!",
+      description: "Your NFT pass will be waiting when you return",
     });
   };
 
@@ -56,7 +56,7 @@ export const WalletConnect = ({ balance, isConnected, onConnect, onDisconnect }:
       <Button 
         onClick={handleConnect}
         disabled={isConnecting}
-        className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 rounded-xl px-4 py-2 text-sm font-medium shadow-lg hover:shadow-xl transition-all duration-200"
+        className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 rounded-xl px-4 py-2 text-sm font-medium shadow-lg hover:shadow-xl transition-all duration-200"
       >
         <Wallet className="h-4 w-4 mr-2" />
         {isConnecting ? 'Connecting...' : 'Connect Wallet'}
@@ -88,9 +88,9 @@ export const WalletConnect = ({ balance, isConnected, onConnect, onDisconnect }:
           View on Explorer
         </DropdownMenuItem>
         <DropdownMenuItem className="flex items-center gap-2 px-3 py-2">
-          <Zap className="h-4 w-4 text-yellow-500" />
+          <Crown className="h-4 w-4 text-purple-500" />
           <div className="flex flex-col">
-            <span className="text-sm">Premium Member</span>
+            <span className="text-sm">Free NFT Pass</span>
             <span className="text-xs text-gray-500">Unlimited transfers</span>
           </div>
         </DropdownMenuItem>
