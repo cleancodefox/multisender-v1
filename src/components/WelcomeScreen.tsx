@@ -12,7 +12,7 @@ import {
   Star,
   Sparkles,
   Crown,
-  Gift
+  ArrowRight
 } from 'lucide-react';
 
 interface WelcomeScreenProps {
@@ -52,7 +52,7 @@ export const WelcomeScreen = ({ onConnect, isConnecting }: WelcomeScreenProps) =
         <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-blue-500/10"></div>
         <div className="relative px-4 py-16 text-center">
           <div className="inline-flex items-center gap-2 bg-purple-100 text-purple-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
-            <Crown className="h-4 w-4" />
+            <Sparkles className="h-4 w-4" />
             MVP Launch - Limited Beta Access
           </div>
           
@@ -70,24 +70,7 @@ export const WelcomeScreen = ({ onConnect, isConnecting }: WelcomeScreenProps) =
             Save time, reduce fees, and scale your token distribution like never before
           </p>
 
-          {/* NFT Pass Card */}
-          <div className="max-w-md mx-auto mb-8">
-            <Card className="border-2 border-purple-200 bg-gradient-to-r from-purple-50 to-blue-50 shadow-xl">
-              <CardContent className="p-6 text-center">
-                <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <Gift className="h-8 w-8 text-white" />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">FREE Launch Pass NFT</h3>
-                <p className="text-sm text-gray-600 mb-4">Limited time: Get unlimited transfers for free during our MVP launch</p>
-                <Badge className="bg-gradient-to-r from-purple-500 to-blue-500 text-white px-4 py-1 text-sm">
-                  <Sparkles className="h-3 w-3 mr-1" />
-                  Early Adopter Bonus
-                </Badge>
-              </CardContent>
-            </Card>
-          </div>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
             <Button 
               onClick={onConnect}
               disabled={isConnecting}
@@ -95,7 +78,7 @@ export const WelcomeScreen = ({ onConnect, isConnecting }: WelcomeScreenProps) =
               className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white px-8 py-4 rounded-xl text-lg font-semibold shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-200 min-w-[200px]"
             >
               <Wallet className="h-5 w-5 mr-2" />
-              {isConnecting ? 'Connecting...' : 'Connect & Start Free'}
+              {isConnecting ? 'Connecting...' : 'Connect & Start'}
             </Button>
             
             <div className="flex items-center gap-2 text-sm text-gray-600">
@@ -160,6 +143,123 @@ export const WelcomeScreen = ({ onConnect, isConnecting }: WelcomeScreenProps) =
         </div>
       </div>
 
+      {/* Pricing Options */}
+      <div className="px-4 py-16 bg-gray-50">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Choose Your Plan
+            </h2>
+            <p className="text-lg text-gray-600">
+              Flexible options for every use case
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Pay Per Use */}
+            <Card className="border-2 border-gray-200 bg-white">
+              <CardContent className="p-6">
+                <div className="text-center mb-6">
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Pay Per Use</h3>
+                  <p className="text-gray-600 text-sm">Perfect for occasional transfers</p>
+                  <div className="mt-4">
+                    <span className="text-3xl font-bold text-gray-900">0.01 SOL</span>
+                    <span className="text-gray-600 ml-1">per transfer</span>
+                  </div>
+                </div>
+                <ul className="space-y-3 text-sm text-gray-600 mb-6">
+                  <li className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+                    Up to 100 recipients per batch
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+                    Standard processing speed
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+                    Basic support
+                  </li>
+                </ul>
+                <Button className="w-full rounded-xl" variant="outline">
+                  Start Now
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* NFT Pass - Less prominent */}
+            <Card className="border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-white">
+              <CardContent className="p-6">
+                <div className="text-center mb-6">
+                  <div className="inline-flex items-center gap-1 bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs font-medium mb-2">
+                    <Crown className="h-3 w-3" />
+                    Limited Edition
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">NFT Pass</h3>
+                  <p className="text-gray-600 text-sm">Unlimited transfers forever</p>
+                  <div className="mt-4">
+                    <span className="text-3xl font-bold text-purple-600">2.5 SOL</span>
+                    <span className="text-gray-600 ml-1">one-time</span>
+                  </div>
+                </div>
+                <ul className="space-y-3 text-sm text-gray-600 mb-6">
+                  <li className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-purple-500 rounded-full"></div>
+                    Unlimited recipients & batches
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-purple-500 rounded-full"></div>
+                    Priority processing
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-purple-500 rounded-full"></div>
+                    VIP support + Discord access
+                  </li>
+                </ul>
+                <Button className="w-full rounded-xl bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600">
+                  Buy NFT Pass
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Free Trial */}
+            <Card className="border-2 border-green-200 bg-gradient-to-br from-green-50 to-white">
+              <CardContent className="p-6">
+                <div className="text-center mb-6">
+                  <div className="inline-flex items-center gap-1 bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium mb-2">
+                    <Sparkles className="h-3 w-3" />
+                    Beta Launch
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Free Trial</h3>
+                  <p className="text-gray-600 text-sm">Try before you decide</p>
+                  <div className="mt-4">
+                    <span className="text-3xl font-bold text-green-600">FREE</span>
+                    <span className="text-gray-600 ml-1">for 7 days</span>
+                  </div>
+                </div>
+                <ul className="space-y-3 text-sm text-gray-600 mb-6">
+                  <li className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+                    Up to 50 recipients per batch
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+                    5 transfers total
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+                    Community support
+                  </li>
+                </ul>
+                <Button className="w-full rounded-xl bg-green-500 hover:bg-green-600 text-white">
+                  Start Free Trial
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
+
       {/* Social Proof */}
       <div className="px-4 py-16 bg-gradient-to-r from-gray-900 to-gray-800">
         <div className="max-w-4xl mx-auto text-center">
@@ -195,7 +295,7 @@ export const WelcomeScreen = ({ onConnect, isConnecting }: WelcomeScreenProps) =
             Ready to Scale Your Token Distribution?
           </h2>
           <p className="text-purple-100 text-lg mb-8 max-w-2xl mx-auto">
-            Join our exclusive beta and get unlimited transfers with your free NFT pass
+            Join thousands of users who trust multisender.so for their bulk transfers
           </p>
           
           <Button 
@@ -204,8 +304,8 @@ export const WelcomeScreen = ({ onConnect, isConnecting }: WelcomeScreenProps) =
             size="lg"
             className="bg-white text-purple-600 hover:bg-gray-100 px-8 py-4 rounded-xl text-lg font-semibold shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-200"
           >
-            <Crown className="h-5 w-5 mr-2" />
-            {isConnecting ? 'Connecting...' : 'Claim Free NFT Pass'}
+            <ArrowRight className="h-5 w-5 mr-2" />
+            {isConnecting ? 'Connecting...' : 'Get Started Now'}
           </Button>
         </div>
       </div>

@@ -1,10 +1,11 @@
+
 import { useState } from 'react';
 import { WelcomeScreen } from '@/components/WelcomeScreen';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Eye, Send, AlertTriangle, CheckCircle, Sparkles, TrendingUp, Crown } from 'lucide-react';
+import { Eye, Send, AlertTriangle, CheckCircle, Sparkles, TrendingUp } from 'lucide-react';
 import { WalletConnect } from '@/components/WalletConnect';
 import { BulkTransferForm } from '@/components/BulkTransferForm';
 import { TransferPreview } from '@/components/TransferPreview';
@@ -35,7 +36,7 @@ const Index = () => {
       setIsConnecting(false);
       toast({
         title: "🎉 Welcome to multisender.so!",
-        description: "Your free NFT pass is activated - unlimited transfers await!",
+        description: "Ready to start your bulk transfers",
       });
     }, 1500);
   };
@@ -106,10 +107,10 @@ const Index = () => {
                 </h1>
                 <div className="flex items-center gap-2">
                   <Badge variant="secondary" className="bg-purple-100 text-purple-800 text-xs px-2 py-0.5 rounded-full">
-                    <Crown className="h-3 w-3 mr-1" />
-                    Free Pass
+                    <Sparkles className="h-3 w-3 mr-1" />
+                    Beta
                   </Badge>
-                  <p className="text-xs text-gray-500">Beta Access</p>
+                  <p className="text-xs text-gray-500">Bulk Transfer Tool</p>
                 </div>
               </div>
             </div>
@@ -142,10 +143,6 @@ const Index = () => {
                     <Badge variant="secondary" className="bg-green-500/20 text-green-300 border-green-500/30 px-3 py-1">
                       <CheckCircle className="h-3 w-3 mr-1" />
                       Connected
-                    </Badge>
-                    <Badge variant="secondary" className="bg-purple-500/20 text-purple-300 border-purple-500/30 px-3 py-1">
-                      <Crown className="h-3 w-3 mr-1" />
-                      Free Pass Active
                     </Badge>
                   </div>
                 </div>

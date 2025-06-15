@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Wallet, ChevronDown, Copy, ExternalLink, LogOut, Crown } from 'lucide-react';
+import { Wallet, ChevronDown, Copy, ExternalLink, LogOut } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,7 +30,7 @@ export const WalletConnect = ({ balance, isConnected, onConnect, onDisconnect }:
       setIsConnecting(false);
       toast({
         title: "🎉 Welcome to multisender.so!",
-        description: "Your free NFT pass is now active - enjoy unlimited transfers!",
+        description: "Ready to start your bulk transfers",
       });
     }, 1500);
   };
@@ -47,7 +47,7 @@ export const WalletConnect = ({ balance, isConnected, onConnect, onDisconnect }:
     onDisconnect();
     toast({
       title: "👋 See You Soon!",
-      description: "Your NFT pass will be waiting when you return",
+      description: "Wallet disconnected successfully",
     });
   };
 
@@ -86,13 +86,6 @@ export const WalletConnect = ({ balance, isConnected, onConnect, onDisconnect }:
         <DropdownMenuItem className="flex items-center gap-2 px-3 py-2">
           <ExternalLink className="h-4 w-4" />
           View on Explorer
-        </DropdownMenuItem>
-        <DropdownMenuItem className="flex items-center gap-2 px-3 py-2">
-          <Crown className="h-4 w-4 text-purple-500" />
-          <div className="flex flex-col">
-            <span className="text-sm">Free NFT Pass</span>
-            <span className="text-xs text-gray-500">Unlimited transfers</span>
-          </div>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={handleDisconnect} className="flex items-center gap-2 px-3 py-2 text-red-600 cursor-pointer">
           <LogOut className="h-4 w-4" />
