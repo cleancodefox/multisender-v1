@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { ArrowLeft, Send, CheckCircle, AlertTriangle, ExternalLink } from 'lucide-react';
+import { ArrowLeft, Send, CheckCircle, AlertTriangle, ExternalLink, Zap, Shield } from 'lucide-react';
 
 interface Recipient {
   address: string;
@@ -30,119 +30,177 @@ export const TransferPreview = ({
   const validRecipients = recipients.filter(r => r.isValid);
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
-      {/* Header */}
-      <div className="sticky top-0 bg-white border-b border-gray-100 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-green-50 pb-20">
+      {/* Enhanced Header */}
+      <div className="sticky top-0 bg-white/95 backdrop-blur-sm border-b border-gray-200 p-4 shadow-sm">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" onClick={onBack} className="rounded-xl p-2">
+          <Button variant="ghost" onClick={onBack} className="rounded-xl p-2 hover:bg-gray-100">
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <div>
-            <h2 className="text-lg font-semibold text-gray-900">Review Transfer</h2>
-            <p className="text-sm text-gray-500">Confirm before sending</p>
+          <div className="flex-1">
+            <h2 className="text-xl font-bold text-gray-900">Final Review</h2>
+            <p className="text-sm text-gray-500">Double-check before execution</p>
           </div>
+          <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 px-3 py-1">
+            <Shield className="h-3 w-3 mr-1" />
+            Secure
+          </Badge>
         </div>
       </div>
 
       <div className="p-4 space-y-4">
-        {/* Summary Card */}
-        <Card className="border-0 bg-white">
+        {/* Enhanced Summary Card */}
+        <Card className="border-0 bg-gradient-to-r from-white to-green-50 shadow-xl">
           <CardHeader className="pb-3">
-            <CardTitle className="text-lg">Transaction Summary</CardTitle>
+            <CardTitle className="text-xl flex items-center gap-2">
+              <Zap className="h-5 w-5 text-yellow-500" />
+              Transaction Overview
+            </CardTitle>
+            <CardDescription>
+              You're about to send tokens to {validRecipients.length} recipients
+            </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-600">Recipients</span>
-              <span className="font-medium">{validRecipients.length}</span>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-2 gap-4 text-sm">
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Recipients</span>
+                  <span className="font-bold text-lg">{validRecipients.length}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Token</span>
+                  <Badge variant="secondary" className="bg-gray-100">SOL</Badge>
+                </div>
+              </div>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Total Amount</span>
+                  <span className="font-bold text-lg">{totalCost.toFixed(6)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Network Fees</span>
+                  <span className="font-semibold">{networkFees.toFixed(6)}</span>
+                </div>
+              </div>
             </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-600">Total Amount</span>
-              <span className="font-medium">{totalCost.toFixed(6)} SOL</span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-600">Network Fees</span>
-              <span className="font-medium">{networkFees.toFixed(6)} SOL</span>
-            </div>
+            
             <Separator />
-            <div className="flex justify-between text-base font-semibold">
-              <span>Total Cost</span>
-              <span className="text-green-600">{(totalCost + networkFees).toFixed(6)} SOL</span>
+            
+            <div className="flex justify-between items-center">
+              <span className="text-xl font-bold">Final Cost</span>
+              <div className="text-right">
+                <div className="text-2xl font-bold text-green-600">
+                  {(totalCost + networkFees).toFixed(6)} SOL
+                </div>
+                <div className="text-xs text-gray-500">
+                  ~${((totalCost + networkFees) * 180).toFixed(2)} USD
+                </div>
+              </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Status Alert */}
-        <Alert className="bg-green-50 border-green-200 rounded-xl">
-          <CheckCircle className="h-4 w-4 text-green-600" />
-          <AlertDescription className="text-green-800">
-            All addresses validated and ready for transfer
+        {/* Enhanced Status Alert */}
+        <Alert className="bg-gradient-to-r from-green-50 to-emerald-50 border-green-200 rounded-xl shadow-lg">
+          <CheckCircle className="h-5 w-5 text-green-600" />
+          <AlertDescription className="text-green-800 font-medium">
+            🎯 All systems ready! Your transfer will be processed in the next block.
           </AlertDescription>
         </Alert>
 
-        {/* Recipients List */}
-        <Card className="border-0 bg-white">
+        {/* Enhanced Recipients List */}
+        <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-lg">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-lg">Recipients ({validRecipients.length})</CardTitle>
-              <Badge variant="outline" className="text-green-600 border-green-200 bg-green-50 rounded-lg">
-                <CheckCircle className="h-3 w-3 mr-1" />
-                All Valid
-              </Badge>
+              <CardTitle className="text-lg">Recipients Preview</CardTitle>
+              <div className="flex gap-2">
+                <Badge variant="outline" className="text-green-600 border-green-200 bg-green-50 rounded-lg">
+                  <CheckCircle className="h-3 w-3 mr-1" />
+                  {validRecipients.length} Valid
+                </Badge>
+                <Badge variant="outline" className="text-blue-600 border-blue-200 bg-blue-50 rounded-lg">
+                  <Zap className="h-3 w-3 mr-1" />
+                  Gas Optimized
+                </Badge>
+              </div>
             </div>
           </CardHeader>
           <CardContent>
-            <div className="max-h-64 overflow-y-auto space-y-3">
-              {validRecipients.map((recipient, index) => (
+            <div className="max-h-80 overflow-y-auto space-y-3">
+              {validRecipients.slice(0, 5).map((recipient, index) => (
                 <div
                   key={index}
-                  className="flex items-center justify-between p-3 rounded-xl bg-gray-50 border border-gray-200"
+                  className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-gray-50 to-white border border-gray-200 hover:shadow-md transition-shadow"
                 >
                   <div className="flex-1 min-w-0">
                     <p className="font-mono text-sm text-gray-900 truncate">
                       {recipient.address}
                     </p>
-                    <div className="flex items-center gap-2 mt-1">
-                      <Badge variant="secondary" className="rounded-lg">#{index + 1}</Badge>
-                      <Button variant="link" size="sm" className="h-auto p-0 text-xs text-green-600">
+                    <div className="flex items-center gap-2 mt-2">
+                      <Badge variant="secondary" className="rounded-lg">
+                        #{index + 1}
+                      </Badge>
+                      <Button variant="link" size="sm" className="h-auto p-0 text-xs text-green-600 hover:text-green-700">
                         <ExternalLink className="h-3 w-3 mr-1" />
-                        Explorer
+                        View
                       </Button>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="font-semibold text-lg">{recipient.amount.toFixed(6)}</p>
+                    <p className="font-bold text-xl text-green-600">
+                      {recipient.amount.toFixed(6)}
+                    </p>
                     <p className="text-xs text-gray-500">SOL</p>
                   </div>
                 </div>
               ))}
+              
+              {validRecipients.length > 5 && (
+                <div className="p-4 text-center border-2 border-dashed border-gray-200 rounded-xl">
+                  <p className="text-gray-600 font-medium">
+                    + {validRecipients.length - 5} more recipients
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    All addresses have been validated
+                  </p>
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>
 
-        {/* Warning */}
-        <Card className="border-0 bg-gradient-to-r from-amber-500 to-orange-500 text-white">
-          <CardContent className="p-4">
-            <div className="flex items-start gap-3">
-              <AlertTriangle className="h-5 w-5 mt-0.5 flex-shrink-0" />
-              <div className="space-y-1">
-                <h3 className="font-medium">Important Notice</h3>
-                <p className="text-sm opacity-90">
-                  This action cannot be undone. Double-check all addresses and amounts.
+        {/* Enhanced Warning */}
+        <Card className="border-0 bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-xl">
+          <CardContent className="p-6">
+            <div className="flex items-start gap-4">
+              <AlertTriangle className="h-6 w-6 mt-0.5 flex-shrink-0" />
+              <div className="space-y-2">
+                <h3 className="font-bold text-lg">⚠️ Final Warning</h3>
+                <p className="text-sm opacity-90 leading-relaxed">
+                  This action is irreversible. Once executed, tokens will be immediately sent to all recipients. 
+                  Please verify all addresses and amounts are correct.
                 </p>
+                <div className="flex items-center gap-2 mt-3">
+                  <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                  <span className="text-xs font-medium">Live on Solana Mainnet</span>
+                </div>
               </div>
             </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Fixed Bottom Button */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-100">
+      {/* Enhanced Fixed Bottom Button */}
+      <div className="fixed bottom-0 left-0 right-0 p-4 bg-white/95 backdrop-blur-sm border-t border-gray-200">
         <Button 
-          className="w-full h-12 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-medium rounded-xl"
+          className="w-full h-14 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold rounded-xl shadow-xl hover:shadow-2xl transition-all duration-200 transform hover:-translate-y-1"
           onClick={onConfirm}
         >
-          <Send className="h-4 w-4 mr-2" />
-          Execute Transfer
+          <Send className="h-5 w-5 mr-2" />
+          Execute Transfer Now
+          <Badge variant="secondary" className="ml-3 bg-white/20 text-white border-white/30">
+            {validRecipients.length} recipients
+          </Badge>
         </Button>
       </div>
     </div>
