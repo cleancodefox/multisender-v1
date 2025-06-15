@@ -1,15 +1,14 @@
+
 import { useState } from 'react';
 import { WelcomeScreen } from '@/components/WelcomeScreen';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Eye, Send, AlertTriangle, CheckCircle } from 'lucide-react';
+import { Send, AlertTriangle, CheckCircle } from 'lucide-react';
 import { WalletConnect } from '@/components/WalletConnect';
 import { BulkTransferForm } from '@/components/BulkTransferForm';
 import { TransferPreview } from '@/components/TransferPreview';
 import { AddressManager } from '@/components/AddressManager';
-import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 
 interface Recipient {
@@ -79,7 +78,6 @@ const Index = () => {
   };
 
   const validateSolanaAddress = (address: string): boolean => {
-    // Basic validation, can be improved with a library like @solana/web3.js
     return address.length >= 32 && address.length <= 44 && /^[1-9A-HJ-NP-Za-km-z]+$/.test(address);
   };
 
@@ -97,18 +95,17 @@ const Index = () => {
   const validRecipients = recipients.filter(r => r.isValid);
   const isReady = validRecipients.length > 0 && totalCost > 0 && walletBalance >= (totalCost + networkFees);
 
-
   return (
-    <div className="min-h-screen bg-gray-50/50">
+    <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-sm border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-6 py-3">
+      <header className="border-b border-black">
+        <div className="max-w-6xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-black flex items-center justify-center">
                 <Send className="h-4 w-4 text-white" />
               </div>
-              <h1 className="text-lg font-semibold text-black">MultiSender.so</h1>
+              <h1 className="text-xl font-bold text-black">MultiSender.so</h1>
             </div>
             <WalletConnect 
               balance={walletBalance} 
@@ -121,94 +118,88 @@ const Index = () => {
       </header>
 
       {!isPreviewMode ? (
-        <main className="max-w-7xl mx-auto px-6 py-8">
-           <div className="grid grid-cols-1 lg:grid-cols-3 lg:gap-8">
-              <div className="lg:col-span-2 space-y-8">
-                <BulkTransferForm
-                  totalAmount={totalAmount}
-                  onTotalAmountChange={setTotalAmount}
-                  distributionMethod={distributionMethod}
-                  onDistributionMethodChange={setDistributionMethod}
-                />
+        <main className="max-w-6xl mx-auto px-6 py-12">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            <div className="lg:col-span-2 space-y-12">
+              <BulkTransferForm
+                totalAmount={totalAmount}
+                onTotalAmountChange={setTotalAmount}
+                distributionMethod={distributionMethod}
+                onDistributionMethodChange={setDistributionMethod}
+              />
 
-                <AddressManager
-                  recipients={recipients}
-                  onAddRecipient={handleAddRecipient}
-                  onUpdateRecipient={handleUpdateRecipient}
-                  onRemoveRecipient={handleRemoveRecipient}
-                  distributionMethod={distributionMethod}
-                />
-              </div>
+              <AddressManager
+                recipients={recipients}
+                onAddRecipient={handleAddRecipient}
+                onUpdateRecipient={handleUpdateRecipient}
+                onRemoveRecipient={handleRemoveRecipient}
+                distributionMethod={distributionMethod}
+              />
+            </div>
 
-              <div className="lg:col-span-1 space-y-8 mt-8 lg:mt-0">
-                <Card className="sticky top-28 bg-white border border-gray-100 shadow-sm">
-                  <CardHeader>
-                    <CardTitle className="text-lg flex items-center justify-between text-black">
-                      Transaction Summary
-                      {validRecipients.length > 0 && (
-                        <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-200">
-                          {validRecipients.length} Ready
-                        </Badge>
-                      )}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="space-y-3 text-sm">
-                      <div className="flex justify-between items-center">
-                        <span className="text-gray-500">Total Recipients</span>
-                        <span className="font-medium text-black">{recipients.length}</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-gray-500">Valid Addresses</span>
-                        <span className="font-medium text-green-600">{validRecipients.length}</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-gray-500">Amount to Send</span>
-                        <span className="font-medium text-black">{totalCost.toFixed(6)} SOL</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-gray-500">Network Fee (Est.)</span>
-                        <span className="font-medium text-black">{networkFees.toFixed(6)} SOL</span>
-                      </div>
+            <div className="lg:col-span-1">
+              <Card className="sticky top-8 border-2 border-black bg-white">
+                <CardHeader className="border-b border-black pb-4">
+                  <CardTitle className="text-xl font-bold text-black">
+                    Summary
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-6 space-y-6">
+                  <div className="space-y-4">
+                    <div className="flex justify-between">
+                      <span className="font-medium">Recipients</span>
+                      <span className="font-bold">{recipients.length}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium">Valid</span>
+                      <span className="font-bold text-green-600">{validRecipients.length}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium">Amount</span>
+                      <span className="font-bold">{totalCost.toFixed(6)} SOL</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium">Fees</span>
+                      <span className="font-bold">{networkFees.toFixed(6)} SOL</span>
                     </div>
                     
-                    <Separator className="bg-gray-100" />
-                    
-                    <div className="flex justify-between text-base font-semibold">
-                      <span className="text-gray-700">Total Cost</span>
-                      <span className="text-black">{(totalCost + networkFees).toFixed(6)} SOL</span>
+                    <div className="border-t-2 border-black pt-4">
+                      <div className="flex justify-between text-lg">
+                        <span className="font-bold">Total</span>
+                        <span className="font-bold">{(totalCost + networkFees).toFixed(6)} SOL</span>
+                      </div>
                     </div>
+                  </div>
 
-                    {walletBalance < (totalCost + networkFees) && totalCost > 0 && (
-                      <Alert variant="destructive" className="bg-red-50 border-red-200 text-red-800">
-                        <AlertTriangle className="h-4 w-4" />
-                        <AlertDescription>
-                          Insufficient balance. Need {((totalCost + networkFees) - walletBalance).toFixed(6)} more SOL.
-                        </AlertDescription>
-                      </Alert>
-                    )}
+                  {walletBalance < (totalCost + networkFees) && totalCost > 0 && (
+                    <Alert className="border-2 border-red-500 bg-red-50">
+                      <AlertTriangle className="h-4 w-4" />
+                      <AlertDescription className="font-medium">
+                        Insufficient balance. Need {((totalCost + networkFees) - walletBalance).toFixed(6)} more SOL.
+                      </AlertDescription>
+                    </Alert>
+                  )}
 
-                    {isReady && (
-                       <Alert className="bg-green-50 border-green-200 text-green-800">
-                        <CheckCircle className="h-4 w-4" />
-                        <AlertDescription>
-                          Ready to send! All addresses are valid and balance is sufficient.
-                        </AlertDescription>
-                      </Alert>
-                    )}
+                  {isReady && (
+                    <Alert className="border-2 border-green-500 bg-green-50">
+                      <CheckCircle className="h-4 w-4" />
+                      <AlertDescription className="font-medium">
+                        Ready to send!
+                      </AlertDescription>
+                    </Alert>
+                  )}
 
-                    <Button 
-                      className="w-full h-11 bg-black hover:bg-gray-800 text-white font-medium rounded-xl"
-                      onClick={() => setIsPreviewMode(true)}
-                      disabled={!isReady}
-                    >
-                      <Eye className="h-4 w-4 mr-2" />
-                      Preview Transfer ({validRecipients.length} recipients)
-                    </Button>
-                  </CardContent>
-                </Card>
-              </div>
-           </div>
+                  <Button 
+                    className="w-full h-12 bg-black hover:bg-gray-800 text-white font-bold border-2 border-black"
+                    onClick={() => setIsPreviewMode(true)}
+                    disabled={!isReady}
+                  >
+                    PREVIEW ({validRecipients.length})
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
         </main>
       ) : (
         <TransferPreview
@@ -222,7 +213,6 @@ const Index = () => {
               description: "Your bulk transfer is being sent to the Solana network...",
             });
             console.log('Executing transfer...');
-            // After transfer, maybe reset state
             setTimeout(() => {
               setIsPreviewMode(false);
               setRecipients([]);

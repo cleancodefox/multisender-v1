@@ -1,9 +1,8 @@
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Calculator, DollarSign, Users } from 'lucide-react';
 
 interface BulkTransferFormProps {
   totalAmount: number;
@@ -19,60 +18,39 @@ export const BulkTransferForm = ({
   onDistributionMethodChange
 }: BulkTransferFormProps) => {
   return (
-    <Card className="bg-white border border-gray-100 shadow-sm">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-lg text-black">
-          <Calculator className="h-5 w-5 text-gray-400" />
-          Distribution Settings
+    <Card className="border-2 border-black bg-white">
+      <CardHeader className="border-b border-black pb-4">
+        <CardTitle className="text-xl font-bold text-black">
+          Distribution Method
         </CardTitle>
-        <CardDescription className="text-gray-500">
-          Choose how tokens are distributed to recipients
-        </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-6">
-        <div>
-          <Label className="text-sm font-medium text-black">Distribution Method</Label>
-          <RadioGroup 
-            value={distributionMethod} 
-            onValueChange={onDistributionMethodChange}
-            className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-3"
-          >
-            <Label htmlFor="equal" className="flex flex-col items-start space-x-3 p-4 rounded-xl border border-gray-200 bg-white hover:border-gray-300 transition-colors has-[:checked]:border-black has-[:checked]:ring-2 has-[:checked]:ring-black has-[:checked]:ring-offset-2 cursor-pointer">
-              <div className="flex items-center gap-3 w-full">
-                <RadioGroupItem value="equal" id="equal" />
-                <div className="flex items-center gap-3 flex-1">
-                  <Users className="h-5 w-5 text-gray-500" />
-                  <div>
-                    <p className="font-medium text-black">
-                      Equal Distribution
-                    </p>
-                    <p className="text-sm text-gray-500">Same amount to all recipients</p>
-                  </div>
-                </div>
-              </div>
-            </Label>
+      <CardContent className="pt-6 space-y-8">
+        <RadioGroup 
+          value={distributionMethod} 
+          onValueChange={onDistributionMethodChange}
+          className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+        >
+          <Label htmlFor="equal" className="flex items-center p-6 border-2 border-black bg-white hover:bg-gray-50 cursor-pointer has-[:checked]:bg-black has-[:checked]:text-white font-medium">
+            <RadioGroupItem value="equal" id="equal" className="mr-4" />
+            <div>
+              <p className="font-bold text-lg">Equal Split</p>
+              <p className="text-sm opacity-80">Same amount to everyone</p>
+            </div>
+          </Label>
 
-            <Label htmlFor="manual" className="flex flex-col items-start space-x-3 p-4 rounded-xl border border-gray-200 bg-white hover:border-gray-300 transition-colors has-[:checked]:border-black has-[:checked]:ring-2 has-[:checked]:ring-black has-[:checked]:ring-offset-2 cursor-pointer">
-              <div className="flex items-center gap-3 w-full">
-                <RadioGroupItem value="manual" id="manual" />
-                <div className="flex items-center gap-3 flex-1">
-                  <DollarSign className="h-5 w-5 text-gray-500" />
-                  <div>
-                    <p className="font-medium text-black">
-                      Manual Amount
-                    </p>
-                    <p className="text-sm text-gray-500">Custom amount for each recipient</p>
-                  </div>
-                </div>
-              </div>
-            </Label>
-          </RadioGroup>
-        </div>
+          <Label htmlFor="manual" className="flex items-center p-6 border-2 border-black bg-white hover:bg-gray-50 cursor-pointer has-[:checked]:bg-black has-[:checked]:text-white font-medium">
+            <RadioGroupItem value="manual" id="manual" className="mr-4" />
+            <div>
+              <p className="font-bold text-lg">Manual</p>
+              <p className="text-sm opacity-80">Custom amounts</p>
+            </div>
+          </Label>
+        </RadioGroup>
 
         {distributionMethod === 'equal' && (
-          <div className="space-y-2 !mt-4">
-            <Label htmlFor="totalAmount" className="text-sm font-medium text-black">
-              Total Amount to Distribute
+          <div className="space-y-3">
+            <Label htmlFor="totalAmount" className="text-lg font-bold text-black">
+              Total Amount
             </Label>
             <div className="relative">
               <Input
@@ -80,26 +58,26 @@ export const BulkTransferForm = ({
                 type="number"
                 step="0.000001"
                 min="0"
-                placeholder="e.g., 1000"
+                placeholder="1000"
                 value={totalAmount || ''}
                 onChange={(e) => onTotalAmountChange(Number(e.target.value))}
-                className="h-11 pr-12 bg-white border-gray-200 focus:border-black rounded-xl"
+                className="h-14 text-lg font-medium border-2 border-black bg-white focus:border-black pr-16"
               />
-              <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 text-sm font-medium">
+              <div className="absolute right-4 top-1/2 -translate-y-1/2 text-black font-bold">
                 SOL
               </div>
             </div>
-            <p className="text-xs text-gray-500 pt-1">
-              This amount will be split equally among all recipients.
+            <p className="text-sm font-medium text-gray-600">
+              Will be split equally among all recipients
             </p>
           </div>
         )}
 
         {distributionMethod === 'manual' && (
-          <div className="p-4 bg-gray-50 rounded-xl border border-gray-100 !mt-4">
-            <p className="text-black font-medium text-sm">Manual Amount Entry</p>
-            <p className="text-gray-600 text-sm mt-1">
-              You will enter custom amounts for each recipient in the list below.
+          <div className="p-6 border-2 border-black bg-gray-50">
+            <p className="font-bold text-lg text-black">Manual Entry</p>
+            <p className="text-sm font-medium text-gray-600 mt-1">
+              Enter custom amounts for each recipient below
             </p>
           </div>
         )}
