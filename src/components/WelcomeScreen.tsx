@@ -5,10 +5,11 @@ import {
   ArrowRight,
   Zap,
   Shield,
-  Clock,
+  DollarSign,
   Users,
   Coins,
-  Target
+  Target,
+  Clock
 } from 'lucide-react';
 
 interface WelcomeScreenProps {
@@ -19,22 +20,25 @@ interface WelcomeScreenProps {
 export const WelcomeScreen = ({ onConnect, isConnecting }: WelcomeScreenProps) => {
   const scenarios = [
     {
-      icon: <Coins className="h-5 w-5" />,
+      icon: <Coins className="h-6 w-6" />,
       title: "Airdrop to NFT Holders",
-      description: "Send tokens to thousands of NFT holders instantly",
-      recipients: "5,000+ recipients"
+      description: "Distribute tokens to thousands of NFT holders instantly with zero hassle",
+      recipients: "10,000+ recipients",
+      time: "< 30 seconds"
     },
     {
-      icon: <Target className="h-5 w-5" />,
-      title: "Reward Distribution", 
-      description: "Distribute rewards to your community members",
-      recipients: "1,000+ recipients"
+      icon: <Target className="h-6 w-6" />,
+      title: "Community Rewards", 
+      description: "Reward your most active community members and contributors",
+      recipients: "5,000+ recipients",
+      time: "< 15 seconds"
     },
     {
-      icon: <Users className="h-5 w-5" />,
-      title: "Team Payouts",
-      description: "Pay your team and contributors efficiently",
-      recipients: "50+ recipients"
+      icon: <Users className="h-6 w-6" />,
+      title: "Team & Contributor Payouts",
+      description: "Pay your team, advisors, and contributors efficiently in one go",
+      recipients: "100+ recipients",
+      time: "< 5 seconds"
     }
   ];
 
@@ -85,74 +89,67 @@ export const WelcomeScreen = ({ onConnect, isConnecting }: WelcomeScreenProps) =
         </div>
       </div>
 
-      {/* Use Cases */}
+      {/* Use Cases - Enhanced */}
       <div className="bg-gray-50 py-24">
-        <div className="max-w-5xl mx-auto px-6">
+        <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-16">
             <h3 className="text-4xl font-bold text-gray-900 mb-4">Built for every use case</h3>
-            <p className="text-lg text-gray-600">Choose your scenario and get started in 30 seconds</p>
+            <p className="text-lg text-gray-600">From airdrops to payouts - we've got you covered</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {scenarios.map((scenario, index) => (
-              <div key={index} className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 hover:shadow-lg transition-shadow">
-                <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center mb-6 text-gray-700">
+              <div key={index} className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-200 hover:border-gray-200">
+                <div className="w-14 h-14 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex items-center justify-center mb-6 text-gray-700">
                   {scenario.icon}
                 </div>
                 <h4 className="text-xl font-bold text-gray-900 mb-3">{scenario.title}</h4>
-                <p className="text-gray-600 mb-4 leading-relaxed">{scenario.description}</p>
-                <div className="text-sm font-semibold text-gray-900">{scenario.recipients}</div>
+                <p className="text-gray-600 mb-6 leading-relaxed">{scenario.description}</p>
+                <div className="flex items-center justify-between text-sm">
+                  <div className="font-semibold text-gray-900">{scenario.recipients}</div>
+                  <div className="font-medium text-green-600">{scenario.time}</div>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      {/* Features */}
+      {/* Why MultiSender Wins - Redesigned */}
       <div className="py-24">
-        <div className="max-w-4xl mx-auto px-6">
+        <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h3 className="text-4xl font-bold text-gray-900 mb-4">Why MultiSender wins</h3>
+            <h3 className="text-4xl font-bold text-gray-900 mb-4">The only tool you'll ever need</h3>
+            <p className="text-lg text-gray-600">Built by developers, for developers who demand the best</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <Zap className="h-8 w-8 text-green-600" />
+            <div className="text-center group">
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-200">
+                <Zap className="h-8 w-8 text-white" />
               </div>
-              <h4 className="text-xl font-bold text-gray-900 mb-3">Lightning Fast</h4>
-              <p className="text-gray-600">Send to 10,000 wallets in under 15 seconds. No queues, no delays.</p>
+              <h4 className="text-xl font-bold text-gray-900 mb-3">Blazing Fast</h4>
+              <p className="text-gray-600 mb-4">Send to 10,000+ wallets in under 30 seconds. No queues, no waiting.</p>
+              <div className="text-sm font-semibold text-blue-600">99.9% success rate</div>
             </div>
             
-            <div className="text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <Shield className="h-8 w-8 text-blue-600" />
+            <div className="text-center group">
+              <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-200">
+                <DollarSign className="h-8 w-8 text-white" />
               </div>
-              <h4 className="text-xl font-bold text-gray-900 mb-3">Ultra Secure</h4>
-              <p className="text-gray-600">Bank-grade security. Your wallet, your keys, your control.</p>
+              <h4 className="text-xl font-bold text-gray-900 mb-3">Ultra Cheap</h4>
+              <p className="text-gray-600 mb-4">Only 0.000005 SOL per transfer. Save 95% compared to manual sending.</p>
+              <div className="text-sm font-semibold text-green-600">Lowest fees on Solana</div>
             </div>
             
-            <div className="text-center">
-              <div className="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <Clock className="h-8 w-8 text-purple-600" />
+            <div className="text-center group">
+              <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-200">
+                <Shield className="h-8 w-8 text-white" />
               </div>
-              <h4 className="text-xl font-bold text-gray-900 mb-3">Minimal Fees</h4>
-              <p className="text-gray-600">Only 0.000005 SOL per transfer. Save 95% vs traditional methods.</p>
+              <h4 className="text-xl font-bold text-gray-900 mb-3">Battle Tested</h4>
+              <p className="text-gray-600 mb-4">Your wallet, your keys, your control. Zero smart contract risk.</p>
+              <div className="text-sm font-semibold text-purple-600">100% secure</div>
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Social Proof */}
-      <div className="bg-gray-900 py-16">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <h3 className="text-2xl font-bold text-white mb-8">Trusted by leading Solana projects</h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {['Magic Eden', 'Tensor', 'Jupiter', 'Phantom'].map((project, index) => (
-              <div key={index} className="bg-gray-800 rounded-xl p-4 border border-gray-700">
-                <div className="text-gray-400 font-semibold">{project}</div>
-              </div>
-            ))}
           </div>
         </div>
       </div>
@@ -161,7 +158,7 @@ export const WelcomeScreen = ({ onConnect, isConnecting }: WelcomeScreenProps) =
       <div className="bg-black py-20">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h3 className="text-4xl font-bold text-white mb-6">Ready to scale your distributions?</h3>
-          <p className="text-xl text-gray-400 mb-10">Join 459 projects already using MultiSender</p>
+          <p className="text-xl text-gray-400 mb-10">Join hundreds of projects already using MultiSender</p>
           
           <Button 
             onClick={onConnect}
