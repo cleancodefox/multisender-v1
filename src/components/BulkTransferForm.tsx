@@ -1,12 +1,13 @@
 
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { DistributionMethod } from '@/types';
 
 interface BulkTransferFormProps {
   totalAmount: number;
   onTotalAmountChange: (amount: number) => void;
-  distributionMethod: 'equal' | 'manual';
-  onDistributionMethodChange: (method: 'equal' | 'manual') => void;
+  distributionMethod: DistributionMethod;
+  onDistributionMethodChange: (method: DistributionMethod) => void;
 }
 
 export const BulkTransferForm = ({
@@ -19,12 +20,11 @@ export const BulkTransferForm = ({
     <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
       <h2 className="text-xl font-bold text-gray-900 mb-6">Distribution Method</h2>
       
-      {/* Mobile-First Button Layout */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
         <button
-          onClick={() => onDistributionMethodChange('equal')}
+          onClick={() => onDistributionMethodChange(DistributionMethod.EQUAL)}
           className={`p-4 border-2 rounded-xl text-left transition-all ${
-            distributionMethod === 'equal' 
+            distributionMethod === DistributionMethod.EQUAL
               ? 'border-black bg-black text-white' 
               : 'border-gray-200 bg-white text-gray-900 hover:border-gray-300'
           }`}
@@ -34,9 +34,9 @@ export const BulkTransferForm = ({
         </button>
 
         <button
-          onClick={() => onDistributionMethodChange('manual')}
+          onClick={() => onDistributionMethodChange(DistributionMethod.MANUAL)}
           className={`p-4 border-2 rounded-xl text-left transition-all ${
-            distributionMethod === 'manual' 
+            distributionMethod === DistributionMethod.MANUAL
               ? 'border-black bg-black text-white' 
               : 'border-gray-200 bg-white text-gray-900 hover:border-gray-300'
           }`}
@@ -46,7 +46,7 @@ export const BulkTransferForm = ({
         </button>
       </div>
 
-      {distributionMethod === 'equal' && (
+      {distributionMethod === DistributionMethod.EQUAL && (
         <div className="space-y-4">
           <Label htmlFor="totalAmount" className="text-sm font-semibold text-gray-900">
             Total Amount
@@ -72,7 +72,7 @@ export const BulkTransferForm = ({
         </div>
       )}
 
-      {distributionMethod === 'manual' && (
+      {distributionMethod === DistributionMethod.MANUAL && (
         <div className="p-4 bg-gray-50 border border-gray-200 rounded-xl">
           <p className="font-semibold text-gray-900 mb-1">Manual Entry Mode</p>
           <p className="text-sm text-gray-600">

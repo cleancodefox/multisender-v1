@@ -1,0 +1,17 @@
+
+export const NETWORK_FEE_PER_TRANSFER = 0.000005;
+export const SOL_PRICE_USD = 160;
+
+export const SOLANA_ADDRESS_REGEX = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
+
+export const VALIDATION_RULES = {
+  MIN_ADDRESS_LENGTH: 32,
+  MAX_ADDRESS_LENGTH: 44,
+  MIN_AMOUNT: 0.000001,
+} as const;
+
+export const UI_CONSTANTS = {
+  MOBILE_BREAKPOINT: 768,
+  HEADER_HEIGHT: 80,
+  MOBILE_ACTION_BAR_HEIGHT: 80,
+} as const;
