@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -40,8 +41,8 @@ export const AddressManager = ({
       setManualAddress('');
       setManualAmount('');
       toast({
-        title: "Alıcı Eklendi",
-        description: "Adres listeye başarıyla eklendi.",
+        title: "Recipient Added",
+        description: "The address was successfully added to the list.",
       });
     }
   };
@@ -49,7 +50,7 @@ export const AddressManager = ({
   const handleCopyAddress = (address: string) => {
     navigator.clipboard.writeText(address);
     toast({
-      title: "Adres Kopyalandı",
+      title: "Address Copied",
     });
   };
 
@@ -61,16 +62,16 @@ export const AddressManager = ({
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-lg text-black">
           <Users className="h-5 w-5 text-gray-400" />
-          Alıcıları Yönet
+          Manage Recipients
         </CardTitle>
         <CardDescription className="text-gray-500">
-          Cüzdan adreslerini manuel olarak, CSV dosyasıyla veya holder snapshot'ları ile ekleyin.
+          Add wallet addresses manually, via CSV file, or with holder snapshots.
         </CardDescription>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="manual" className="w-full">
           <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 h-auto bg-gray-100 p-1 rounded-xl">
-            <TabsTrigger value="manual">Manuel</TabsTrigger>
+            <TabsTrigger value="manual">Manual</TabsTrigger>
             <TabsTrigger value="csv">CSV</TabsTrigger>
             <TabsTrigger value="nft" disabled>NFT Holder</TabsTrigger>
             <TabsTrigger value="token" disabled>Token Holder</TabsTrigger>
@@ -79,7 +80,7 @@ export const AddressManager = ({
           <TabsContent value="manual" className="mt-4 space-y-4">
             <div className="flex flex-col sm:flex-row gap-2">
               <Input
-                placeholder="Cüzdan adresini girin..."
+                placeholder="Enter wallet address..."
                 value={manualAddress}
                 onChange={(e) => setManualAddress(e.target.value)}
                 className="flex-1 h-11 bg-white border-gray-200 focus:border-black rounded-xl"
@@ -89,7 +90,7 @@ export const AddressManager = ({
                   type="number"
                   step="0.000001"
                   min="0"
-                  placeholder="Tutar (SOL)"
+                  placeholder="Amount (SOL)"
                   value={manualAmount}
                   onChange={(e) => setManualAmount(e.target.value === '' ? '' : Number(e.target.value))}
                   className="sm:w-36 h-11 bg-white border-gray-200 focus:border-black rounded-xl"
@@ -97,7 +98,7 @@ export const AddressManager = ({
               )}
               <Button onClick={handleManualAdd} className="h-11 bg-black hover:bg-gray-800 text-white rounded-xl">
                 <Plus className="h-4 w-4 sm:mr-2" />
-                <span className="hidden sm:inline">Ekle</span>
+                <span className="hidden sm:inline">Add</span>
               </Button>
             </div>
           </TabsContent>
@@ -105,7 +106,7 @@ export const AddressManager = ({
           <TabsContent value="csv" className="mt-4">
             <div className="border-2 border-dashed border-gray-200 rounded-xl p-6 text-center hover:border-black transition-colors cursor-pointer">
               <Upload className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-              <p className="text-sm text-black font-medium mb-1">CSV dosyasını sürükleyin veya seçin</p>
+              <p className="text-sm text-black font-medium mb-1">Drag and drop or select a CSV file</p>
               <p className="text-xs text-gray-500">Format: address,amount</p>
             </div>
           </TabsContent>
@@ -118,16 +119,16 @@ export const AddressManager = ({
         {recipients.length > 0 && (
           <div className="mt-6">
             <div className="flex items-center justify-between text-sm mb-2">
-              <span className="text-gray-500 font-medium">{recipients.length} Alıcı</span>
+              <span className="text-gray-500 font-medium">{recipients.length} Recipients</span>
               <div className="flex items-center gap-4">
                 {validRecipients.length > 0 && (
                   <Badge variant="outline" className="border-green-200 bg-green-50 text-green-700">
-                    {validRecipients.length} Geçerli
+                    {validRecipients.length} Valid
                   </Badge>
                 )}
                 {invalidRecipients.length > 0 && (
                   <Badge variant="destructive" className="bg-red-50 text-red-700 border-red-200">
-                    {invalidRecipients.length} Geçersiz
+                    {invalidRecipients.length} Invalid
                   </Badge>
                 )}
               </div>
@@ -137,9 +138,9 @@ export const AddressManager = ({
                 <TableHeader>
                   <TableRow className="bg-gray-50 hover:bg-gray-50">
                     <TableHead className="w-12 text-xs text-gray-500 font-medium">#</TableHead>
-                    <TableHead className="text-xs text-gray-500 font-medium">Cüzdan Adresi</TableHead>
-                    <TableHead className="text-xs text-gray-500 font-medium text-right">Tutar (SOL)</TableHead>
-                    <TableHead className="text-xs text-gray-500 font-medium text-center w-28">Durum</TableHead>
+                    <TableHead className="text-xs text-gray-500 font-medium">Wallet Address</TableHead>
+                    <TableHead className="text-xs text-gray-500 font-medium text-right">Amount (SOL)</TableHead>
+                    <TableHead className="text-xs text-gray-500 font-medium text-center w-28">Status</TableHead>
                     <TableHead className="w-12"></TableHead>
                   </TableRow>
                 </TableHeader>
@@ -178,12 +179,12 @@ export const AddressManager = ({
                         {recipient.isValid ? (
                           <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
                             <CheckCircle className="h-3 w-3 mr-1" />
-                            Geçerli
+                            Valid
                           </Badge>
                         ) : (
                           <Badge variant="destructive" className="bg-red-50 text-red-700 border-red-200">
                             <AlertCircle className="h-3 w-3 mr-1" />
-                            Geçersiz
+                            Invalid
                           </Badge>
                         )}
                       </TableCell>

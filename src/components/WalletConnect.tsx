@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -35,7 +36,7 @@ export const WalletConnect = ({ balance, isConnected, onConnect, onDisconnect }:
   const handleCopyAddress = () => {
     navigator.clipboard.writeText(walletAddress);
     toast({
-      title: "📋 Adres Kopyalandı",
+      title: "📋 Address Copied",
     });
   };
 
@@ -51,7 +52,7 @@ export const WalletConnect = ({ balance, isConnected, onConnect, onDisconnect }:
         className="bg-black text-white hover:bg-gray-800 rounded-xl px-4 text-sm font-medium h-10"
       >
         <Wallet className="h-4 w-4 mr-2" />
-        {isConnecting ? 'Bağlanıyor...' : 'Cüzdan Bağla'}
+        {isConnecting ? 'Connecting...' : 'Connect Wallet'}
       </Button>
     );
   }
@@ -75,24 +76,24 @@ export const WalletConnect = ({ balance, isConnected, onConnect, onDisconnect }:
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-60 bg-white/80 backdrop-blur-sm border-gray-100 rounded-xl shadow-xl mt-2">
         <div className="px-3 py-2">
-            <p className="text-xs text-gray-500">Cüzdan Adresi</p>
+            <p className="text-xs text-gray-500">Wallet Address</p>
             <p className="text-sm font-mono text-black">{walletAddress.slice(0, 12)}...{walletAddress.slice(-8)}</p>
         </div>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleCopyAddress} className="flex items-center gap-2 px-3 py-2 cursor-pointer text-sm">
           <Copy className="h-4 w-4 text-gray-500" />
-          Adresi Kopyala
+          Copy Address
         </DropdownMenuItem>
         <DropdownMenuItem asChild className="flex items-center gap-2 px-3 py-2 cursor-pointer text-sm">
           <a href={`https://solscan.io/account/${walletAddress}`} target="_blank" rel="noopener noreferrer">
             <ExternalLink className="h-4 w-4 text-gray-500" />
-            Solscan'de Görüntüle
+            View on Solscan
           </a>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleDisconnect} className="flex items-center gap-2 px-3 py-2 text-red-600 hover:!text-red-600 hover:!bg-red-50 cursor-pointer text-sm font-medium">
           <LogOut className="h-4 w-4" />
-          Bağlantıyı Kes
+          Disconnect
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

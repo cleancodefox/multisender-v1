@@ -23,15 +23,15 @@ export const BulkTransferForm = ({
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-lg text-black">
           <Calculator className="h-5 w-5 text-gray-400" />
-          Dağıtım Ayarları
+          Distribution Settings
         </CardTitle>
         <CardDescription className="text-gray-500">
-          Tokenların alıcılara nasıl dağıtılacağını seçin
+          Choose how tokens are distributed to recipients
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <div>
-          <Label className="text-sm font-medium text-black">Dağıtım Yöntemi</Label>
+          <Label className="text-sm font-medium text-black">Distribution Method</Label>
           <RadioGroup 
             value={distributionMethod} 
             onValueChange={onDistributionMethodChange}
@@ -44,9 +44,9 @@ export const BulkTransferForm = ({
                   <Users className="h-5 w-5 text-gray-500" />
                   <div>
                     <p className="font-medium text-black">
-                      Eşit Dağıtım
+                      Equal Distribution
                     </p>
-                    <p className="text-sm text-gray-500">Tüm alıcılara eşit tutar</p>
+                    <p className="text-sm text-gray-500">Same amount to all recipients</p>
                   </div>
                 </div>
               </div>
@@ -59,9 +59,9 @@ export const BulkTransferForm = ({
                   <DollarSign className="h-5 w-5 text-gray-500" />
                   <div>
                     <p className="font-medium text-black">
-                      Manuel Tutar
+                      Manual Amount
                     </p>
-                    <p className="text-sm text-gray-500">Her alıcı için özel tutar</p>
+                    <p className="text-sm text-gray-500">Custom amount for each recipient</p>
                   </div>
                 </div>
               </div>
@@ -72,7 +72,7 @@ export const BulkTransferForm = ({
         {distributionMethod === 'equal' && (
           <div className="space-y-2 !mt-4">
             <Label htmlFor="totalAmount" className="text-sm font-medium text-black">
-              Dağıtılacak Toplam Tutar
+              Total Amount to Distribute
             </Label>
             <div className="relative">
               <Input
@@ -80,7 +80,7 @@ export const BulkTransferForm = ({
                 type="number"
                 step="0.000001"
                 min="0"
-                placeholder="Örn: 1000"
+                placeholder="e.g., 1000"
                 value={totalAmount || ''}
                 onChange={(e) => onTotalAmountChange(Number(e.target.value))}
                 className="h-11 pr-12 bg-white border-gray-200 focus:border-black rounded-xl"
@@ -90,16 +90,16 @@ export const BulkTransferForm = ({
               </div>
             </div>
             <p className="text-xs text-gray-500 pt-1">
-              Bu tutar tüm alıcılar arasında eşit olarak paylaştırılacaktır.
+              This amount will be split equally among all recipients.
             </p>
           </div>
         )}
 
         {distributionMethod === 'manual' && (
           <div className="p-4 bg-gray-50 rounded-xl border border-gray-100 !mt-4">
-            <p className="text-black font-medium text-sm">Manuel Tutar Girişi</p>
+            <p className="text-black font-medium text-sm">Manual Amount Entry</p>
             <p className="text-gray-600 text-sm mt-1">
-              Her alıcı için özel tutarları aşağıdaki listeden gireceksiniz.
+              You will enter custom amounts for each recipient in the list below.
             </p>
           </div>
         )}

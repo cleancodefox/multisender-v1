@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -38,8 +39,8 @@ export const TransferPreview = ({
               <ArrowLeft className="h-4 w-4" />
             </Button>
             <div>
-              <h2 className="text-lg font-semibold text-gray-900">Transferi Onayla</h2>
-              <p className="text-sm text-gray-500">Bu işlem geri alınamaz, lütfen detayları kontrol edin.</p>
+              <h2 className="text-lg font-semibold text-gray-900">Confirm Transfer</h2>
+              <p className="text-sm text-gray-500">This action cannot be undone, please check the details.</p>
             </div>
           </div>
         </div>
@@ -49,25 +50,25 @@ export const TransferPreview = ({
         {/* Summary Card */}
         <Card className="bg-white border border-gray-100 shadow-sm">
           <CardHeader>
-            <CardTitle className="text-black">İşlem Detayları</CardTitle>
+            <CardTitle className="text-black">Transaction Details</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex justify-between items-center text-lg">
-              <span className="text-gray-600">Gönderilecek Toplam Tutar</span>
+              <span className="text-gray-600">Total Amount to Send</span>
               <div className="text-right">
                 <span className="font-bold text-black">{totalCost.toFixed(6)} SOL</span>
                 <p className="text-xs text-gray-500">${(totalCost * solPrice).toFixed(2)}</p>
               </div>
             </div>
              <div className="flex justify-between items-center text-sm">
-              <span className="text-gray-600">Tahmini Ağ Ücreti</span>
+              <span className="text-gray-600">Estimated Network Fee</span>
               <span className="font-medium text-black">{networkFees.toFixed(6)} SOL</span>
             </div>
             
             <Separator />
             
             <div className="flex justify-between items-center">
-              <span className="text-xl font-bold text-black">TOPLAM MALİYET</span>
+              <span className="text-xl font-bold text-black">TOTAL COST</span>
               <div className="text-right">
                 <div className="text-2xl font-bold text-black">
                   {(totalCost + networkFees).toFixed(6)} SOL
@@ -83,7 +84,7 @@ export const TransferPreview = ({
         {/* Recipients List */}
         <Card className="bg-white border border-gray-100 shadow-sm">
           <CardHeader>
-             <CardTitle className="text-black">Alıcılar ({validRecipients.length})</CardTitle>
+             <CardTitle className="text-black">Recipients ({validRecipients.length})</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="max-h-80 overflow-y-auto space-y-2 pr-2 -mr-2">
@@ -117,10 +118,10 @@ export const TransferPreview = ({
         {/* Final Warning */}
         <Alert variant="destructive" className="bg-red-500 border-none text-white shadow-lg">
           <AlertTriangle className="h-5 w-5 text-white" />
-          <AlertTitle className="font-bold text-lg">DİKKAT: Bu işlem geri alınamaz!</AlertTitle>
+          <AlertTitle className="font-bold text-lg">ATTENTION: This action is irreversible!</AlertTitle>
           <AlertDescription className="opacity-90">
-            Onayladığınızda, tokenlar cüzdanınızdan çıkacak ve belirtilen adreslere gönderilecektir. 
-            Lütfen tüm bilgilerin doğruluğundan emin olun.
+            Once you confirm, the tokens will leave your wallet and be sent to the specified addresses. 
+            Please ensure all information is correct.
           </AlertDescription>
         </Alert>
       </main>
@@ -132,7 +133,7 @@ export const TransferPreview = ({
             onClick={onConfirm}
           >
             <Shield className="h-5 w-5 mr-2" />
-            Onayla ve {validRecipients.length} Adrese Gönder
+            Confirm and Send to {validRecipients.length} Addresses
           </Button>
         </div>
       </div>

@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { WelcomeScreen } from '@/components/WelcomeScreen';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -35,8 +34,8 @@ const Index = () => {
       setIsWalletConnected(true);
       setIsConnecting(false);
       toast({
-        title: "Cüzdan Bağlandı!",
-        description: "MultiSender.so'ya hoş geldiniz.",
+        title: "Wallet Connected!",
+        description: "Welcome to MultiSender.so.",
       });
     }, 1500);
   };
@@ -47,8 +46,8 @@ const Index = () => {
     setTotalAmount(0);
     setIsPreviewMode(false);
     toast({
-      title: "Oturum Sıfırlandı",
-      description: "Güvenlik için tüm veriler temizlendi.",
+      title: "Session Reset",
+      description: "All data has been cleared for security.",
     });
   };
 
@@ -74,7 +73,7 @@ const Index = () => {
   const handleRemoveRecipient = (index: number) => {
     setRecipients(recipients.filter((_, i) => i !== index));
     toast({
-      title: "Alıcı Kaldırıldı",
+      title: "Recipient Removed",
       variant: "destructive",
     });
   };
@@ -145,10 +144,10 @@ const Index = () => {
                 <Card className="sticky top-28 bg-white border border-gray-100 shadow-sm">
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center justify-between text-black">
-                      İşlem Özeti
+                      Transaction Summary
                       {validRecipients.length > 0 && (
                         <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-200">
-                          {validRecipients.length} Hazır
+                          {validRecipients.length} Ready
                         </Badge>
                       )}
                     </CardTitle>
@@ -156,19 +155,19 @@ const Index = () => {
                   <CardContent className="space-y-4">
                     <div className="space-y-3 text-sm">
                       <div className="flex justify-between items-center">
-                        <span className="text-gray-500">Toplam Alıcı</span>
+                        <span className="text-gray-500">Total Recipients</span>
                         <span className="font-medium text-black">{recipients.length}</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-gray-500">Geçerli Adres</span>
+                        <span className="text-gray-500">Valid Addresses</span>
                         <span className="font-medium text-green-600">{validRecipients.length}</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-gray-500">Gönderilecek Tutar</span>
+                        <span className="text-gray-500">Amount to Send</span>
                         <span className="font-medium text-black">{totalCost.toFixed(6)} SOL</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-gray-500">Ağ Ücreti (Tahmini)</span>
+                        <span className="text-gray-500">Network Fee (Est.)</span>
                         <span className="font-medium text-black">{networkFees.toFixed(6)} SOL</span>
                       </div>
                     </div>
@@ -176,7 +175,7 @@ const Index = () => {
                     <Separator className="bg-gray-100" />
                     
                     <div className="flex justify-between text-base font-semibold">
-                      <span className="text-gray-700">Toplam Maliyet</span>
+                      <span className="text-gray-700">Total Cost</span>
                       <span className="text-black">{(totalCost + networkFees).toFixed(6)} SOL</span>
                     </div>
 
@@ -184,7 +183,7 @@ const Index = () => {
                       <Alert variant="destructive" className="bg-red-50 border-red-200 text-red-800">
                         <AlertTriangle className="h-4 w-4" />
                         <AlertDescription>
-                          Yetersiz bakiye. {((totalCost + networkFees) - walletBalance).toFixed(6)} SOL daha gerekli.
+                          Insufficient balance. Need {((totalCost + networkFees) - walletBalance).toFixed(6)} more SOL.
                         </AlertDescription>
                       </Alert>
                     )}
@@ -193,7 +192,7 @@ const Index = () => {
                        <Alert className="bg-green-50 border-green-200 text-green-800">
                         <CheckCircle className="h-4 w-4" />
                         <AlertDescription>
-                          Gönderime hazır! Tüm adresler geçerli ve bakiye yeterli.
+                          Ready to send! All addresses are valid and balance is sufficient.
                         </AlertDescription>
                       </Alert>
                     )}
@@ -204,7 +203,7 @@ const Index = () => {
                       disabled={!isReady}
                     >
                       <Eye className="h-4 w-4 mr-2" />
-                      Transferi Önizle ({validRecipients.length} alıcı)
+                      Preview Transfer ({validRecipients.length} recipients)
                     </Button>
                   </CardContent>
                 </Card>
@@ -219,8 +218,8 @@ const Index = () => {
           onBack={() => setIsPreviewMode(false)}
           onConfirm={() => {
             toast({
-              title: "🚀 Transfer Başlatıldı!",
-              description: "Toplu transferiniz Solana ağına gönderiliyor...",
+              title: "🚀 Transfer Initiated!",
+              description: "Your bulk transfer is being sent to the Solana network...",
             });
             console.log('Executing transfer...');
             // After transfer, maybe reset state
@@ -229,8 +228,8 @@ const Index = () => {
               setRecipients([]);
               setTotalAmount(0);
               toast({
-                title: "✅ Transfer Tamamlandı!",
-                description: "Tüm alıcılara gönderim başarılı.",
+                title: "✅ Transfer Complete!",
+                description: "Successfully sent to all recipients.",
               });
             }, 3000);
           }}

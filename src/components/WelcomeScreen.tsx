@@ -21,18 +21,18 @@ export const WelcomeScreen = ({ onConnect, isConnecting }: WelcomeScreenProps) =
   const features = [
     {
       icon: <Zap className="h-5 w-5 text-black" />,
-      title: "Işık Hızında",
-      description: "Tek seferde 1000'den fazla cüzdana anında gönderim yapın."
+      title: "Lightning Fast",
+      description: "Send to over 1000 wallets instantly in a single transaction."
     },
     {
       icon: <Shield className="h-5 w-5 text-black" />,
-      title: "%100 Güvenli", 
-      description: "Varlıklarınız sizin kontrolünüzde, tamamen merkeziyetsiz."
+      title: "100% Secure", 
+      description: "Your assets are under your control, completely decentralized."
     },
     {
       icon: <Clock className="h-5 w-5 text-black" />,
-      title: "Zaman Kazanın",
-      description: "Toplu transferleri tek bir tıkla saniyeler içinde halledin."
+      title: "Save Time",
+      description: "Handle bulk transfers in seconds with a single click."
     }
   ];
 
@@ -54,7 +54,7 @@ export const WelcomeScreen = ({ onConnect, isConnecting }: WelcomeScreenProps) =
               variant="outline"
               className="border-gray-200 hover:bg-gray-50"
             >
-              {isConnecting ? 'Bağlanıyor...' : 'Cüzdan Bağla'}
+              {isConnecting ? 'Connecting...' : 'Connect Wallet'}
             </Button>
           </div>
         </div>
@@ -64,15 +64,15 @@ export const WelcomeScreen = ({ onConnect, isConnecting }: WelcomeScreenProps) =
       <main className="max-w-7xl mx-auto px-6">
         <div className="py-24 sm:py-32 text-center">
           <Badge variant="outline" className="mb-6 border-gray-200 text-gray-600 font-medium py-1 px-3">
-            #1 Toplu Gönderim Platformu
+            #1 Bulk Transfer Platform
           </Badge>
           
           <h1 className="text-4xl md:text-6xl font-bold text-black mb-6 leading-tight">
-            Tokenlarınızı binlerce adrese <br/> aynı anda gönderin
+            Send tokens to thousands of <br/> addresses at once
           </h1>
           
           <p className="text-lg md:text-xl text-gray-600 mb-10 max-w-3xl mx-auto">
-            Solana üzerindeki en gelişmiş toplu transfer aracı. Zamandan tasarruf edin, işlem ücretlerini azaltın ve dağıtım operasyonlarınızı ölçeklendirin.
+            The most advanced bulk transfer tool on Solana. Save time, reduce transaction fees, and scale your distribution operations.
           </p>
 
           <Button 
@@ -82,7 +82,7 @@ export const WelcomeScreen = ({ onConnect, isConnecting }: WelcomeScreenProps) =
             className="bg-black hover:bg-gray-800 text-white px-8 h-12 text-base font-medium rounded-xl"
           >
             <Wallet className="h-4 w-4 mr-2" />
-            {isConnecting ? 'Bağlanıyor...' : 'Hemen Başla'}
+            {isConnecting ? 'Connecting...' : 'Get Started'}
           </Button>
         </div>
 
@@ -114,7 +114,7 @@ export const WelcomeScreen = ({ onConnect, isConnecting }: WelcomeScreenProps) =
               ))}
             </div>
             <blockquote className="text-2xl font-medium text-black mb-6">
-              "Airdrop sürecimizde bize 40 saatten fazla kazandırdı. İnanılmaz temiz arayüz, akıl almaz bir hız."
+              "Saved us over 40 hours on our airdrop process. Incredibly clean interface, insanely fast."
             </blockquote>
             <div className="flex items-center justify-center gap-3">
               <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center text-black font-semibold border border-gray-200">
