@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Plus, Upload, Users, Trash2 } from 'lucide-react';
+import { Plus, Upload, Users, Trash2, CheckCircle, XCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface Recipient {
@@ -48,34 +48,34 @@ export const AddressManager = ({
   const invalidRecipients = recipients.filter(r => r.isValid === false);
 
   return (
-    <div className="border border-black bg-white p-8">
-      <div className="flex items-center gap-3 mb-8">
-        <Users className="h-6 w-6" />
-        <h2 className="text-2xl font-bold">MANAGE RECIPIENTS</h2>
+    <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+      <div className="flex items-center gap-3 mb-6">
+        <Users className="h-5 w-5 text-gray-600" />
+        <h2 className="text-lg font-bold text-gray-900">Manage Recipients</h2>
       </div>
       
-      <p className="text-sm opacity-70 mb-8">
-        Add wallet addresses manually, via CSV file, or with holder snapshots.
+      <p className="text-sm text-gray-600 mb-6">
+        Add wallet addresses manually or via CSV file upload.
       </p>
 
       {/* Tab Navigation */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-8">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-6">
         {[
-          { id: 'manual', label: 'MANUAL' },
-          { id: 'csv', label: 'CSV' },
-          { id: 'nft', label: 'NFT HOLDER', disabled: true },
-          { id: 'token', label: 'TOKEN HOLDER', disabled: true }
+          { id: 'manual', label: 'Manual Entry' },
+          { id: 'csv', label: 'CSV Upload' },
+          { id: 'nft', label: 'NFT Holders', disabled: true },
+          { id: 'token', label: 'Token Holders', disabled: true }
         ].map((tab) => (
           <button
             key={tab.id}
             onClick={() => !tab.disabled && setActiveTab(tab.id)}
             disabled={tab.disabled}
-            className={`p-3 border border-black font-bold text-sm transition-colors ${
+            className={`p-3 rounded-lg font-medium text-sm transition-all ${
               activeTab === tab.id
                 ? 'bg-black text-white'
                 : tab.disabled
-                ? 'bg-white text-gray-400 border-gray-300 cursor-not-allowed'
-                : 'bg-white text-black hover:bg-black hover:text-white'
+                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
             {tab.label}
@@ -85,12 +85,12 @@ export const AddressManager = ({
 
       {/* Tab Content */}
       {activeTab === 'manual' && (
-        <div className="flex flex-col sm:flex-row gap-4 mb-8">
+        <div className="flex flex-col sm:flex-row gap-3 mb-6">
           <Input
-            placeholder="Enter wallet address..."
+            placeholder="Enter Solana wallet address..."
             value={manualAddress}
             onChange={(e) => setManualAddress(e.target.value)}
-            className="flex-1 h-12 border border-black bg-white text-black focus:border-black"
+            className="flex-1 h-11 border-gray-300 focus:border-black focus:ring-black rounded-lg"
           />
           {distributionMethod === 'manual' && (
             <Input
@@ -100,86 +100,104 @@ export const AddressManager = ({
               placeholder="Amount (SOL)"
               value={manualAmount}
               onChange={(e) => setManualAmount(e.target.value === '' ? '' : Number(e.target.value))}
-              className="sm:w-36 h-12 border border-black bg-white text-black focus:border-black"
+              className="sm:w-36 h-11 border-gray-300 focus:border-black focus:ring-black rounded-lg"
             />
           )}
           <Button 
             onClick={handleManualAdd} 
-            className="h-12 bg-black hover:bg-gray-800 text-white font-bold"
+            className="h-11 bg-black hover:bg-gray-800 text-white font-medium px-6 rounded-lg"
           >
             <Plus className="h-4 w-4 sm:mr-2" />
-            <span className="hidden sm:inline">ADD</span>
+            <span className="hidden sm:inline">Add</span>
           </Button>
         </div>
       )}
 
       {activeTab === 'csv' && (
-        <div className="border border-black p-8 text-center hover:bg-black hover:text-white transition-colors cursor-pointer mb-8">
-          <Upload className="h-8 w-8 mx-auto mb-4" />
-          <p className="font-bold mb-2">DRAG AND DROP OR SELECT A CSV FILE</p>
-          <p className="text-sm opacity-70">Format: address,amount</p>
+        <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition-colors cursor-pointer mb-6">
+          <Upload className="h-8 w-8 mx-auto mb-3 text-gray-400" />
+          <p className="font-medium text-gray-700 mb-1">Drop CSV file here or click to browse</p>
+          <p className="text-sm text-gray-500">Format: address,amount (one per line)</p>
         </div>
       )}
 
       {/* Recipients List */}
       {recipients.length > 0 && (
         <div>
-          <div className="flex items-center justify-between mb-6">
-            <span className="text-xl font-bold">{recipients.length} RECIPIENTS</span>
-            <div className="flex items-center gap-6 text-sm">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-4">
+              <span className="font-semibold text-gray-900">{recipients.length} Recipients</span>
               {validRecipients.length > 0 && (
-                <span>{validRecipients.length} VALID</span>
+                <div className="flex items-center gap-1 text-green-600">
+                  <CheckCircle className="h-4 w-4" />
+                  <span className="text-sm">{validRecipients.length} Valid</span>
+                </div>
               )}
               {invalidRecipients.length > 0 && (
-                <span>{invalidRecipients.length} INVALID</span>
+                <div className="flex items-center gap-1 text-red-600">
+                  <XCircle className="h-4 w-4" />
+                  <span className="text-sm">{invalidRecipients.length} Invalid</span>
+                </div>
               )}
             </div>
           </div>
           
-          <div className="border border-black">
-            <div className="grid grid-cols-12 gap-4 p-4 border-b border-black font-bold text-sm">
-              <div className="col-span-1">#</div>
-              <div className="col-span-6">WALLET ADDRESS</div>
-              <div className="col-span-3 text-right">AMOUNT (SOL)</div>
-              <div className="col-span-1 text-center">STATUS</div>
-              <div className="col-span-1"></div>
+          <div className="border border-gray-200 rounded-lg overflow-hidden">
+            <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
+              <div className="grid grid-cols-12 gap-4 text-sm font-medium text-gray-700">
+                <div className="col-span-1">#</div>
+                <div className="col-span-6">Wallet Address</div>
+                <div className="col-span-3 text-right">Amount (SOL)</div>
+                <div className="col-span-1 text-center">Status</div>
+                <div className="col-span-1"></div>
+              </div>
             </div>
             
-            {recipients.map((recipient, index) => (
-              <div key={index} className="grid grid-cols-12 gap-4 p-4 border-b border-black last:border-b-0 hover:bg-black hover:text-white transition-colors">
-                <div className="col-span-1 text-sm opacity-70">{index + 1}</div>
-                <div className="col-span-6">
-                  <code className="text-sm font-mono">
-                    {recipient.address.slice(0, 12)}...{recipient.address.slice(-8)}
-                  </code>
+            <div className="divide-y divide-gray-200">
+              {recipients.map((recipient, index) => (
+                <div key={index} className={`px-4 py-3 hover:bg-gray-50 transition-colors ${
+                  index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'
+                }`}>
+                  <div className="grid grid-cols-12 gap-4 items-center">
+                    <div className="col-span-1 text-sm text-gray-500">{index + 1}</div>
+                    <div className="col-span-6">
+                      <code className="text-sm font-mono text-gray-900 bg-gray-100 px-2 py-1 rounded">
+                        {recipient.address.slice(0, 12)}...{recipient.address.slice(-8)}
+                      </code>
+                    </div>
+                    <div className="col-span-3">
+                      <Input
+                        type="number"
+                        step="0.000001"
+                        min="0"
+                        value={recipient.amount || ''}
+                        onChange={(e) => onUpdateRecipient(index, recipient.address, Number(e.target.value))}
+                        className="w-full h-9 text-sm text-right border-gray-300 focus:border-black focus:ring-black rounded"
+                        disabled={distributionMethod === 'equal'}
+                        placeholder="0.00"
+                      />
+                    </div>
+                    <div className="col-span-1 text-center">
+                      {recipient.isValid ? (
+                        <CheckCircle className="h-4 w-4 text-green-500 mx-auto" />
+                      ) : (
+                        <XCircle className="h-4 w-4 text-red-500 mx-auto" />
+                      )}
+                    </div>
+                    <div className="col-span-1 text-right">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => onRemoveRecipient(index)}
+                        className="h-8 w-8 p-0 hover:bg-red-50 hover:text-red-600"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
                 </div>
-                <div className="col-span-3">
-                  <Input
-                    type="number"
-                    step="0.000001"
-                    min="0"
-                    value={recipient.amount || ''}
-                    onChange={(e) => onUpdateRecipient(index, recipient.address, Number(e.target.value))}
-                    className="w-full h-10 text-sm border border-black bg-transparent text-right"
-                    disabled={distributionMethod === 'equal'}
-                    placeholder="0.00"
-                  />
-                </div>
-                <div className="col-span-1 text-center text-sm">
-                  {recipient.isValid ? 'VALID' : 'INVALID'}
-                </div>
-                <div className="col-span-1 text-right">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => onRemoveRecipient(index)}
-                    className="h-8 w-8 p-0 hover:bg-black hover:text-white"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       )}
