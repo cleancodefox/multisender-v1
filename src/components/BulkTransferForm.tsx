@@ -17,7 +17,7 @@ export const BulkTransferForm = ({
 }: BulkTransferFormProps) => {
   return (
     <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-      <h2 className="text-lg font-bold text-gray-900 mb-6">Distribution Method</h2>
+      <h2 className="text-xl font-bold text-gray-900 mb-6">Distribution Method</h2>
       
       {/* Mobile-First Button Layout */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
@@ -47,8 +47,8 @@ export const BulkTransferForm = ({
       </div>
 
       {distributionMethod === 'equal' && (
-        <div className="space-y-3">
-          <Label htmlFor="totalAmount" className="text-sm font-medium text-gray-700">
+        <div className="space-y-4">
+          <Label htmlFor="totalAmount" className="text-sm font-semibold text-gray-900">
             Total Amount
           </Label>
           <div className="relative">
@@ -62,11 +62,11 @@ export const BulkTransferForm = ({
               onChange={(e) => onTotalAmountChange(Number(e.target.value))}
               className="h-12 text-base border-gray-300 focus:border-black focus:ring-black pr-16 rounded-xl"
             />
-            <div className="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-medium text-gray-500">
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-semibold text-gray-500">
               SOL
             </div>
           </div>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-600">
             This amount will be split equally among all recipients
           </p>
         </div>
@@ -74,8 +74,8 @@ export const BulkTransferForm = ({
 
       {distributionMethod === 'manual' && (
         <div className="p-4 bg-gray-50 border border-gray-200 rounded-xl">
-          <p className="font-medium text-gray-900">Manual Entry Mode</p>
-          <p className="text-sm text-gray-600 mt-1">
+          <p className="font-semibold text-gray-900 mb-1">Manual Entry Mode</p>
+          <p className="text-sm text-gray-600">
             You can enter custom amounts for each recipient in the list below
           </p>
         </div>
