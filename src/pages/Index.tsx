@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Eye, Send, AlertTriangle, CheckCircle, Zap, Shield } from 'lucide-react';
+import { Eye, Send, AlertTriangle, CheckCircle, Wallet } from 'lucide-react';
 import { WalletConnect } from '@/components/WalletConnect';
 import { BulkTransferForm } from '@/components/BulkTransferForm';
 import { TransferPreview } from '@/components/TransferPreview';
@@ -43,12 +43,11 @@ const Index = () => {
     setTotalAmount(0);
     setIsPreviewMode(false);
     toast({
-      title: "🔄 Session Reset",
+      title: "Session Reset",
       description: "All data cleared for security",
     });
   };
 
-  // Show welcome screen if wallet is not connected
   if (!isWalletConnected) {
     return <WelcomeScreen onConnect={handleWalletConnect} isConnecting={isConnecting} />;
   }
@@ -62,7 +61,7 @@ const Index = () => {
     setRecipients([...recipients, newRecipient]);
     
     toast({
-      title: "✅ Address Added",
+      title: "Address Added",
       description: `Recipient ${recipients.length + 1} added successfully`,
     });
   };
@@ -94,23 +93,18 @@ const Index = () => {
   const validRecipients = recipients.filter(r => r.isValid);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">
-      {/* Modern Header */}
-      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-200/50 shadow-sm">
+    <div className="min-h-screen bg-gray-50">
+      {/* Minimal Header */}
+      <header className="sticky top-0 z-50 bg-white border-b border-gray-200">
         <div className="px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="relative">
-                <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
-                  <Send className="h-6 w-6 text-white" />
-                </div>
-                <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center">
+                <Send className="h-4 w-4 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
-                  MultiSender.so
-                </h1>
-                <p className="text-sm text-slate-500">Bulk token distribution made simple</p>
+                <h1 className="text-lg font-semibold text-gray-900">MultiSender.so</h1>
+                <p className="text-xs text-gray-500">Bulk token distribution</p>
               </div>
             </div>
             <WalletConnect 
@@ -127,31 +121,19 @@ const Index = () => {
         <div className="pb-24">
           {/* Balance Card */}
           <div className="p-6">
-            <Card className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white border-0 shadow-2xl overflow-hidden relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10"></div>
-              <CardContent className="p-8 relative">
-                <div className="text-center space-y-4">
-                  <div className="flex items-center justify-center gap-2 mb-3">
-                    <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-                    <p className="text-sm text-blue-300 font-medium">Available Balance</p>
+            <Card className="bg-white border border-gray-200">
+              <CardContent className="p-6">
+                <div className="text-center space-y-3">
+                  <div className="flex items-center justify-center gap-2 mb-2">
+                    <Wallet className="h-4 w-4 text-gray-600" />
+                    <p className="text-sm text-gray-600">Available Balance</p>
                   </div>
-                  <p className="text-5xl font-light tracking-tight">{walletBalance.toFixed(6)}</p>
-                  <p className="text-xl text-slate-300 font-medium">SOL</p>
-                  
-                  <div className="flex items-center justify-center gap-6 pt-4">
-                    <Badge variant="secondary" className="bg-green-500/20 text-green-300 border-green-500/30 px-4 py-2 text-sm">
-                      <CheckCircle className="h-4 w-4 mr-2" />
-                      Connected
-                    </Badge>
-                    <Badge variant="secondary" className="bg-blue-500/20 text-blue-300 border-blue-500/30 px-4 py-2 text-sm">
-                      <Zap className="h-4 w-4 mr-2" />
-                      Optimized
-                    </Badge>
-                    <Badge variant="secondary" className="bg-purple-500/20 text-purple-300 border-purple-500/30 px-4 py-2 text-sm">
-                      <Shield className="h-4 w-4 mr-2" />
-                      Secure
-                    </Badge>
-                  </div>
+                  <p className="text-3xl font-semibold text-gray-900">{walletBalance.toFixed(6)}</p>
+                  <p className="text-sm text-gray-500">SOL</p>
+                  <Badge variant="secondary" className="bg-green-50 text-green-700 border-green-200">
+                    <CheckCircle className="h-3 w-3 mr-1" />
+                    Connected
+                  </Badge>
                 </div>
               </CardContent>
             </Card>
@@ -175,50 +157,50 @@ const Index = () => {
             />
 
             {/* Summary Card */}
-            <Card className="border-0 bg-white/60 backdrop-blur-sm shadow-xl">
+            <Card className="bg-white border border-gray-200">
               <CardHeader className="pb-4">
-                <CardTitle className="text-xl flex items-center justify-between">
-                  Transaction Summary
+                <CardTitle className="text-lg flex items-center justify-between">
+                  Summary
                   {validRecipients.length > 0 && (
-                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 px-3 py-1">
+                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
                       {validRecipients.length} Ready
                     </Badge>
                   )}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="grid grid-cols-2 gap-6 text-sm">
-                  <div className="space-y-3">
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div className="space-y-2">
                     <div className="flex justify-between">
-                      <span className="text-slate-600">Recipients</span>
-                      <span className="font-semibold">{recipients.length}</span>
+                      <span className="text-gray-600">Recipients</span>
+                      <span className="font-medium">{recipients.length}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-slate-600">Valid Addresses</span>
-                      <span className="font-semibold text-green-600">{validRecipients.length}</span>
+                      <span className="text-gray-600">Valid</span>
+                      <span className="font-medium text-green-600">{validRecipients.length}</span>
                     </div>
                   </div>
-                  <div className="space-y-3">
+                  <div className="space-y-2">
                     <div className="flex justify-between">
-                      <span className="text-slate-600">Total Amount</span>
-                      <span className="font-semibold">{totalCost.toFixed(6)} SOL</span>
+                      <span className="text-gray-600">Amount</span>
+                      <span className="font-medium">{totalCost.toFixed(6)} SOL</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-slate-600">Network Fees</span>
-                      <span className="font-semibold">{networkFees.toFixed(6)} SOL</span>
+                      <span className="text-gray-600">Fees</span>
+                      <span className="font-medium">{networkFees.toFixed(6)} SOL</span>
                     </div>
                   </div>
                 </div>
                 
                 <Separator />
                 
-                <div className="flex justify-between text-lg font-bold">
+                <div className="flex justify-between text-base font-semibold">
                   <span>Total Cost</span>
-                  <span className="text-blue-600">{(totalCost + networkFees).toFixed(6)} SOL</span>
+                  <span className="text-gray-900">{(totalCost + networkFees).toFixed(6)} SOL</span>
                 </div>
 
                 {walletBalance < (totalCost + networkFees) && totalCost > 0 && (
-                  <Alert className="bg-red-50 border-red-200 rounded-xl">
+                  <Alert className="bg-red-50 border-red-200">
                     <AlertTriangle className="h-4 w-4 text-red-600" />
                     <AlertDescription className="text-red-800 text-sm">
                       Insufficient balance. Need {((totalCost + networkFees) - walletBalance).toFixed(6)} more SOL.
@@ -227,10 +209,10 @@ const Index = () => {
                 )}
 
                 {validRecipients.length > 0 && walletBalance >= (totalCost + networkFees) && totalCost > 0 && (
-                  <Alert className="bg-green-50 border-green-200 rounded-xl">
+                  <Alert className="bg-green-50 border-green-200">
                     <CheckCircle className="h-4 w-4 text-green-600" />
                     <AlertDescription className="text-green-800 text-sm">
-                      🚀 Ready to execute! All addresses validated and balance sufficient.
+                      Ready to execute! All addresses validated and balance sufficient.
                     </AlertDescription>
                   </Alert>
                 )}
@@ -239,13 +221,13 @@ const Index = () => {
           </div>
 
           {/* Fixed Bottom Button */}
-          <div className="fixed bottom-0 left-0 right-0 p-6 bg-white/80 backdrop-blur-xl border-t border-slate-200/50">
+          <div className="fixed bottom-0 left-0 right-0 p-6 bg-white border-t border-gray-200">
             <Button 
-              className="w-full h-16 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1"
+              className="w-full h-12 bg-gray-900 hover:bg-gray-800 text-white font-medium rounded-lg"
               onClick={() => setIsPreviewMode(true)}
               disabled={validRecipients.length === 0 || totalCost === 0 || walletBalance < (totalCost + networkFees)}
             >
-              <Eye className="h-5 w-5 mr-3" />
+              <Eye className="h-4 w-4 mr-2" />
               Preview Transfer ({validRecipients.length} recipients)
             </Button>
           </div>
@@ -258,7 +240,7 @@ const Index = () => {
           onBack={() => setIsPreviewMode(false)}
           onConfirm={() => {
             toast({
-              title: "🎉 Transfer Initiated!",
+              title: "Transfer Initiated!",
               description: "Your bulk transfer is being processed...",
             });
             console.log('Executing transfer...');
