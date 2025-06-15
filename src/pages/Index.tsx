@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Eye, Send, AlertTriangle, CheckCircle, Sparkles, TrendingUp } from 'lucide-react';
+import { Eye, Send, AlertTriangle, CheckCircle, Zap, Shield } from 'lucide-react';
 import { WalletConnect } from '@/components/WalletConnect';
 import { BulkTransferForm } from '@/components/BulkTransferForm';
 import { TransferPreview } from '@/components/TransferPreview';
@@ -24,7 +24,7 @@ const Index = () => {
   const [isConnecting, setIsConnecting] = useState(false);
   const [recipients, setRecipients] = useState<Recipient[]>([]);
   const [totalAmount, setTotalAmount] = useState<number>(0);
-  const [distributionMethod, setDistributionMethod] = useState<'equal' | 'manual' | 'percentage'>('equal');
+  const [distributionMethod, setDistributionMethod] = useState<'equal' | 'manual'>('equal');
   const [isPreviewMode, setIsPreviewMode] = useState(false);
   const [walletBalance] = useState(5.234);
   const { toast } = useToast();
@@ -67,6 +67,12 @@ const Index = () => {
     });
   };
 
+  const handleUpdateRecipient = (index: number, address: string, amount: number) => {
+    setRecipients(recipients.map((recipient, i) => 
+      i === index ? { ...recipient, address, amount, isValid: validateSolanaAddress(address) } : recipient
+    ));
+  };
+
   const handleRemoveRecipient = (index: number) => {
     setRecipients(recipients.filter((_, i) => i !== index));
   };
@@ -88,26 +94,23 @@ const Index = () => {
   const validRecipients = recipients.filter(r => r.isValid);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-green-50">
-      {/* Enhanced Header */}
-      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200 shadow-sm">
-        <div className="px-4 py-3">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">
+      {/* Modern Header */}
+      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-200/50 shadow-sm">
+        <div className="px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center shadow-lg">
-                <Send className="h-5 w-5 text-white" />
+            <div className="flex items-center gap-4">
+              <div className="relative">
+                <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+                  <Send className="h-6 w-6 text-white" />
+                </div>
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
               </div>
               <div>
-                <h1 className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-                  SolMulti Pro
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
+                  MultiSender.so
                 </h1>
-                <div className="flex items-center gap-2">
-                  <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 text-xs px-2 py-0.5 rounded-full">
-                    <Sparkles className="h-3 w-3 mr-1" />
-                    Premium
-                  </Badge>
-                  <p className="text-xs text-gray-500">Advanced multisender</p>
-                </div>
+                <p className="text-sm text-slate-500">Bulk token distribution made simple</p>
               </div>
             </div>
             <WalletConnect 
@@ -121,28 +124,32 @@ const Index = () => {
       </header>
 
       {!isPreviewMode ? (
-        <div className="pb-20">
-          {/* Enhanced Balance Card */}
-          <div className="p-4">
-            <Card className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white border-0 shadow-2xl overflow-hidden relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-green-500/10 to-emerald-500/10"></div>
-              <CardContent className="p-6 relative">
-                <div className="text-center space-y-3">
-                  <div className="flex items-center justify-center gap-2 mb-2">
+        <div className="pb-24">
+          {/* Balance Card */}
+          <div className="p-6">
+            <Card className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white border-0 shadow-2xl overflow-hidden relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10"></div>
+              <CardContent className="p-8 relative">
+                <div className="text-center space-y-4">
+                  <div className="flex items-center justify-center gap-2 mb-3">
                     <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-                    <p className="text-sm text-green-300 font-medium">Live Balance</p>
+                    <p className="text-sm text-blue-300 font-medium">Available Balance</p>
                   </div>
-                  <p className="text-4xl font-light tracking-tight">{walletBalance.toFixed(6)}</p>
-                  <p className="text-lg text-gray-300 font-medium">SOL</p>
+                  <p className="text-5xl font-light tracking-tight">{walletBalance.toFixed(6)}</p>
+                  <p className="text-xl text-slate-300 font-medium">SOL</p>
                   
-                  <div className="flex items-center justify-center gap-4 pt-2">
-                    <Badge variant="secondary" className="bg-green-500/20 text-green-300 border-green-500/30 px-3 py-1">
-                      <CheckCircle className="h-3 w-3 mr-1" />
+                  <div className="flex items-center justify-center gap-6 pt-4">
+                    <Badge variant="secondary" className="bg-green-500/20 text-green-300 border-green-500/30 px-4 py-2 text-sm">
+                      <CheckCircle className="h-4 w-4 mr-2" />
                       Connected
                     </Badge>
-                    <Badge variant="secondary" className="bg-yellow-500/20 text-yellow-300 border-yellow-500/30 px-3 py-1">
-                      <TrendingUp className="h-3 w-3 mr-1" />
-                      Gas Optimized
+                    <Badge variant="secondary" className="bg-blue-500/20 text-blue-300 border-blue-500/30 px-4 py-2 text-sm">
+                      <Zap className="h-4 w-4 mr-2" />
+                      Optimized
+                    </Badge>
+                    <Badge variant="secondary" className="bg-purple-500/20 text-purple-300 border-purple-500/30 px-4 py-2 text-sm">
+                      <Shield className="h-4 w-4 mr-2" />
+                      Secure
                     </Badge>
                   </div>
                 </div>
@@ -151,7 +158,7 @@ const Index = () => {
           </div>
 
           {/* Main Content */}
-          <div className="px-4 space-y-4">
+          <div className="px-6 space-y-6">
             <BulkTransferForm
               totalAmount={totalAmount}
               onTotalAmountChange={setTotalAmount}
@@ -162,41 +169,42 @@ const Index = () => {
             <AddressManager
               recipients={recipients}
               onAddRecipient={handleAddRecipient}
+              onUpdateRecipient={handleUpdateRecipient}
               onRemoveRecipient={handleRemoveRecipient}
               distributionMethod={distributionMethod}
             />
 
-            {/* Enhanced Summary Card */}
-            <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-lg">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg flex items-center justify-between">
+            {/* Summary Card */}
+            <Card className="border-0 bg-white/60 backdrop-blur-sm shadow-xl">
+              <CardHeader className="pb-4">
+                <CardTitle className="text-xl flex items-center justify-between">
                   Transaction Summary
                   {validRecipients.length > 0 && (
-                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                      {validRecipients.length} Valid
+                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 px-3 py-1">
+                      {validRecipients.length} Ready
                     </Badge>
                   )}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div className="space-y-2">
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-2 gap-6 text-sm">
+                  <div className="space-y-3">
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Recipients</span>
+                      <span className="text-slate-600">Recipients</span>
                       <span className="font-semibold">{recipients.length}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Valid Addresses</span>
+                      <span className="text-slate-600">Valid Addresses</span>
                       <span className="font-semibold text-green-600">{validRecipients.length}</span>
                     </div>
                   </div>
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Total Amount</span>
+                      <span className="text-slate-600">Total Amount</span>
                       <span className="font-semibold">{totalCost.toFixed(6)} SOL</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Network Fees</span>
+                      <span className="text-slate-600">Network Fees</span>
                       <span className="font-semibold">{networkFees.toFixed(6)} SOL</span>
                     </div>
                   </div>
@@ -206,7 +214,7 @@ const Index = () => {
                 
                 <div className="flex justify-between text-lg font-bold">
                   <span>Total Cost</span>
-                  <span className="text-green-600">{(totalCost + networkFees).toFixed(6)} SOL</span>
+                  <span className="text-blue-600">{(totalCost + networkFees).toFixed(6)} SOL</span>
                 </div>
 
                 {walletBalance < (totalCost + networkFees) && totalCost > 0 && (
@@ -230,14 +238,14 @@ const Index = () => {
             </Card>
           </div>
 
-          {/* Enhanced Fixed Bottom Button */}
-          <div className="fixed bottom-0 left-0 right-0 p-4 bg-white/95 backdrop-blur-sm border-t border-gray-200">
+          {/* Fixed Bottom Button */}
+          <div className="fixed bottom-0 left-0 right-0 p-6 bg-white/80 backdrop-blur-xl border-t border-slate-200/50">
             <Button 
-              className="w-full h-14 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5"
+              className="w-full h-16 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1"
               onClick={() => setIsPreviewMode(true)}
               disabled={validRecipients.length === 0 || totalCost === 0 || walletBalance < (totalCost + networkFees)}
             >
-              <Eye className="h-5 w-5 mr-2" />
+              <Eye className="h-5 w-5 mr-3" />
               Preview Transfer ({validRecipients.length} recipients)
             </Button>
           </div>
