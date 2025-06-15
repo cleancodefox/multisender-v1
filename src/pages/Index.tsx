@@ -1,9 +1,7 @@
 
 import { useState } from 'react';
 import { WelcomeScreen } from '@/components/WelcomeScreen';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Send, AlertTriangle, CheckCircle } from 'lucide-react';
 import { WalletConnect } from '@/components/WalletConnect';
 import { BulkTransferForm } from '@/components/BulkTransferForm';
@@ -96,16 +94,16 @@ const Index = () => {
   const isReady = validRecipients.length > 0 && totalCost > 0 && walletBalance >= (totalCost + networkFees);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-black text-white">
       {/* Header */}
-      <header className="border-b border-black">
-        <div className="max-w-6xl mx-auto px-6 py-4">
+      <header className="border-b border-white">
+        <div className="max-w-6xl mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-black flex items-center justify-center">
-                <Send className="h-4 w-4 text-white" />
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 bg-white flex items-center justify-center">
+                <Send className="h-5 w-5 text-black" />
               </div>
-              <h1 className="text-xl font-bold text-black">MultiSender.so</h1>
+              <h1 className="text-2xl font-bold">MULTISENDER.SO</h1>
             </div>
             <WalletConnect 
               balance={walletBalance} 
@@ -138,66 +136,62 @@ const Index = () => {
             </div>
 
             <div className="lg:col-span-1">
-              <Card className="sticky top-8 border-2 border-black bg-white">
-                <CardHeader className="border-b border-black pb-4">
-                  <CardTitle className="text-xl font-bold text-black">
-                    Summary
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="pt-6 space-y-6">
-                  <div className="space-y-4">
-                    <div className="flex justify-between">
-                      <span className="font-medium">Recipients</span>
-                      <span className="font-bold">{recipients.length}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="font-medium">Valid</span>
-                      <span className="font-bold text-green-600">{validRecipients.length}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="font-medium">Amount</span>
-                      <span className="font-bold">{totalCost.toFixed(6)} SOL</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="font-medium">Fees</span>
-                      <span className="font-bold">{networkFees.toFixed(6)} SOL</span>
-                    </div>
-                    
-                    <div className="border-t-2 border-black pt-4">
-                      <div className="flex justify-between text-lg">
-                        <span className="font-bold">Total</span>
-                        <span className="font-bold">{(totalCost + networkFees).toFixed(6)} SOL</span>
-                      </div>
+              <div className="sticky top-8 border border-white bg-black p-8">
+                <h2 className="text-2xl font-bold mb-8">SUMMARY</h2>
+                
+                <div className="space-y-6">
+                  <div className="flex justify-between text-lg">
+                    <span>RECIPIENTS</span>
+                    <span className="font-bold">{recipients.length}</span>
+                  </div>
+                  <div className="flex justify-between text-lg">
+                    <span>VALID</span>
+                    <span className="font-bold">{validRecipients.length}</span>
+                  </div>
+                  <div className="flex justify-between text-lg">
+                    <span>AMOUNT</span>
+                    <span className="font-bold">{totalCost.toFixed(6)} SOL</span>
+                  </div>
+                  <div className="flex justify-between text-lg">
+                    <span>FEES</span>
+                    <span className="font-bold">{networkFees.toFixed(6)} SOL</span>
+                  </div>
+                  
+                  <div className="border-t border-white pt-6">
+                    <div className="flex justify-between text-xl">
+                      <span className="font-bold">TOTAL</span>
+                      <span className="font-bold">{(totalCost + networkFees).toFixed(6)} SOL</span>
                     </div>
                   </div>
+                </div>
 
-                  {walletBalance < (totalCost + networkFees) && totalCost > 0 && (
-                    <Alert className="border-2 border-red-500 bg-red-50">
-                      <AlertTriangle className="h-4 w-4" />
-                      <AlertDescription className="font-medium">
-                        Insufficient balance. Need {((totalCost + networkFees) - walletBalance).toFixed(6)} more SOL.
-                      </AlertDescription>
-                    </Alert>
-                  )}
+                {walletBalance < (totalCost + networkFees) && totalCost > 0 && (
+                  <div className="mt-6 p-4 border border-white bg-black">
+                    <div className="flex items-center gap-2">
+                      <AlertTriangle className="h-5 w-5" />
+                      <span className="font-bold">INSUFFICIENT BALANCE</span>
+                    </div>
+                    <p className="mt-2">Need {((totalCost + networkFees) - walletBalance).toFixed(6)} more SOL</p>
+                  </div>
+                )}
 
-                  {isReady && (
-                    <Alert className="border-2 border-green-500 bg-green-50">
-                      <CheckCircle className="h-4 w-4" />
-                      <AlertDescription className="font-medium">
-                        Ready to send!
-                      </AlertDescription>
-                    </Alert>
-                  )}
+                {isReady && (
+                  <div className="mt-6 p-4 border border-white bg-black">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="h-5 w-5" />
+                      <span className="font-bold">READY TO SEND</span>
+                    </div>
+                  </div>
+                )}
 
-                  <Button 
-                    className="w-full h-12 bg-black hover:bg-gray-800 text-white font-bold border-2 border-black"
-                    onClick={() => setIsPreviewMode(true)}
-                    disabled={!isReady}
-                  >
-                    PREVIEW ({validRecipients.length})
-                  </Button>
-                </CardContent>
-              </Card>
+                <Button 
+                  className="w-full h-14 bg-white hover:bg-gray-200 text-black font-bold text-lg mt-8"
+                  onClick={() => setIsPreviewMode(true)}
+                  disabled={!isReady}
+                >
+                  PREVIEW ({validRecipients.length})
+                </Button>
+              </div>
             </div>
           </div>
         </main>

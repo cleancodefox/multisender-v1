@@ -1,12 +1,8 @@
 
 import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Plus, Upload, Users, Coins, Trash2, Copy, CheckCircle, AlertCircle } from 'lucide-react';
+import { Plus, Upload, Users, Trash2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface Recipient {
@@ -32,6 +28,7 @@ export const AddressManager = ({
 }: AddressManagerProps) => {
   const [manualAddress, setManualAddress] = useState('');
   const [manualAmount, setManualAmount] = useState<number | ''>('');
+  const [activeTab, setActiveTab] = useState('manual');
   const { toast } = useToast();
 
   const handleManualAdd = () => {
@@ -47,165 +44,145 @@ export const AddressManager = ({
     }
   };
 
-  const handleCopyAddress = (address: string) => {
-    navigator.clipboard.writeText(address);
-    toast({
-      title: "Address Copied",
-    });
-  };
-
   const validRecipients = recipients.filter(r => r.isValid);
   const invalidRecipients = recipients.filter(r => r.isValid === false);
 
   return (
-    <Card className="bg-white border border-gray-100 shadow-sm">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-lg text-black">
-          <Users className="h-5 w-5 text-gray-400" />
-          Manage Recipients
-        </CardTitle>
-        <CardDescription className="text-gray-500">
-          Add wallet addresses manually, via CSV file, or with holder snapshots.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Tabs defaultValue="manual" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 h-auto bg-gray-100 p-1 rounded-xl">
-            <TabsTrigger value="manual">Manual</TabsTrigger>
-            <TabsTrigger value="csv">CSV</TabsTrigger>
-            <TabsTrigger value="nft" disabled>NFT Holder</TabsTrigger>
-            <TabsTrigger value="token" disabled>Token Holder</TabsTrigger>
-          </TabsList>
+    <div className="border border-white bg-black p-8">
+      <div className="flex items-center gap-3 mb-8">
+        <Users className="h-6 w-6" />
+        <h2 className="text-2xl font-bold">MANAGE RECIPIENTS</h2>
+      </div>
+      
+      <p className="text-sm opacity-70 mb-8">
+        Add wallet addresses manually, via CSV file, or with holder snapshots.
+      </p>
 
-          <TabsContent value="manual" className="mt-4 space-y-4">
-            <div className="flex flex-col sm:flex-row gap-2">
-              <Input
-                placeholder="Enter wallet address..."
-                value={manualAddress}
-                onChange={(e) => setManualAddress(e.target.value)}
-                className="flex-1 h-11 bg-white border-gray-200 focus:border-black rounded-xl"
-              />
-              {distributionMethod === 'manual' && (
-                <Input
-                  type="number"
-                  step="0.000001"
-                  min="0"
-                  placeholder="Amount (SOL)"
-                  value={manualAmount}
-                  onChange={(e) => setManualAmount(e.target.value === '' ? '' : Number(e.target.value))}
-                  className="sm:w-36 h-11 bg-white border-gray-200 focus:border-black rounded-xl"
-                />
+      {/* Tab Navigation */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-8">
+        {[
+          { id: 'manual', label: 'MANUAL' },
+          { id: 'csv', label: 'CSV' },
+          { id: 'nft', label: 'NFT HOLDER', disabled: true },
+          { id: 'token', label: 'TOKEN HOLDER', disabled: true }
+        ].map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => !tab.disabled && setActiveTab(tab.id)}
+            disabled={tab.disabled}
+            className={`p-3 border border-white font-bold text-sm transition-colors ${
+              activeTab === tab.id
+                ? 'bg-white text-black'
+                : tab.disabled
+                ? 'bg-black text-gray-500 border-gray-500 cursor-not-allowed'
+                : 'bg-black text-white hover:bg-white hover:text-black'
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Tab Content */}
+      {activeTab === 'manual' && (
+        <div className="flex flex-col sm:flex-row gap-4 mb-8">
+          <Input
+            placeholder="Enter wallet address..."
+            value={manualAddress}
+            onChange={(e) => setManualAddress(e.target.value)}
+            className="flex-1 h-12 border border-white bg-black text-white focus:border-white"
+          />
+          {distributionMethod === 'manual' && (
+            <Input
+              type="number"
+              step="0.000001"
+              min="0"
+              placeholder="Amount (SOL)"
+              value={manualAmount}
+              onChange={(e) => setManualAmount(e.target.value === '' ? '' : Number(e.target.value))}
+              className="sm:w-36 h-12 border border-white bg-black text-white focus:border-white"
+            />
+          )}
+          <Button 
+            onClick={handleManualAdd} 
+            className="h-12 bg-white hover:bg-gray-200 text-black font-bold"
+          >
+            <Plus className="h-4 w-4 sm:mr-2" />
+            <span className="hidden sm:inline">ADD</span>
+          </Button>
+        </div>
+      )}
+
+      {activeTab === 'csv' && (
+        <div className="border border-white p-8 text-center hover:bg-white hover:text-black transition-colors cursor-pointer mb-8">
+          <Upload className="h-8 w-8 mx-auto mb-4" />
+          <p className="font-bold mb-2">DRAG AND DROP OR SELECT A CSV FILE</p>
+          <p className="text-sm opacity-70">Format: address,amount</p>
+        </div>
+      )}
+
+      {/* Recipients List */}
+      {recipients.length > 0 && (
+        <div>
+          <div className="flex items-center justify-between mb-6">
+            <span className="text-xl font-bold">{recipients.length} RECIPIENTS</span>
+            <div className="flex items-center gap-6 text-sm">
+              {validRecipients.length > 0 && (
+                <span>{validRecipients.length} VALID</span>
               )}
-              <Button onClick={handleManualAdd} className="h-11 bg-black hover:bg-gray-800 text-white rounded-xl">
-                <Plus className="h-4 w-4 sm:mr-2" />
-                <span className="hidden sm:inline">Add</span>
-              </Button>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="csv" className="mt-4">
-            <div className="border-2 border-dashed border-gray-200 rounded-xl p-6 text-center hover:border-black transition-colors cursor-pointer">
-              <Upload className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-              <p className="text-sm text-black font-medium mb-1">Drag and drop or select a CSV file</p>
-              <p className="text-xs text-gray-500">Format: address,amount</p>
-            </div>
-          </TabsContent>
-          
-          {/* Tabs for NFT and Token Holders are disabled but styled */}
-          <TabsContent value="nft" className="mt-4" />
-          <TabsContent value="token" className="mt-4" />
-        </Tabs>
-
-        {recipients.length > 0 && (
-          <div className="mt-6">
-            <div className="flex items-center justify-between text-sm mb-2">
-              <span className="text-gray-500 font-medium">{recipients.length} Recipients</span>
-              <div className="flex items-center gap-4">
-                {validRecipients.length > 0 && (
-                  <Badge variant="outline" className="border-green-200 bg-green-50 text-green-700">
-                    {validRecipients.length} Valid
-                  </Badge>
-                )}
-                {invalidRecipients.length > 0 && (
-                  <Badge variant="destructive" className="bg-red-50 text-red-700 border-red-200">
-                    {invalidRecipients.length} Invalid
-                  </Badge>
-                )}
-              </div>
-            </div>
-            <div className="border border-gray-100 rounded-lg overflow-hidden">
-              <Table>
-                <TableHeader>
-                  <TableRow className="bg-gray-50 hover:bg-gray-50">
-                    <TableHead className="w-12 text-xs text-gray-500 font-medium">#</TableHead>
-                    <TableHead className="text-xs text-gray-500 font-medium">Wallet Address</TableHead>
-                    <TableHead className="text-xs text-gray-500 font-medium text-right">Amount (SOL)</TableHead>
-                    <TableHead className="text-xs text-gray-500 font-medium text-center w-28">Status</TableHead>
-                    <TableHead className="w-12"></TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {recipients.map((recipient, index) => (
-                    <TableRow key={index} className="hover:bg-gray-50/50">
-                      <TableCell className="text-sm text-gray-400">{index + 1}</TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <code className="text-sm text-black">
-                            {recipient.address.slice(0, 6)}...{recipient.address.slice(-6)}
-                          </code>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => handleCopyAddress(recipient.address)}
-                            className="h-7 w-7 p-0 text-gray-400 hover:text-black hover:bg-gray-100"
-                          >
-                            <Copy className="h-3.5 w-3.5" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Input
-                          type="number"
-                          step="0.000001"
-                          min="0"
-                          value={recipient.amount || ''}
-                          onChange={(e) => onUpdateRecipient(index, recipient.address, Number(e.target.value))}
-                          className="w-32 h-9 text-sm bg-white border-gray-200 focus:border-black rounded-lg ml-auto text-right"
-                          disabled={distributionMethod === 'equal'}
-                          placeholder="0.00"
-                        />
-                      </TableCell>
-                      <TableCell className="text-center">
-                        {recipient.isValid ? (
-                          <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                            <CheckCircle className="h-3 w-3 mr-1" />
-                            Valid
-                          </Badge>
-                        ) : (
-                          <Badge variant="destructive" className="bg-red-50 text-red-700 border-red-200">
-                            <AlertCircle className="h-3 w-3 mr-1" />
-                            Invalid
-                          </Badge>
-                        )}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => onRemoveRecipient(index)}
-                          className="h-8 w-8 p-0 text-gray-400 hover:text-red-500 hover:bg-red-50"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+              {invalidRecipients.length > 0 && (
+                <span>{invalidRecipients.length} INVALID</span>
+              )}
             </div>
           </div>
-        )}
-      </CardContent>
-    </Card>
+          
+          <div className="border border-white">
+            <div className="grid grid-cols-12 gap-4 p-4 border-b border-white font-bold text-sm">
+              <div className="col-span-1">#</div>
+              <div className="col-span-6">WALLET ADDRESS</div>
+              <div className="col-span-3 text-right">AMOUNT (SOL)</div>
+              <div className="col-span-1 text-center">STATUS</div>
+              <div className="col-span-1"></div>
+            </div>
+            
+            {recipients.map((recipient, index) => (
+              <div key={index} className="grid grid-cols-12 gap-4 p-4 border-b border-white last:border-b-0 hover:bg-white hover:text-black transition-colors">
+                <div className="col-span-1 text-sm opacity-70">{index + 1}</div>
+                <div className="col-span-6">
+                  <code className="text-sm font-mono">
+                    {recipient.address.slice(0, 12)}...{recipient.address.slice(-8)}
+                  </code>
+                </div>
+                <div className="col-span-3">
+                  <Input
+                    type="number"
+                    step="0.000001"
+                    min="0"
+                    value={recipient.amount || ''}
+                    onChange={(e) => onUpdateRecipient(index, recipient.address, Number(e.target.value))}
+                    className="w-full h-10 text-sm border border-white bg-transparent text-right"
+                    disabled={distributionMethod === 'equal'}
+                    placeholder="0.00"
+                  />
+                </div>
+                <div className="col-span-1 text-center text-sm">
+                  {recipient.isValid ? 'VALID' : 'INVALID'}
+                </div>
+                <div className="col-span-1 text-right">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => onRemoveRecipient(index)}
+                    className="h-8 w-8 p-0 hover:bg-white hover:text-black"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
