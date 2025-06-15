@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Plus, Upload, Trash2, AlertTriangle, CheckCircle, Users, Copy } from 'lucide-react';
+import { Plus, Upload, Trash2, AlertTriangle, CheckCircle, Users, Copy, Percent } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface Recipient {
@@ -32,21 +32,26 @@ export const AddressManager = ({
 }: AddressManagerProps) => {
   const [newAddress, setNewAddress] = useState('');
   const [newAmount, setNewAmount] = useState<number>(0);
-  const [csvFile, setCsvFile] = useState<File | null>(null);
   const { toast } = useToast();
 
   const handleAddRecipient = () => {
     if (newAddress.trim()) {
-      onAddRecipient(newAddress.trim(), distributionMethod === 'manual' ? newAmount : 1);
+      const amount = distributionMethod === 'equal' ? 1 : newAmount;
+      onAddRecipient(newAddress.trim(), amount);
       setNewAddress('');
       setNewAmount(0);
+      
+      toast({
+        title: "✅ Recipient Added",
+        description: `Address added successfully`,
+      });
     }
   };
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file && file.type === 'text/csv') {
-      setCsvFile(file);
+      // Mock CSV processing
       const mockAddresses = [
         '7KvpRXpZ7hxjosYHd3j1sSw6wfU1E7xQF5cyQq7WC9Wf',
         'oPnvCUD3LhMUygUT1gbrdSb9ztNenWd9fhQeDvxhFDW',
@@ -54,88 +59,124 @@ export const AddressManager = ({
       ];
       const amounts = [1, 2, 1.5];
       mockAddresses.forEach((addr, index) => onAddRecipient(addr, amounts[index]));
+      
+      toast({
+        title: "📋 CSV Imported",
+        description: `${mockAddresses.length} addresses imported successfully`,
+      });
     }
   };
 
   const handleCopyAddress = (address: string) => {
     navigator.clipboard.writeText(address);
     toast({
-      title: "Address Copied",
-      description: "Wallet address copied to clipboard",
+      title: "📋 Copied",
+      description: "Address copied to clipboard",
     });
   };
 
   const validRecipients = recipients.filter(r => r.isValid);
   const invalidRecipients = recipients.filter(r => !r.isValid);
 
+  const getAmountLabel = () => {
+    switch (distributionMethod) {
+      case 'equal': return 'Will be calculated';
+      case 'percentage': return 'Percentage (%)';
+      default: return 'Amount (SOL)';
+    }
+  };
+
+  const getAmountPlaceholder = () => {
+    switch (distributionMethod) {
+      case 'equal': return 'Auto-calculated';
+      case 'percentage': return '25';
+      default: return '1.5';
+    }
+  };
+
   return (
     <Card className="border-0 bg-white shadow-sm">
       <CardHeader className="pb-4">
-        <CardTitle className="flex items-center gap-2 text-lg">
-          <Users className="h-5 w-5 text-green-600" />
-          Recipients Management
+        <CardTitle className="flex items-center gap-2 text-xl">
+          <Users className="h-6 w-6 text-green-600" />
+          Add Recipients
         </CardTitle>
-        <CardDescription className="text-sm text-gray-500">
-          Add wallet addresses and amounts for bulk transfer
+        <CardDescription className="text-gray-600">
+          Add wallet addresses for your bulk transfer
         </CardDescription>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="manual" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 bg-gray-100 rounded-xl p-1">
-            <TabsTrigger value="manual" className="rounded-lg">Manual Entry</TabsTrigger>
-            <TabsTrigger value="csv" className="rounded-lg">CSV Upload</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-2 bg-gray-100 rounded-xl p-1 mb-6">
+            <TabsTrigger value="manual" className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
+              Manual Entry
+            </TabsTrigger>
+            <TabsTrigger value="csv" className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
+              CSV Upload
+            </TabsTrigger>
           </TabsList>
           
-          <TabsContent value="manual" className="space-y-4 mt-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <TabsContent value="manual" className="space-y-4 mt-0">
+            <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="address" className="text-sm font-medium text-gray-700">Wallet Address</Label>
+                <Label htmlFor="address" className="text-base font-semibold text-gray-900">
+                  Wallet Address
+                </Label>
                 <Input
                   id="address"
                   placeholder="7KvpRXpZ7hxjosYHd3j1sSw6wfU1E7xQF5cyQq7WC9Wf"
                   value={newAddress}
                   onChange={(e) => setNewAddress(e.target.value)}
-                  className="font-mono text-sm bg-gray-50 border-gray-200 rounded-xl"
+                  className="font-mono text-sm h-12 bg-gray-50 border-gray-300 focus:border-blue-500"
                 />
               </div>
               
-              <div className="space-y-2">
-                <Label htmlFor="amount" className="text-sm font-medium text-gray-700">
-                  Amount {distributionMethod === 'equal' ? '(Auto)' : '(SOL)'}
-                </Label>
-                <Input
-                  id="amount"
-                  type="number"
-                  step="0.000001"
-                  placeholder={distributionMethod === 'equal' ? 'Auto calculated' : '1.5'}
-                  value={distributionMethod === 'equal' ? '' : newAmount}
-                  onChange={(e) => setNewAmount(Number(e.target.value))}
-                  disabled={distributionMethod === 'equal'}
-                  className="bg-gray-50 border-gray-200 rounded-xl"
-                />
-              </div>
+              {distributionMethod !== 'equal' && (
+                <div className="space-y-2">
+                  <Label htmlFor="amount" className="text-base font-semibold text-gray-900 flex items-center gap-2">
+                    {distributionMethod === 'percentage' && <Percent className="h-4 w-4" />}
+                    {getAmountLabel()}
+                  </Label>
+                  <div className="relative">
+                    <Input
+                      id="amount"
+                      type="number"
+                      step={distributionMethod === 'percentage' ? '1' : '0.000001'}
+                      placeholder={getAmountPlaceholder()}
+                      value={newAmount || ''}
+                      onChange={(e) => setNewAmount(Number(e.target.value))}
+                      className="h-12 bg-gray-50 border-gray-300 focus:border-blue-500 pr-12"
+                    />
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 font-medium">
+                      {distributionMethod === 'percentage' ? '%' : 'SOL'}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
             
             <Button 
               onClick={handleAddRecipient}
-              disabled={!newAddress.trim()}
-              className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 rounded-xl h-11"
+              disabled={!newAddress.trim() || (distributionMethod !== 'equal' && !newAmount)}
+              className="w-full h-12 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 rounded-xl text-white font-semibold"
             >
-              <Plus className="h-4 w-4 mr-2" />
-              Add to List
+              <Plus className="h-5 w-5 mr-2" />
+              Add Recipient
             </Button>
           </TabsContent>
           
-          <TabsContent value="csv" className="space-y-4 mt-4">
-            <div className="border-2 border-dashed border-gray-200 rounded-xl p-6 text-center space-y-3">
-              <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center mx-auto">
-                <Upload className="h-6 w-6 text-gray-400" />
+          <TabsContent value="csv" className="space-y-4 mt-0">
+            <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center space-y-4 bg-gray-50">
+              <div className="w-16 h-16 bg-gray-200 rounded-xl flex items-center justify-center mx-auto">
+                <Upload className="h-8 w-8 text-gray-400" />
               </div>
               <div>
-                <h3 className="font-medium text-gray-900">Upload CSV File</h3>
-                <p className="text-sm text-gray-500">Format: address,amount</p>
-                <p className="text-xs text-gray-400 mt-1">
-                  Example: 7KvpRXpZ7hxjosYHd3j1sSw6wfU1E7xQF5cyQq7WC9Wf,1.5
+                <h3 className="font-semibold text-gray-900 text-lg">Upload CSV File</h3>
+                <p className="text-gray-600 mt-1">
+                  Format: address,{distributionMethod === 'percentage' ? 'percentage' : 'amount'}
+                </p>
+                <p className="text-sm text-gray-500 mt-2">
+                  Example: 7KvpRXpZ...WC9Wf,{distributionMethod === 'percentage' ? '25' : '1.5'}
                 </p>
               </div>
               <input
@@ -146,77 +187,77 @@ export const AddressManager = ({
                 id="csv-upload"
               />
               <label htmlFor="csv-upload">
-                <Button asChild className="cursor-pointer bg-gray-900 hover:bg-gray-800 rounded-xl">
-                  <span>Choose File</span>
+                <Button asChild className="cursor-pointer h-12 px-8 bg-gray-800 hover:bg-gray-900 rounded-xl">
+                  <span>Choose CSV File</span>
                 </Button>
               </label>
-              {csvFile && (
-                <p className="text-sm text-green-600 font-medium">
-                  ✓ {csvFile.name} uploaded successfully
-                </p>
-              )}
             </div>
           </TabsContent>
         </Tabs>
 
-        {/* Validation Alerts */}
+        {/* Status Alerts */}
         {invalidRecipients.length > 0 && (
-          <Alert className="mt-4 bg-red-50 border-red-200 rounded-xl">
-            <AlertTriangle className="h-4 w-4 text-red-600" />
-            <AlertDescription className="text-red-800">
-              {invalidRecipients.length} invalid address(es) detected. Please check and correct them.
+          <Alert className="mt-6 bg-red-50 border-red-200 rounded-xl">
+            <AlertTriangle className="h-5 w-5 text-red-600" />
+            <AlertDescription className="text-red-800 font-medium">
+              {invalidRecipients.length} invalid address(es) detected. Please review and correct them.
             </AlertDescription>
           </Alert>
         )}
 
         {validRecipients.length > 0 && (
-          <Alert className="mt-4 bg-green-50 border-green-200 rounded-xl">
-            <CheckCircle className="h-4 w-4 text-green-600" />
-            <AlertDescription className="text-green-800">
-              {validRecipients.length} valid addresses ready for transfer
+          <Alert className="mt-6 bg-green-50 border-green-200 rounded-xl">
+            <CheckCircle className="h-5 w-5 text-green-600" />
+            <AlertDescription className="text-green-800 font-medium">
+              {validRecipients.length} addresses ready for transfer
             </AlertDescription>
           </Alert>
         )}
 
         {/* Recipients Table */}
         {recipients.length > 0 && (
-          <div className="mt-6 space-y-4">
+          <div className="mt-8 space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="font-semibold text-gray-900 text-lg">Transfer List</h3>
-              <div className="flex gap-2">
-                <Badge variant="outline" className="text-green-600 border-green-200 bg-green-50 rounded-lg">
-                  <CheckCircle className="h-3 w-3 mr-1" />
+              <h3 className="font-bold text-gray-900 text-xl">Recipients List</h3>
+              <div className="flex gap-3">
+                <Badge variant="outline" className="text-green-700 border-green-300 bg-green-50 px-3 py-1 rounded-lg">
+                  <CheckCircle className="h-4 w-4 mr-1" />
                   {validRecipients.length} Valid
                 </Badge>
                 {invalidRecipients.length > 0 && (
-                  <Badge variant="outline" className="text-red-600 border-red-200 bg-red-50 rounded-lg">
-                    <AlertTriangle className="h-3 w-3 mr-1" />
+                  <Badge variant="outline" className="text-red-700 border-red-300 bg-red-50 px-3 py-1 rounded-lg">
+                    <AlertTriangle className="h-4 w-4 mr-1" />
                     {invalidRecipients.length} Invalid
                   </Badge>
                 )}
               </div>
             </div>
             
-            <div className="border border-gray-200 rounded-xl overflow-hidden">
+            <div className="border border-gray-200 rounded-xl overflow-hidden bg-white">
               <Table>
                 <TableHeader>
-                  <TableRow className="bg-gray-50">
-                    <TableHead className="font-semibold text-gray-900">#</TableHead>
-                    <TableHead className="font-semibold text-gray-900">Wallet Address</TableHead>
-                    <TableHead className="font-semibold text-gray-900 text-right">Amount (SOL)</TableHead>
-                    <TableHead className="font-semibold text-gray-900 text-center">Status</TableHead>
-                    <TableHead className="font-semibold text-gray-900 text-center">Actions</TableHead>
+                  <TableRow className="bg-gray-50 hover:bg-gray-50">
+                    <TableHead className="font-bold text-gray-900 py-4">#</TableHead>
+                    <TableHead className="font-bold text-gray-900">Wallet Address</TableHead>
+                    <TableHead className="font-bold text-gray-900 text-right">
+                      {distributionMethod === 'percentage' ? 'Percentage' : 'Amount (SOL)'}
+                    </TableHead>
+                    <TableHead className="font-bold text-gray-900 text-center">Status</TableHead>
+                    <TableHead className="font-bold text-gray-900 text-center">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {recipients.map((recipient, index) => (
-                    <TableRow key={index} className={recipient.isValid ? 'hover:bg-green-50' : 'hover:bg-red-50'}>
-                      <TableCell className="font-medium text-gray-600">
+                    <TableRow 
+                      key={index} 
+                      className={`hover:bg-gray-50 ${recipient.isValid === false ? 'bg-red-50' : ''}`}
+                    >
+                      <TableCell className="font-semibold text-gray-700 py-4">
                         {index + 1}
                       </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <code className="font-mono text-sm bg-gray-100 px-2 py-1 rounded">
+                      <TableCell className="py-4">
+                        <div className="flex items-center gap-3">
+                          <code className="font-mono text-sm bg-gray-100 px-3 py-2 rounded-lg border">
                             {recipient.address.length > 20 
                               ? `${recipient.address.slice(0, 8)}...${recipient.address.slice(-8)}`
                               : recipient.address
@@ -226,32 +267,34 @@ export const AddressManager = ({
                             variant="ghost"
                             size="sm"
                             onClick={() => handleCopyAddress(recipient.address)}
-                            className="h-6 w-6 p-0 hover:bg-gray-200"
+                            className="h-8 w-8 p-0 hover:bg-gray-200 rounded-lg"
                           >
-                            <Copy className="h-3 w-3" />
+                            <Copy className="h-4 w-4" />
                           </Button>
                         </div>
                       </TableCell>
-                      <TableCell className="text-right font-mono font-medium">
-                        {recipient.amount.toFixed(6)}
+                      <TableCell className="text-right font-mono font-bold text-lg py-4">
+                        {distributionMethod === 'equal' ? 'Auto' : 
+                         distributionMethod === 'percentage' ? `${recipient.amount}%` :
+                         recipient.amount.toFixed(6)}
                       </TableCell>
-                      <TableCell className="text-center">
+                      <TableCell className="text-center py-4">
                         <Badge 
                           variant="outline" 
                           className={recipient.isValid 
-                            ? "text-green-600 border-green-200 bg-green-50" 
-                            : "text-red-600 border-red-200 bg-red-50"
+                            ? "text-green-700 border-green-300 bg-green-50 px-3 py-1 rounded-lg" 
+                            : "text-red-700 border-red-300 bg-red-50 px-3 py-1 rounded-lg"
                           }
                         >
                           {recipient.isValid ? 'Valid' : 'Invalid'}
                         </Badge>
                       </TableCell>
-                      <TableCell className="text-center">
+                      <TableCell className="text-center py-4">
                         <Button
                           variant="ghost"
                           size="sm"
                           onClick={() => onRemoveRecipient(index)}
-                          className="text-red-600 hover:text-red-700 hover:bg-red-100 rounded-lg h-8 w-8 p-0"
+                          className="text-red-600 hover:text-red-700 hover:bg-red-100 rounded-lg h-9 w-9 p-0"
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
@@ -262,13 +305,31 @@ export const AddressManager = ({
               </Table>
             </div>
 
-            {/* Summary Row */}
-            <div className="bg-gray-50 rounded-xl p-4">
-              <div className="flex justify-between items-center">
-                <span className="font-semibold text-gray-900">Total Recipients: {recipients.length}</span>
-                <span className="font-semibold text-gray-900">
-                  Total Amount: {recipients.reduce((sum, r) => sum + r.amount, 0).toFixed(6)} SOL
-                </span>
+            {/* Enhanced Summary */}
+            <div className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-xl p-6 border border-gray-200">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                <div>
+                  <div className="text-2xl font-bold text-gray-900">{recipients.length}</div>
+                  <div className="text-sm text-gray-600">Total Recipients</div>
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-green-600">{validRecipients.length}</div>
+                  <div className="text-sm text-gray-600">Valid Addresses</div>
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-blue-600">
+                    {distributionMethod === 'equal' ? 'Auto' : recipients.reduce((sum, r) => sum + r.amount, 0).toFixed(6)}
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    {distributionMethod === 'percentage' ? 'Total %' : 'Total Amount'}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-purple-600">
+                    {(recipients.length * 0.000005).toFixed(6)}
+                  </div>
+                  <div className="text-sm text-gray-600">Est. Fees (SOL)</div>
+                </div>
               </div>
             </div>
           </div>
