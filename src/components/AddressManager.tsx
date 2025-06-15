@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Plus, Users, Trash2, CheckCircle, XCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { Recipient, DistributionMethod } from '@/types';
+import { Recipient, DistributionMethod, AssetSelection, AssetType } from '@/types';
 
 interface AddressManagerProps {
   recipients: Recipient[];
@@ -12,6 +12,7 @@ interface AddressManagerProps {
   onUpdateRecipient: (index: number, address: string, amount: number) => void;
   onRemoveRecipient: (index: number) => void;
   distributionMethod: DistributionMethod;
+  assetSelection: AssetSelection;
 }
 
 export const AddressManager = ({
@@ -19,7 +20,8 @@ export const AddressManager = ({
   onAddRecipient,
   onUpdateRecipient,
   onRemoveRecipient,
-  distributionMethod
+  distributionMethod,
+  assetSelection
 }: AddressManagerProps) => {
   const [manualAddress, setManualAddress] = useState('');
   const [manualAmount, setManualAmount] = useState<number | ''>('');
@@ -36,6 +38,12 @@ export const AddressManager = ({
 
   const validRecipients = recipients.filter(r => r.isValid);
   const invalidRecipients = recipients.filter(r => r.isValid === false);
+  
+  const getCurrentUnit = () => {
+    return assetSelection.type === AssetType.SOL 
+      ? 'SOL' 
+      : assetSelection.token?.symbol || 'TOKEN';
+  };
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
@@ -63,7 +71,7 @@ export const AddressManager = ({
                 type="number"
                 step="0.000001"
                 min="0"
-                placeholder="Amount (SOL)"
+                placeholder={`Amount (${getCurrentUnit()})`}
                 value={manualAmount}
                 onChange={(e) => setManualAmount(e.target.value === '' ? '' : Number(e.target.value))}
                 className="flex-1 h-12 border-gray-300 focus:border-black focus:ring-black rounded-xl"
@@ -160,7 +168,7 @@ export const AddressManager = ({
               <div className="grid grid-cols-12 gap-4 text-sm font-medium text-gray-700">
                 <div className="col-span-1">#</div>
                 <div className="col-span-6">Wallet Address</div>
-                <div className="col-span-3 text-right">Amount (SOL)</div>
+                <div className="col-span-3 text-right">Amount ({getCurrentUnit()})</div>
                 <div className="col-span-1 text-center">Status</div>
                 <div className="col-span-1"></div>
               </div>

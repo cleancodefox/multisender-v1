@@ -1,6 +1,5 @@
-
 import { useState, useCallback, useMemo } from 'react';
-import { Recipient, DistributionMethod } from '@/types';
+import { Recipient, DistributionMethod, AssetType, AssetSelection } from '@/types';
 import { validateSolanaAddress } from '@/utils/validation';
 import { calculateEqualDistribution } from '@/utils/calculations';
 import { useToast } from '@/hooks/use-toast';
@@ -9,6 +8,9 @@ export const useRecipients = () => {
   const [recipients, setRecipients] = useState<Recipient[]>([]);
   const [totalAmount, setTotalAmount] = useState<number>(0);
   const [distributionMethod, setDistributionMethod] = useState<DistributionMethod>(DistributionMethod.EQUAL);
+  const [assetSelection, setAssetSelection] = useState<AssetSelection>({
+    type: AssetType.SOL
+  });
   const { toast } = useToast();
 
   const validRecipients = useMemo(() => 
@@ -66,11 +68,13 @@ export const useRecipients = () => {
     calculatedRecipients,
     totalAmount,
     distributionMethod,
+    assetSelection,
     addRecipient,
     updateRecipient,
     removeRecipient,
     clearRecipients,
     setTotalAmount,
     setDistributionMethod,
+    setAssetSelection,
   };
 };

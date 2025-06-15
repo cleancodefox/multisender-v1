@@ -17,6 +17,27 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      crypto: 'crypto-browserify',
+      stream: 'stream-browserify',
+      assert: 'assert',
+      events: 'events',
+      util: 'util',
     },
+  },
+  define: {
+    global: 'globalThis',
+    process: {
+      env: {},
+    },
+  },
+  optimizeDeps: {
+    include: [
+      'buffer',
+      'crypto-browserify',
+      'stream-browserify',
+      'assert',
+      'events',
+      'util'
+    ],
   },
 }));
