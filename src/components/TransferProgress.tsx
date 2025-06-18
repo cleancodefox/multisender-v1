@@ -21,12 +21,12 @@ export const TransferProgress = ({ progress, assetSymbol }: TransferProgressProp
   const batchProgressPercentage = (progress.currentBatch / progress.totalBatches) * 100;
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 space-y-6">
+    <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4 sm:p-6 space-y-4 sm:space-y-6">
       <div className="text-center">
-        <h3 className="text-xl font-bold text-gray-900 mb-2">
+        <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
           Sending {assetSymbol} to Recipients
         </h3>
-        <p className="text-gray-600">
+        <p className="text-sm sm:text-base text-gray-600">
           Processing {progress.total} transfers in {progress.totalBatches} batch{progress.totalBatches > 1 ? 'es' : ''}
         </p>
       </div>

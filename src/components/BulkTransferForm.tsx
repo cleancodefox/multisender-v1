@@ -82,49 +82,49 @@ export const BulkTransferForm = ({
   return (
     <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
       {/* Asset Selection Header */}
-      <div className="bg-gradient-to-r from-gray-50 to-white border-b border-gray-200 px-6 py-5">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Transfer Settings</h2>
+      <div className="bg-gradient-to-r from-gray-50 to-white border-b border-gray-200 px-4 sm:px-6 py-4 sm:py-5">
+        <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">Transfer Settings</h2>
 
         {/* Asset Type Selector */}
         <div className="space-y-3">
           <Label className="text-sm font-semibold text-gray-700">Asset Type</Label>
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-3">
             <button
               onClick={() => handleAssetTypeChange(AssetType.SOL)}
-              className={`flex-1 flex items-center gap-3 p-4 border-2 rounded-xl transition-all ${assetSelection.type === AssetType.SOL
+              className={`flex-1 flex items-center gap-3 p-3 sm:p-4 border-2 rounded-xl transition-all ${assetSelection.type === AssetType.SOL
                 ? 'border-blue-500 bg-blue-50 text-blue-900'
                 : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:bg-gray-50'
                 }`}
             >
-              <div className={`p-2 rounded-lg ${assetSelection.type === AssetType.SOL
+              <div className={`p-1.5 sm:p-2 rounded-lg ${assetSelection.type === AssetType.SOL
                 ? 'bg-blue-100'
                 : 'bg-gray-100'
                 }`}>
-                <Wallet className="h-5 w-5" />
+                <Wallet className="h-4 w-4 sm:h-5 sm:w-5" />
               </div>
               <div className="text-left">
-                <div className="font-semibold">SOL</div>
-                <div className="text-sm opacity-75">Native Solana</div>
+                <div className="font-semibold text-sm sm:text-base">SOL</div>
+                <div className="text-xs sm:text-sm opacity-75">Native Solana</div>
               </div>
             </button>
 
             <button
               onClick={() => handleAssetTypeChange(AssetType.TOKEN)}
-              className={`flex-1 flex items-center gap-3 p-4 border-2 rounded-xl transition-all ${assetSelection.type === AssetType.TOKEN
+              className={`flex-1 flex items-center gap-3 p-3 sm:p-4 border-2 rounded-xl transition-all ${assetSelection.type === AssetType.TOKEN
                 ? 'border-blue-500 bg-blue-50 text-blue-900'
                 : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:bg-gray-50'
                 }`}
               disabled={tokens.length === 0 && !isLoading}
             >
-              <div className={`p-2 rounded-lg ${assetSelection.type === AssetType.TOKEN
+              <div className={`p-1.5 sm:p-2 rounded-lg ${assetSelection.type === AssetType.TOKEN
                 ? 'bg-blue-100'
                 : 'bg-gray-100'
                 }`}>
-                <Coins className="h-5 w-5" />
+                <Coins className="h-4 w-4 sm:h-5 sm:w-5" />
               </div>
               <div className="text-left">
-                <div className="font-semibold">Token</div>
-                <div className="text-sm opacity-75">
+                <div className="font-semibold text-sm sm:text-base">Token</div>
+                <div className="text-xs sm:text-sm opacity-75">
                   {isLoading ? 'Loading...' : `${tokens.length} available`}
                 </div>
               </div>
@@ -253,36 +253,36 @@ export const BulkTransferForm = ({
       </div>
 
       {/* Distribution Method */}
-      <div className="px-6 py-5 border-b border-gray-200">
+      <div className="px-4 sm:px-6 py-4 sm:py-5 border-b border-gray-200">
         <Label className="text-sm font-semibold text-gray-700 mb-3 block">Distribution Method</Label>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <button
             onClick={() => onDistributionMethodChange(DistributionMethod.EQUAL)}
-            className={`p-4 border-2 rounded-xl text-left transition-all ${distributionMethod === DistributionMethod.EQUAL
+            className={`p-3 sm:p-4 border-2 rounded-xl text-left transition-all ${distributionMethod === DistributionMethod.EQUAL
               ? 'border-black bg-black text-white'
               : 'border-gray-200 bg-white text-gray-900 hover:border-gray-300 hover:bg-gray-50'
               }`}
           >
-            <div className="font-semibold mb-1">Equal Split</div>
-            <div className="text-sm opacity-75">Same amount to everyone</div>
+            <div className="font-semibold mb-1 text-sm sm:text-base">Equal Split</div>
+            <div className="text-xs sm:text-sm opacity-75">Same amount to everyone</div>
           </button>
 
           <button
             onClick={() => onDistributionMethodChange(DistributionMethod.MANUAL)}
-            className={`p-4 border-2 rounded-xl text-left transition-all ${distributionMethod === DistributionMethod.MANUAL
+            className={`p-3 sm:p-4 border-2 rounded-xl text-left transition-all ${distributionMethod === DistributionMethod.MANUAL
               ? 'border-black bg-black text-white'
               : 'border-gray-200 bg-white text-gray-900 hover:border-gray-300 hover:bg-gray-50'
               }`}
           >
-            <div className="font-semibold mb-1">Manual Entry</div>
-            <div className="text-sm opacity-75">Custom amounts</div>
+            <div className="font-semibold mb-1 text-sm sm:text-base">Manual Entry</div>
+            <div className="text-xs sm:text-sm opacity-75">Custom amounts</div>
           </button>
         </div>
       </div>
 
       {/* Amount Input Section */}
-      <div className="px-6 py-5">
+      <div className="px-4 sm:px-6 py-4 sm:py-5">
         {distributionMethod === DistributionMethod.EQUAL && (
           <div className="space-y-4">
             <Label htmlFor="totalAmount" className="text-sm font-semibold text-gray-700">
@@ -298,10 +298,10 @@ export const BulkTransferForm = ({
                 placeholder={`Enter total amount (e.g., 1000 ${getCurrentUnit()})`}
                 value={totalAmount || ''}
                 onChange={(e) => onTotalAmountChange(Number(e.target.value))}
-                className="h-14 text-lg border-gray-300 focus:border-black focus:ring-black pr-20 rounded-xl font-semibold"
+                className="h-12 sm:h-14 text-base sm:text-lg border-gray-300 focus:border-black focus:ring-black pr-16 sm:pr-20 rounded-xl font-semibold"
               />
-              <div className="absolute right-4 top-1/2 -translate-y-1/2">
-                <Badge variant="outline" className="bg-gray-50 border-gray-300 text-gray-700 font-semibold">
+              <div className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2">
+                <Badge variant="outline" className="bg-gray-50 border-gray-300 text-gray-700 font-semibold text-xs sm:text-sm">
                   {getCurrentUnit()}
                 </Badge>
               </div>
@@ -324,14 +324,14 @@ export const BulkTransferForm = ({
 
         {distributionMethod === DistributionMethod.MANUAL && (
           <div className="space-y-3">
-            <div className="flex items-center justify-between p-4 bg-amber-50 border border-amber-200 rounded-xl">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between p-3 sm:p-4 bg-amber-50 border border-amber-200 rounded-xl gap-2 sm:gap-0">
               <div>
-                <div className="font-semibold text-amber-900 mb-1">Manual Entry Mode</div>
-                <div className="text-sm text-amber-700">
+                <div className="font-semibold text-amber-900 mb-1 text-sm sm:text-base">Manual Entry Mode</div>
+                <div className="text-xs sm:text-sm text-amber-700">
                   Enter custom amounts for each recipient below
                 </div>
               </div>
-              <Badge variant="outline" className="bg-amber-100 border-amber-300 text-amber-800">
+              <Badge variant="outline" className="bg-amber-100 border-amber-300 text-amber-800 text-xs sm:text-sm self-start sm:self-auto">
                 {getCurrentUnit()}
               </Badge>
             </div>

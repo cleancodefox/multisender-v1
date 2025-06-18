@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Connection, PublicKey } from '@solana/web3.js';
+import { Connection, PublicKey, RpcResponseAndContext, TokenAccountsFilter, Commitment } from '@solana/web3.js';
 import { TOKEN_PROGRAM_ID, getAssociatedTokenAddress, getMint } from '@solana/spl-token';
 import { Metaplex } from '@metaplex-foundation/js';
 import type { Token } from '@/types';
@@ -52,14 +52,28 @@ export function useTokenAccounts(publicKey: PublicKey | null, connection: Connec
     setError(null);
 
     try {
-      // Initialize Metaplex
-      const metaplex = Metaplex.make(connection);
+      // Initialize Metaplex with better error handling
+      let metaplex;
+      try {
+        metaplex = Metaplex.make(connection);
+      } catch (metaplexError) {
+        console.warn('Failed to initialize Metaplex, continuing without metadata:', metaplexError);
+        metaplex = null;
+      }
 
-      // Get all token accounts for the wallet
-      const tokenAccounts = await connection.getParsedTokenAccountsByOwner(
+      // Get all token accounts for the wallet with timeout
+      const tokenAccountsPromise = connection.getParsedTokenAccountsByOwner(
         publicKey,
-        { programId: TOKEN_PROGRAM_ID }
+        { programId: TOKEN_PROGRAM_ID },
+        'confirmed'
       );
+
+      // Add timeout to prevent hanging
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        setTimeout(() => reject(new Error('Request timeout')), 15000);
+      });
+
+      const tokenAccounts = await Promise.race([tokenAccountsPromise, timeoutPromise]);
 
       // Filter accounts with balance > 0 and get token info
       const tokenAccountsWithBalance: TokenAccount[] = tokenAccounts.value
@@ -86,32 +100,48 @@ export function useTokenAccounts(publicKey: PublicKey | null, connection: Connec
           // Check if it's a known token first
           const knownToken = KNOWN_TOKENS[mintAddress];
           let metadata;
-          try {
-            // Try to fetch metadata using Metaplex
-            const nft = await metaplex.nfts().findByMint({ mintAddress: account.mint });
+          if (metaplex) {
+            try {
+              // Try to fetch metadata using Metaplex with timeout
+              const metaplexPromise = metaplex.nfts().findByMint({ mintAddress: account.mint });
+              const metaplexTimeout = new Promise<never>((_, reject) => {
+                setTimeout(() => reject(new Error('Metaplex timeout')), 5000);
+              });
 
+              const nft = await Promise.race([metaplexPromise, metaplexTimeout]);
 
-            // If we have a URI, fetch the JSON metadata
-            let imageUrl = '';
-            if (nft.uri) {
-              try {
-                const response = await fetch(nft.uri);
-                if (response.ok) {
-                  const jsonMetadata = await response.json();
-                  imageUrl = jsonMetadata.image || '';
+              // If we have a URI, fetch the JSON metadata
+              let imageUrl = '';
+              if (nft.uri) {
+                try {
+                  const response = await fetch(nft.uri, { 
+                    signal: AbortSignal.timeout(3000) // 3 second timeout
+                  });
+                  if (response.ok) {
+                    const jsonMetadata = await response.json();
+                    imageUrl = jsonMetadata.image || '';
+                  }
+                } catch (uriError) {
+                  console.warn('Failed to fetch URI metadata:', uriError);
                 }
-              } catch (uriError) {
-                console.warn('Failed to fetch URI metadata:', uriError);
               }
-            }
 
-            metadata = {
-              name: nft.name || 'Unknown Token',
-              symbol: nft.symbol || 'UNK',
-              logoURI: imageUrl || nft.json?.image || '',
-            };
-          } catch (metaplexError) {
-            // Fallback to known token data or generic data
+              metadata = {
+                name: nft.name || 'Unknown Token',
+                symbol: nft.symbol || 'UNK',
+                logoURI: imageUrl || nft.json?.image || '',
+              };
+            } catch (metaplexError) {
+              console.warn(`Metaplex failed for ${mintAddress}:`, metaplexError);
+              // Fallback to known token data or generic data
+              metadata = knownToken || {
+                name: 'Unknown Token',
+                symbol: 'UNK',
+                logoURI: '',
+              };
+            }
+          } else {
+            // No Metaplex available, use known token data or generic
             metadata = knownToken || {
               name: 'Unknown Token',
               symbol: 'UNK',

@@ -1,10 +1,11 @@
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Plus, Users, Trash2, CheckCircle, XCircle } from 'lucide-react';
+import { Plus, Users, Trash2, CheckCircle, XCircle, Upload, FileText, AlertCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Recipient, DistributionMethod, AssetSelection, AssetType } from '@/types';
+import { PublicKey } from '@solana/web3.js';
 
 interface AddressManagerProps {
   recipients: Recipient[];
@@ -25,6 +26,8 @@ export const AddressManager = ({
 }: AddressManagerProps) => {
   const [manualAddress, setManualAddress] = useState('');
   const [manualAmount, setManualAmount] = useState<number | ''>('');
+  const [isUploadingCSV, setIsUploadingCSV] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
   const handleManualAdd = () => {
@@ -33,6 +36,112 @@ export const AddressManager = ({
       onAddRecipient(manualAddress, amount);
       setManualAddress('');
       setManualAmount('');
+    }
+  };
+
+  const validateSolanaAddress = (address: string): boolean => {
+    try {
+      new PublicKey(address);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  const parseCSVContent = (content: string): { address: string; amount?: number }[] => {
+    const lines = content.trim().split('\n');
+    const results: { address: string; amount?: number }[] = [];
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (!line) continue;
+
+      // Skip header row if it contains common header terms
+      if (i === 0 && /address|wallet|recipient|amount/i.test(line)) {
+        continue;
+      }
+
+      const parts = line.split(',').map(part => part.trim().replace(/"/g, ''));
+      
+      if (parts.length >= 1) {
+        const address = parts[0];
+        const amount = parts.length > 1 ? parseFloat(parts[1]) : undefined;
+        
+        if (validateSolanaAddress(address)) {
+          results.push({ 
+            address, 
+            amount: (distributionMethod === DistributionMethod.MANUAL && amount && !isNaN(amount)) ? amount : undefined 
+          });
+        }
+      }
+    }
+
+    return results;
+  };
+
+  const handleCSVUpload = async (file: File) => {
+    if (!file) return;
+
+    setIsUploadingCSV(true);
+    
+    try {
+      const content = await file.text();
+      const parsedData = parseCSVContent(content);
+
+      if (parsedData.length === 0) {
+        toast({
+          title: "No Valid Addresses Found",
+          description: "The CSV file doesn't contain any valid Solana addresses.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Add parsed recipients
+      let addedCount = 0;
+      parsedData.forEach(({ address, amount }) => {
+        try {
+          onAddRecipient(address, amount);
+          addedCount++;
+        } catch (error) {
+          console.warn(`Failed to add address ${address}:`, error);
+        }
+      });
+
+      toast({
+        title: "CSV Uploaded Successfully",
+        description: `${addedCount} recipients added from CSV file.`,
+      });
+
+      // Clear file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+
+    } catch (error) {
+      console.error('CSV parsing error:', error);
+      toast({
+        title: "CSV Upload Failed",
+        description: "Failed to parse CSV file. Please check the format and try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUploadingCSV(false);
+    }
+  };
+
+  const handleFileInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      if (file.type !== 'text/csv' && !file.name.endsWith('.csv')) {
+        toast({
+          title: "Invalid File Type",
+          description: "Please select a CSV file.",
+          variant: "destructive",
+        });
+        return;
+      }
+      handleCSVUpload(file);
     }
   };
 
@@ -46,17 +155,74 @@ export const AddressManager = ({
   };
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-      <div className="flex items-center gap-3 mb-6">
-        <Users className="h-5 w-5 text-gray-600" />
-        <h2 className="text-lg font-bold text-gray-900">Manage Recipients</h2>
+    <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4 sm:p-6">
+      <div className="flex items-center gap-3 mb-4 sm:mb-6">
+        <Users className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600" />
+        <h2 className="text-base sm:text-lg font-bold text-gray-900">Manage Recipients</h2>
       </div>
       
-      <p className="text-sm text-gray-600 mb-6">
-        Add wallet addresses manually. Advanced features like CSV upload and token holder imports coming soon.
+      <p className="text-xs sm:text-sm text-gray-600 mb-4 sm:mb-6">
+        Add wallet addresses manually or upload a CSV file with multiple addresses.
       </p>
 
+      {/* CSV Upload Section */}
+      <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-xl">
+        <div className="flex items-center gap-2 mb-3">
+          <Upload className="h-4 w-4 text-blue-600" />
+          <h3 className="font-semibold text-blue-900 text-sm">CSV Upload</h3>
+        </div>
+        
+        <div className="space-y-3">
+          <div className="flex flex-col sm:flex-row gap-3">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".csv"
+              onChange={handleFileInputChange}
+              className="hidden"
+            />
+            
+            <Button
+              variant="outline"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={isUploadingCSV}
+              className="flex-1 h-10 border-blue-300 text-blue-700 hover:bg-blue-100 hover:border-blue-400"
+            >
+              {isUploadingCSV ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+                  Uploading...
+                </>
+              ) : (
+                <>
+                  <FileText className="h-4 w-4 mr-2" />
+                  Choose CSV File
+                </>
+              )}
+            </Button>
+          </div>
+
+          <div className="bg-blue-100 p-3 rounded-lg">
+            <div className="flex items-start gap-2">
+              <AlertCircle className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
+              <div className="text-xs text-blue-800">
+                <p className="font-medium mb-1">CSV Format:</p>
+                <p className="mb-1">• First column: Wallet addresses</p>
+                <p className="mb-1">• Second column: Amount (optional for manual mode)</p>
+                <p>• Header row will be automatically detected and skipped</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Manual Input Section */}
       <div className="space-y-4 mb-6">
+        <div className="flex items-center gap-2 mb-3">
+          <Plus className="h-4 w-4 text-gray-600" />
+          <h3 className="font-semibold text-gray-900 text-sm">Manual Entry</h3>
+        </div>
+        
         <div className="flex flex-col space-y-3">
           <Input
             placeholder="Enter Solana wallet address..."

@@ -4,14 +4,7 @@ import {
   ArrowRight,
   Zap,
   Shield,
-  DollarSign,
-  Users,
-  Coins,
-  Target,
-  Clock,
-  Building2,
-  Gamepad2,
-  Briefcase
+  DollarSign
 } from 'lucide-react';
 
 interface WelcomeScreenProps {
@@ -20,155 +13,89 @@ interface WelcomeScreenProps {
 }
 
 export const WelcomeScreen = ({ onConnect, isConnecting }: WelcomeScreenProps) => {
-  const projectTypes = [
-    {
-      icon: <Coins className="h-6 w-6" />,
-      title: "NFT Projects",
-      description: "Launch airdrops, reward holders, and distribute royalties to your community",
-      example: "10,000+ NFT holders"
-    },
-    {
-      icon: <Gamepad2 className="h-6 w-6" />,
-      title: "Gaming Projects", 
-      description: "Distribute in-game tokens, rewards, and tournament prizes to players",
-      example: "5,000+ active players"
-    },
-    {
-      icon: <Building2 className="h-6 w-6" />,
-      title: "DeFi Protocols",
-      description: "Execute governance distributions, yield farming rewards, and protocol incentives",
-      example: "50,000+ liquidity providers"
-    },
-    {
-      icon: <Briefcase className="h-6 w-6" />,
-      title: "DAOs & Teams",
-      description: "Pay contributors, distribute grants, and manage treasury allocations",
-      example: "500+ contributors"
-    }
-  ];
 
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <div className="max-w-4xl mx-auto px-6 py-24">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-24">
         <div className="text-center">
-          <div className="flex items-center justify-center gap-3 mb-12">
-            <div className="w-14 h-14 bg-black rounded-2xl flex items-center justify-center">
-              <Send className="h-7 w-7 text-white" />
+          <div className="flex items-center justify-center gap-3 mb-8 sm:mb-12">
+            <div className="w-12 h-12 sm:w-14 sm:h-14 bg-black rounded-2xl flex items-center justify-center">
+              <Send className="h-6 w-6 sm:h-7 sm:w-7 text-white" />
             </div>
-            <h1 className="text-3xl font-bold text-gray-900">MultiSent</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Multisent</h1>
           </div>
           
-          <h2 className="text-6xl md:text-8xl font-black mb-8 tracking-tight text-gray-900 leading-none">
+          <h2 className="text-4xl sm:text-6xl md:text-8xl font-black mb-6 sm:mb-8 tracking-tight text-gray-900 leading-none">
             Send to 10,000<br />wallets in seconds
           </h2>
           
-          <p className="text-xl text-gray-600 mb-16 max-w-2xl mx-auto leading-relaxed">
-            The fastest way to distribute tokens on Solana. Ultra-low fees, instant transfers, enterprise-grade reliability.
+          <p className="text-lg sm:text-xl text-gray-600 mb-12 sm:mb-16 max-w-2xl mx-auto leading-relaxed px-2">
+            The fastest way to distribute tokens on Solana. Ultra-low fees, instant transfers.
           </p>
-
-          {/* Stats */}
-          <div className="grid grid-cols-3 gap-8 mb-16 max-w-2xl mx-auto">
-            <div className="text-center">
-              <div className="text-3xl font-black text-gray-900 mb-2">2.4M+</div>
-              <div className="text-sm text-gray-600">Tokens sent this week</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-black text-gray-900 mb-2">459</div>
-              <div className="text-sm text-gray-600">Projects trust us</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-black text-gray-900 mb-2">12s</div>
-              <div className="text-sm text-gray-600">Average transfer time</div>
-            </div>
-          </div>
 
           <Button 
             onClick={onConnect}
             disabled={isConnecting}
-            className="h-16 px-12 bg-black hover:bg-gray-800 text-white font-bold text-lg rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200"
+            className="h-14 sm:h-16 px-8 sm:px-12 bg-black hover:bg-gray-800 text-white font-bold text-base sm:text-lg rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200"
           >
             {isConnecting ? 'Connecting...' : 'Start Sending'}
-            <ArrowRight className="h-5 w-5 ml-3" />
+            <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 ml-2 sm:ml-3" />
           </Button>
         </div>
       </div>
 
-      {/* Project Types */}
-      <div className="bg-gray-50 py-24">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h3 className="text-4xl font-bold text-gray-900 mb-4">Who uses MultiSent?</h3>
-            <p className="text-lg text-gray-600">From NFT drops to DAO payouts - trusted by every type of project</p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {projectTypes.map((project, index) => (
-              <div key={index} className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-200 hover:border-gray-200">
-                <div className="w-14 h-14 bg-gray-100 rounded-xl flex items-center justify-center mb-6 text-gray-700">
-                  {project.icon}
-                </div>
-                <h4 className="text-xl font-bold text-gray-900 mb-3">{project.title}</h4>
-                <p className="text-gray-600 mb-4 leading-relaxed">{project.description}</p>
-                <div className="text-sm font-semibold text-gray-500">{project.example}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
 
-      {/* Why MultiSent */}
-      <div className="py-24">
-        <div className="max-w-5xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h3 className="text-4xl font-bold text-gray-900 mb-4">Why MultiSent?</h3>
-            <p className="text-lg text-gray-600">Simple. Fast. Reliable. Everything you need, nothing you don't.</p>
+
+      {/* Why Multisent */}
+      <div className="py-12 sm:py-20 bg-gray-50">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-8 sm:mb-12">
+            <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Why Multisent?</h3>
+            <p className="text-base text-gray-600 px-2">Simple. Fast. Reliable.</p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-black rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <Zap className="h-8 w-8 text-white" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+            <div className="text-center p-6 bg-white rounded-2xl border border-gray-100">
+              <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center mx-auto mb-4">
+                <Zap className="h-6 w-6 text-white" />
               </div>
-              <h4 className="text-xl font-bold text-gray-900 mb-3">Lightning Fast</h4>
-              <p className="text-gray-600 mb-4">Send to 10,000+ wallets in under 30 seconds. No queues, no waiting, no delays.</p>
-              <div className="text-sm font-semibold text-gray-900">Average: 12 seconds</div>
+              <h4 className="text-lg font-bold text-gray-900 mb-2">Lightning Fast</h4>
+              <p className="text-sm text-gray-600">Send to thousands of wallets in seconds</p>
             </div>
             
-            <div className="text-center">
-              <div className="w-16 h-16 bg-black rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <DollarSign className="h-8 w-8 text-white" />
+            <div className="text-center p-6 bg-white rounded-2xl border border-gray-100">
+              <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center mx-auto mb-4">
+                <DollarSign className="h-6 w-6 text-white" />
               </div>
-              <h4 className="text-xl font-bold text-gray-900 mb-3">Ultra Low Fees</h4>
-              <p className="text-gray-600 mb-4">Only 0.000005 SOL per transfer. Save 95% compared to manual sending.</p>
-              <div className="text-sm font-semibold text-gray-900">Cheapest on Solana</div>
+              <h4 className="text-lg font-bold text-gray-900 mb-2">Ultra Low Fees</h4>
+              <p className="text-sm text-gray-600">Save 95% compared to manual sending</p>
             </div>
             
-            <div className="text-center">
-              <div className="w-16 h-16 bg-black rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <Shield className="h-8 w-8 text-white" />
+            <div className="text-center p-6 bg-white rounded-2xl border border-gray-100">
+              <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center mx-auto mb-4">
+                <Shield className="h-6 w-6 text-white" />
               </div>
-              <h4 className="text-xl font-bold text-gray-900 mb-3">Your Control</h4>
-              <p className="text-gray-600 mb-4">Your wallet, your keys, your tokens. Zero smart contract risk.</p>
-              <div className="text-sm font-semibold text-gray-900">100% non-custodial</div>
+              <h4 className="text-lg font-bold text-gray-900 mb-2">Non-Custodial</h4>
+              <p className="text-sm text-gray-600">Your wallet, your keys, your control</p>
             </div>
           </div>
         </div>
       </div>
 
       {/* CTA Footer */}
-      <div className="bg-black py-20">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <h3 className="text-4xl font-bold text-white mb-6">Ready to scale your distributions?</h3>
-          <p className="text-xl text-gray-400 mb-10">Join hundreds of projects already using MultiSent</p>
+      <div className="bg-black py-12 sm:py-16">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+          <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4">Ready to get started?</h3>
+          <p className="text-base sm:text-lg text-gray-400 mb-6 sm:mb-8 px-2">Connect your wallet and start sending tokens</p>
           
           <Button 
             onClick={onConnect}
             disabled={isConnecting}
-            className="h-16 px-12 bg-white hover:bg-gray-100 text-black font-bold text-lg rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200"
+            className="h-12 sm:h-14 px-6 sm:px-8 bg-white hover:bg-gray-100 text-black font-bold text-sm sm:text-base rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
           >
-            {isConnecting ? 'Connecting...' : 'Start Your First Transfer'}
-            <ArrowRight className="h-5 w-5 ml-3" />
+            {isConnecting ? 'Connecting...' : 'Connect Wallet'}
+            <ArrowRight className="h-4 w-4 ml-2" />
           </Button>
         </div>
       </div>

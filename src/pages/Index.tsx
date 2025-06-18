@@ -103,7 +103,7 @@ const Index = () => {
         onPreview={() => transfer.setIsPreviewMode(true)}
       />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 pb-24 lg:pb-8">
         <TransferContainer
           transferSummary={transferSummary}
           onPreview={() => transfer.setIsPreviewMode(true)}

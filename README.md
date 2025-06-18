@@ -1,73 +1,119 @@
-# Welcome to your Lovable project
+# Multisent - Send to 10,000 wallets in seconds
 
-## Project info
+**The fastest way to distribute tokens on Solana. Ultra-low fees, instant transfers, enterprise-grade reliability.**
 
-**URL**: https://lovable.dev/projects/8284db23-151e-47ed-8ce5-efdda0c60742
+## 🚀 Features
 
-## How can I edit this code?
+- **Lightning Fast**: Send to 10,000+ wallets in under 30 seconds
+- **Ultra Low Fees**: Only 0.000005 SOL per transfer - 95% cheaper than manual sending
+- **Non-Custodial**: Your wallet, your keys, your tokens. Zero smart contract risk
+- **Mobile Responsive**: Fully optimized for mobile and desktop use
+- **Multiple Assets**: Support for SOL and SPL tokens
+- **Flexible Distribution**: Equal split or custom amounts per recipient
 
-There are several ways of editing your application.
+## 🛠 Technology Stack
 
-**Use Lovable**
+This project is built with modern web technologies:
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/8284db23-151e-47ed-8ce5-efdda0c60742) and start prompting.
+- **React** - UI library
+- **TypeScript** - Type-safe JavaScript
+- **Vite** - Fast build tool
+- **Tailwind CSS** - Utility-first CSS framework
+- **shadcn/ui** - Modern React component library
+- **Solana Web3.js** - Solana blockchain integration
+- **Wallet Adapter** - Multi-wallet support for Solana
 
-Changes made via Lovable will be committed automatically to this repo.
+## 🏃‍♂️ Quick Start
 
-**Use your preferred IDE**
+### Prerequisites
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+- Node.js 18+ installed ([install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating))
+- A Solana wallet (Phantom, Solflare, etc.)
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Installation
 
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
+```bash
+# Clone the repository
 git clone <YOUR_GIT_URL>
+cd multisent
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# Install dependencies
+npm install
 
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+The application will be available at `http://localhost:5173`
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Building for Production
 
-**Use GitHub Codespaces**
+```bash
+# Build the project
+npm run build
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+# Preview the build
+npm run preview
+```
 
-## What technologies are used for this project?
+## 💡 How to Use
 
-This project is built with:
+1. **Connect Wallet**: Click "Start Sending" and connect your Solana wallet
+2. **Choose Asset**: Select SOL or any SPL token from your wallet
+3. **Distribution Method**: Choose equal split or manual amounts
+4. **Add Recipients**: Enter wallet addresses manually
+5. **Preview & Send**: Review details and confirm the transfer
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## 📱 Mobile First Design
 
-## How can I deploy this project?
+Multisent is designed with mobile users in mind:
 
-Simply open [Lovable](https://lovable.dev/projects/8284db23-151e-47ed-8ce5-efdda0c60742) and click on Share -> Publish.
+- Responsive layout that works on all screen sizes
+- Touch-optimized interface
+- Mobile action bar for quick access
+- Optimized typography and spacing
 
-## Can I connect a custom domain to my Lovable project?
+## 🔒 Security
 
-Yes, you can!
+- **Non-custodial**: We never hold your funds
+- **Client-side**: All operations happen in your browser
+- **Wallet integration**: Uses official Solana wallet adapters
+- **No smart contracts**: Direct blockchain interactions only
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## 🌐 Supported Wallets
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+- Phantom
+- Solflare
+- Backpack
+- And more via Solana Wallet Adapter
+
+## 📊 Use Cases
+
+- **NFT Projects**: Airdrops and royalty distributions
+- **Gaming**: Reward distribution to players
+- **DeFi**: Yield farming and governance rewards  
+- **DAOs**: Contributor payments and grants
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/improvement`)
+3. Commit your changes (`git commit -am 'Add new feature'`)
+4. Push to the branch (`git push origin feature/improvement`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+## 🆘 Support
+
+If you encounter any issues or have questions:
+
+1. Check the [Issues](../../issues) page
+2. Create a new issue with detailed information
+3. Include steps to reproduce any bugs
+
+---
+
+**Built with ❤️ for the Solana ecosystem**

@@ -58,8 +58,8 @@ export const TransferSummary = ({
   };
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-      <h2 className="text-xl font-bold text-gray-900 mb-6">Transfer Summary</h2>
+    <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4 sm:p-6">
+      <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 sm:mb-6">Transfer Summary</h2>
       
       <div className="space-y-4">
         <div className="flex justify-between items-center">
@@ -124,7 +124,7 @@ export const TransferSummary = ({
       )}
 
       <Button 
-        className="w-full h-12 bg-black hover:bg-gray-800 text-white font-semibold text-sm mt-6 rounded-xl"
+        className="w-full h-10 sm:h-12 bg-black hover:bg-gray-800 text-white font-semibold text-xs sm:text-sm mt-4 sm:mt-6 rounded-xl"
         onClick={onPreview}
         disabled={!isReady}
       >

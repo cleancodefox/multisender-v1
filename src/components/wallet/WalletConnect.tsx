@@ -60,17 +60,18 @@ export const WalletConnect = ({ balance, isConnected, onConnect, onDisconnect }:
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="bg-white border-gray-200 hover:bg-gray-50 rounded-xl px-3 h-10 shadow-sm">
-          <div className="flex items-center gap-3">
+        <Button variant="outline" className="bg-white border-gray-200 hover:bg-gray-50 rounded-xl px-2 sm:px-3 h-10 shadow-sm">
+          <div className="flex items-center gap-2 sm:gap-3">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
             </span>
-            <span className="font-mono text-sm text-black">{walletAddress.slice(0, 4)}...{walletAddress.slice(-4)}</span>
-            <Badge variant="secondary" className="bg-gray-100 text-black text-xs px-2 py-1 rounded-md">
-              {balance.toFixed(2)} SOL
+            <span className="font-mono text-xs sm:text-sm text-black">{walletAddress.slice(0, 4)}...{walletAddress.slice(-4)}</span>
+            <Badge variant="secondary" className="bg-gray-100 text-black text-xs px-1.5 sm:px-2 py-1 rounded-md">
+              <span className="hidden sm:inline">{balance.toFixed(2)} SOL</span>
+              <span className="sm:hidden">{balance.toFixed(1)}</span>
             </Badge>
-            <ChevronDown className="h-4 w-4 text-gray-400" />
+            <ChevronDown className="h-3 w-3 sm:h-4 sm:w-4 text-gray-400" />
           </div>
         </Button>
       </DropdownMenuTrigger>

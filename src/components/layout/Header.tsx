@@ -31,7 +31,7 @@ export const Header = ({
             <div className="w-8 h-8 sm:w-10 sm:h-10 bg-black rounded-xl flex items-center justify-center">
               <Send className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
             </div>
-            <h1 className="text-lg sm:text-xl font-bold text-gray-900">MultiSent.SO</h1>
+            <h1 className="text-lg sm:text-xl font-bold text-gray-900">MULTISENT</h1>
           </div>
           
           <div className="flex items-center gap-3">
