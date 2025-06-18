@@ -56,7 +56,7 @@ export const WelcomeScreen = ({ onConnect, isConnecting }: WelcomeScreenProps) =
             <div className="w-14 h-14 bg-black rounded-2xl flex items-center justify-center">
               <Send className="h-7 w-7 text-white" />
             </div>
-            <h1 className="text-3xl font-bold text-gray-900">MultiSender</h1>
+            <h1 className="text-3xl font-bold text-gray-900">MultiSent</h1>
           </div>
           
           <h2 className="text-6xl md:text-8xl font-black mb-8 tracking-tight text-gray-900 leading-none">
@@ -98,7 +98,7 @@ export const WelcomeScreen = ({ onConnect, isConnecting }: WelcomeScreenProps) =
       <div className="bg-gray-50 py-24">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h3 className="text-4xl font-bold text-gray-900 mb-4">Who uses MultiSender?</h3>
+            <h3 className="text-4xl font-bold text-gray-900 mb-4">Who uses MultiSent?</h3>
             <p className="text-lg text-gray-600">From NFT drops to DAO payouts - trusted by every type of project</p>
           </div>
           
@@ -117,11 +117,11 @@ export const WelcomeScreen = ({ onConnect, isConnecting }: WelcomeScreenProps) =
         </div>
       </div>
 
-      {/* Why MultiSender */}
+      {/* Why MultiSent */}
       <div className="py-24">
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h3 className="text-4xl font-bold text-gray-900 mb-4">Why MultiSender?</h3>
+            <h3 className="text-4xl font-bold text-gray-900 mb-4">Why MultiSent?</h3>
             <p className="text-lg text-gray-600">Simple. Fast. Reliable. Everything you need, nothing you don't.</p>
           </div>
           
@@ -160,7 +160,7 @@ export const WelcomeScreen = ({ onConnect, isConnecting }: WelcomeScreenProps) =
       <div className="bg-black py-20">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h3 className="text-4xl font-bold text-white mb-6">Ready to scale your distributions?</h3>
-          <p className="text-xl text-gray-400 mb-10">Join hundreds of projects already using MultiSender</p>
+          <p className="text-xl text-gray-400 mb-10">Join hundreds of projects already using MultiSent</p>
           
           <Button 
             onClick={onConnect}
