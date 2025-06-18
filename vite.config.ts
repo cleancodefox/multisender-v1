@@ -22,13 +22,12 @@ export default defineConfig(({ mode }) => ({
       assert: 'assert',
       events: 'events',
       util: 'util',
+      buffer: 'buffer',
     },
   },
   define: {
     global: 'globalThis',
-    process: {
-      env: {},
-    },
+    'process.env': {},
   },
   optimizeDeps: {
     include: [
@@ -39,5 +38,18 @@ export default defineConfig(({ mode }) => ({
       'events',
       'util'
     ],
+  },
+  build: {
+    rollupOptions: {
+      external: [],
+      output: {
+        globals: {
+          global: 'globalThis',
+        },
+      },
+    },
+    commonjsOptions: {
+      transformMixedEsModules: true,
+    },
   },
 }));
