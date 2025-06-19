@@ -8,6 +8,8 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Star, Infinity as InfinityIcon, Clock, Zap } from "lucide-react";
+import { usePlatformPass } from "@/hooks/usePlatformPass";
+import { PassType } from "@/types";
 
 interface PassOption {
   title: string;
@@ -18,9 +20,22 @@ interface PassOption {
   isPopular?: boolean;
   buttonText: string;
   priceSubtext?: string;
+  passType: PassType;
 }
 
-export const PassCardSection = () => {
+interface PassCardSectionProps {
+  onWalletConnect?: () => void;
+  isWalletConnected?: boolean;
+  isConnecting?: boolean;
+}
+
+export const PassCardSection = ({ 
+  onWalletConnect, 
+  isWalletConnected = true, 
+  isConnecting = false 
+}: PassCardSectionProps = {}) => {
+  const { purchasePass, isPurchasing, subscriptionStatus } = usePlatformPass();
+
   const passOptions: PassOption[] = [
     {
       title: "Free",
@@ -35,6 +50,7 @@ export const PassCardSection = () => {
       ],
       icon: <Zap className="h-5 w-5" />,
       buttonText: "Start Free",
+      passType: PassType.FREE,
     },
     {
       title: "3 Days Pass",
@@ -50,6 +66,7 @@ export const PassCardSection = () => {
       icon: <Clock className="h-5 w-5" />,
       buttonText: "Get 3-Day Pass",
       isPopular: true,
+      passType: PassType.THREE_DAY,
     },
     {
       title: "Lifetime Pass",
@@ -65,12 +82,45 @@ export const PassCardSection = () => {
       ],
       icon: <InfinityIcon className="h-5 w-5" />,
       buttonText: "Get Lifetime Pass",
+      passType: PassType.LIFETIME,
     },
   ];
 
-  const handlePurchase = (passType: string) => {
-    // TODO: Implement NFT minting logic
-    console.log(`Purchase ${passType} pass`);
+  const handlePurchase = async (passType: PassType) => {
+    // If wallet is not connected, trigger wallet connection
+    if (!isWalletConnected && onWalletConnect) {
+      onWalletConnect();
+      return;
+    }
+
+    const result = await purchasePass(passType);
+    if (result.success && result.mintAddress) {
+      console.log(`Pass purchased successfully! Mint: ${result.mintAddress}`);
+    }
+  };
+
+  const isPassOwned = (passType: PassType) => {
+    return isWalletConnected && subscriptionStatus.passType === passType && subscriptionStatus.hasActivePass;
+  };
+
+  const getButtonText = (option: PassOption) => {
+    if (!isWalletConnected) {
+      return isConnecting ? "Connecting..." : "Connect Wallet to Purchase";
+    }
+    if (isPurchasing) {
+      return "Minting...";
+    }
+    if (isPassOwned(option.passType)) {
+      return "Owned";
+    }
+    return option.buttonText;
+  };
+
+  const isButtonDisabled = (option: PassOption) => {
+    if (!isWalletConnected) {
+      return isConnecting;
+    }
+    return isPurchasing || isPassOwned(option.passType);
   };
 
   return (
@@ -89,6 +139,11 @@ export const PassCardSection = () => {
           <p className="text-base text-gray-600 px-2 max-w-2xl mx-auto">
             Get an NFT pass for unlimited transfers and special benefits. Own
             your access forever.
+            {!isWalletConnected && (
+              <span className="block mt-2 text-sm text-orange-600 font-medium">
+                💳 Connect your wallet to purchase passes
+              </span>
+            )}
           </p>
         </div>
 
@@ -153,14 +208,15 @@ export const PassCardSection = () => {
                 </ul>
 
                 <Button
-                  onClick={() => handlePurchase(option.title)}
+                  onClick={() => handlePurchase(option.passType)}
+                  disabled={isButtonDisabled(option)}
                   className={`w-full h-11 font-semibold text-sm rounded-xl transition-all duration-200 ${
                     option.isPopular
                       ? "bg-black hover:bg-gray-800 text-white shadow-md hover:shadow-lg"
                       : "bg-gray-100 hover:bg-gray-200 text-gray-900 border border-gray-200"
-                  }`}
+                  } ${isButtonDisabled(option) ? "opacity-50 cursor-not-allowed" : ""}`}
                 >
-                  {option.buttonText}
+                  {getButtonText(option)}
                 </Button>
               </CardContent>
             </Card>

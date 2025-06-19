@@ -6,24 +6,40 @@ import { AddressManager } from '@/components/AddressManager';
 import { Header } from '@/components/layout/Header';
 import { MobileActionBar } from '@/components/layout/MobileActionBar';
 import { TransferContainer } from '@/components/transfer/TransferContainer';
+import { PassCardSection } from '@/components/PassCardSection';
+import { SubscriptionBanner } from '@/components/SubscriptionBanner';
 import { useWallet } from '@/hooks/useWallet';
 import { useRecipients } from '@/hooks/useRecipients';
 import { useTransfer } from '@/hooks/useTransfer';
+import { usePlatformPass } from '@/hooks/usePlatformPass';
 import { TransferStatus, AssetType } from '@/types';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const Index = () => {
   const wallet = useWallet();
   const recipients = useRecipients();
   const transfer = useTransfer(wallet.balance);
+  const { subscriptionStatus } = usePlatformPass();
+  const [showPassCards, setShowPassCards] = useState(false);
 
   // Clear recipients and reset preview mode when wallet disconnects
   useEffect(() => {
     if (!wallet.isConnected) {
       recipients.clearRecipients();
       transfer.setIsPreviewMode(false);
+      setShowPassCards(false);
     }
   }, [wallet.isConnected, recipients, transfer]);
+
+  // Show pass cards for a few seconds after wallet connection to showcase subscription options
+  useEffect(() => {
+    if (wallet.isConnected && !subscriptionStatus.isLoading) {
+      setShowPassCards(true);
+      // Auto-hide after 5 seconds, user can still scroll down to see them
+      const timer = setTimeout(() => setShowPassCards(false), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [wallet.isConnected, subscriptionStatus.isLoading]);
 
   if (!wallet.isConnected) {
     return <WelcomeScreen onConnect={wallet.connect} isConnecting={wallet.isConnecting} />;
@@ -104,6 +120,12 @@ const Index = () => {
       />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 pb-24 lg:pb-8">
+        {/* Subscription Status Banner */}
+        <SubscriptionBanner 
+          subscriptionStatus={subscriptionStatus}
+          onViewPasses={() => setShowPassCards(true)}
+        />
+
         <TransferContainer
           transferSummary={transferSummary}
           onPreview={() => transfer.setIsPreviewMode(true)}
@@ -126,6 +148,9 @@ const Index = () => {
             assetSelection={recipients.assetSelection}
           />
         </TransferContainer>
+
+        {/* Pass Cards Section */}
+        {showPassCards && <PassCardSection />}
       </main>
 
       <MobileActionBar

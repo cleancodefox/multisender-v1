@@ -110,7 +110,11 @@ export const WelcomeScreen = ({
       <WhoIsItForSection />
 
       {/* Pass Card NFT Section */}
-      <PassCardSection />
+      <PassCardSection 
+        onWalletConnect={onConnect}
+        isWalletConnected={false}
+        isConnecting={isConnecting}
+      />
 
       {/* FAQ Section */}
       <FAQSection />

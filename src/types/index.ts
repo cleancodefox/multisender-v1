@@ -59,3 +59,53 @@ export interface TransferSummaryData {
   isReady: boolean;
   assetSelection: AssetSelection;
 }
+
+// Platform Pass System Types
+export enum PassType {
+  FREE = 'free',
+  THREE_DAY = 'three_day',
+  LIFETIME = 'lifetime'
+}
+
+export interface PlatformPass {
+  id: string;
+  type: PassType;
+  walletAddress: string;
+  mintAddress: string;
+  purchaseDate: Date;
+  expiryDate?: Date; // null for lifetime passes
+  isActive: boolean;
+  transactionSignature: string;
+}
+
+export interface PassMetadata {
+  name: string;
+  description: string;
+  image: string;
+  attributes: Array<{
+    trait_type: string;
+    value: string | number;
+  }>;
+  properties: {
+    category: string;
+    files: Array<{
+      uri: string;
+      type: string;
+    }>;
+  };
+}
+
+export interface SubscriptionStatus {
+  hasActivePass: boolean;
+  passType: PassType | null;
+  expiryDate?: Date;
+  mintAddress?: string;
+  isLoading: boolean;
+}
+
+export interface PassPurchaseResult {
+  success: boolean;
+  mintAddress?: string;
+  transactionSignature?: string;
+  error?: string;
+}
